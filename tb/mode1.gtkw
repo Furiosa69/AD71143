@@ -1,0 +1,37 @@
+[*]
+[*] GTKWave Analyzer v3.3.127 (w)1999-2026 BSI
+[*] Thu Jun 25 06:17:54 2026
+[*]
+[dumpfile] "/home/furiosa/Projects/shitatechnology/work/ctrl/tb_nt39565d_normal_short_stv.vcd"
+[dumpfile_mtime] "Thu Jun 25 02:41:31 2026"
+[dumpfile_size] 20035
+[savefile] "/home/furiosa/Projects/shitatechnology/work/ctrl/mode1.gtkw"
+[timestart] 0
+[size] 1920 1121
+[pos] -27 -24
+*-19.500000 4865000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_nt39565d_normal_short_stv.
+[sst_width] 290
+[signals_width] 205
+[sst_expanded] 1
+[sst_vpaned_height] 338
+@28
+tb_nt39565d_normal_short_stv.clk
+tb_nt39565d_normal_short_stv.rst_n
+[color] 2
+tb_nt39565d_normal_short_stv.cpv
+tb_nt39565d_normal_short_stv.oe1
+tb_nt39565d_normal_short_stv.oe2
+@200
+-
+@22
+[color] 2
+tb_nt39565d_normal_short_stv.dut.state[3:0]
+@28
+tb_nt39565d_normal_short_stv.frame_start
+tb_nt39565d_normal_short_stv.frame_done
+tb_nt39565d_normal_short_stv.dut.stv1
+tb_nt39565d_normal_short_stv.dut.stv2
+tb_nt39565d_normal_short_stv.dut.oe_mask_en
+[pattern_trace] 1
+[pattern_trace] 0
