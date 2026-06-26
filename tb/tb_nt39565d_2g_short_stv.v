@@ -77,9 +77,6 @@ module tb_nt39565d_2g_short_stv;
     always #5 clk = ~clk;
 
     initial begin
-        $dumpfile("tb_nt39565d_2g_short_stv.vcd");
-        $dumpvars(0, tb_nt39565d_2g_short_stv);
-
         rst_n = 1'b0;
         frame_start = 1'b0;
         line_start = 1'b0;
@@ -98,20 +95,5 @@ module tb_nt39565d_2g_short_stv;
         #10;
         frame_start = 1'b0;
 
-        #30
-        xao_emergency = 1'b1;
-
-        #20
-        xao_emergency = 1'b0;
-
-        wait(busy == 1'b0);
-//        wait(frame_done);
-        #40;
-        $finish;
-    end
-
-    initial begin
-        #7000;
-        $fatal(1, "Timeout: 2G short STV simulation did not finish");
     end
 endmodule

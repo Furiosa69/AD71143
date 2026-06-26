@@ -16,7 +16,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 module nt39565d_gate_ctrl #(
-    parameter integer CLK_FREQ_MHZ      = 20,
+    parameter integer CLK_FREQ_MHZ      = 25,
     parameter integer CPV_PERIOD_US     = 10,
     parameter integer CPV_PW_US_X10     = 10,
     parameter integer STV_SETUP_US_X10  = 3,
