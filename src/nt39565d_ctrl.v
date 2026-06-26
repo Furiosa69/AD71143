@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // Module Name    : nt39565d_gate_ctrl
-// Description    : NT39565D TFT LCD Gate Driver 控制模块
+// Description    : NT39565instD TFT LCD Gate Driver 控制模块
 //                  - 产生 CPV (移位时钟)
 //                  - 产生 STV (起始脉冲)
 //                  - 产生 OE  (输出使能, 低有效)
