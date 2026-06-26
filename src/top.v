@@ -1,3 +1,4 @@
+// 仿真情况下扫描8行是 11731 fps，在实际的512行情况下，大约是 65 fps
 module top #(
     parameter integer FRAME_LINES      = 541,
     parameter integer FRAME_GAP_CYCLES = 100,

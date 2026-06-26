@@ -48,13 +48,13 @@ initial begin
 end
 
 initial begin
-    #1_000_000;   // 1ms 超时
+    #1_000_000_000;   // 1s 超时
     $display("ERROR: Simulation timeout at %t", $time);
     $finish;
 end
 
 top #(
-    .FRAME_LINES      (8    ),      // 用 8 行快速仿真验证
+    .FRAME_LINES      (541  ),      // 用 8 行快速仿真验证
     .FRAME_GAP_CYCLES (100  ),      // 间隙 100 个时钟周期
     .MODE_SELECT      (2'b00),      // Normal 模式
     .STV_DELAY_SEL    (2'b00),      // Short STV
