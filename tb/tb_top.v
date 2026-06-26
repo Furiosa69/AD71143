@@ -25,37 +25,54 @@ wire        line_done_o;
 
 initial begin
     sys_clk = 1'b0;
-    forever #10 sys_clk = ~sys_clk;  // 10ns 周期 → 50MHz
+    forever #10 sys_clk = ~sys_clk;  // 10ns 半周期 → 20ns 周期 → 50MHz
 end
 
 initial begin
     key = 1'b0;         // 按键按下（复位有效）
-    #200;               // 保持 100ns
+    #200;               // 保持 200ns
     key = 1'b1;         // 释放按键（复位释放）
     #1000;              // 等待稳定
     $display("Simulation start at %t", $time);
 end
 
+real sim_time_sec;
+real frame_rate_sim;
+integer total_frames = 10;
+integer frame_cnt_display;
+
 initial begin
-    // 等待 10 帧结束后退出
-    repeat (10) begin
+    frame_cnt_display = 0;
+    
+    repeat (total_frames) begin
         @(posedge frame_done_o);
-        $display("Frame done at %t", $time);
+        frame_cnt_display = frame_cnt_display + 1;
+        $display("Frame %d done at %t", frame_cnt_display, $time);
     end
+    
     #500;
+    
+    sim_time_sec = $time / 1_000_000_000.0;
+    frame_rate_sim = total_frames / sim_time_sec;
+    
+    $display("========================================");
     $display("Simulation finished at %t", $time);
+    $display("Total frames: %d", total_frames);
+    $display("Total simulation time: %.6f seconds", sim_time_sec);
+    $display("Average frame rate: %.2f fps", frame_rate_sim);
+    $display("========================================");
     $finish;
 end
 
 initial begin
-    #1_000_000_000;   // 1s 超时
+    #10_000_000_000;   // 10ms 超时（50MHz 下 10ms = 500,000 个周期）
     $display("ERROR: Simulation timeout at %t", $time);
     $finish;
 end
 
 top #(
-    .FRAME_LINES      (541  ),      // 用 8 行快速仿真验证
-    .FRAME_GAP_CYCLES (100  ),      // 间隙 100 个时钟周期
+    .FRAME_LINES      (541  ),      // Normal模式最大541行
+    .FRAME_GAP_CYCLES (100  ),      // 间隙 100 个时钟周期（100 × 40ns = 4µs）
     .MODE_SELECT      (2'b00),      // Normal 模式
     .STV_DELAY_SEL    (2'b00),      // Short STV
     .SCAN_DIRECTION   (1'b0 ),      // 下移

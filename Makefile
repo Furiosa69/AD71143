@@ -3,7 +3,7 @@ TB_DIR  := tb
 OUT_DIR := out
 VCD_DIR := vcd
 
-SRC_FILES := $(wildcard $(SRC_DIR)/*.v)
+SRC_FILES := $(wildcard $(SRC_DIR)/top.v $(SRC_DIR)/nt39565d_ctrl.v)
 TB_FILES  := $(wildcard $(TB_DIR)/*.v)
 
 IVERILOG := iverilog -g2012
