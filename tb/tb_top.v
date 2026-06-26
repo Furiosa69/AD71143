@@ -25,12 +25,12 @@ wire        line_done_o;
 
 initial begin
     sys_clk = 1'b0;
-    forever #20 sys_clk = ~sys_clk;  // 20ns 周期 → 25MHz
+    forever #10 sys_clk = ~sys_clk;  // 10ns 周期 → 50MHz
 end
 
 initial begin
     key = 1'b0;         // 按键按下（复位有效）
-    #100;               // 保持 100ns
+    #200;               // 保持 100ns
     key = 1'b1;         // 释放按键（复位释放）
     #1000;              // 等待稳定
     $display("Simulation start at %t", $time);

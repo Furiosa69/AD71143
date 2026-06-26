@@ -1,6 +1,6 @@
 module top #(
     parameter integer FRAME_LINES      = 541,
-    parameter integer FRAME_GAP_CYCLES = 25_000,
+    parameter integer FRAME_GAP_CYCLES = 100,
     parameter [1:0]   MODE_SELECT      = 2'b00,
     parameter [1:0]   STV_DELAY_SEL    = 2'b00,
     parameter         SCAN_DIRECTION   = 1'b0,
@@ -29,15 +29,23 @@ module top #(
     output wire line_done_o
 );
 
-// ============================================================
-// 复位信号（低有效）
-// ============================================================
-wire rst_n;
-assign rst_n = key;
 
-// ============================================================
-// 状态机定义
-// ============================================================
+//wire clk_25m;
+//wire locked;
+//
+//clk_wiz_0 u_mmcm(
+//    .clk_in1    (sys_clk),
+//    .clk_out1   (clk_25m),
+//    .locked     (locked)
+//);
+
+
+wire rst_n;
+wire frame_done;
+assign rst_n = key;
+//assign rst_n = key & locked;
+
+
 localparam [1:0] TOP_IDLE       = 2'd0;
 localparam [1:0] TOP_START      = 2'd1;
 localparam [1:0] TOP_WAIT_FRAME = 2'd2;
@@ -48,19 +56,26 @@ reg        frame_start;
 reg        line_start;
 reg [31:0] gap_cnt;
 
+reg        frame_done_ff;
+wire       frame_done_rise;
+
+always @(posedge sys_clk or negedge rst_n) begin
+    if (!rst_n) begin
+        frame_done_ff <= 1'b0;
+    end else begin
+        frame_done_ff <= frame_done;
+    end
+end
+
+assign frame_done_rise = frame_done & !frame_done_ff;
+
 wire busy;
 wire line_done;
-wire frame_done;
 
 assign frame_active  = busy;
 assign frame_done_o  = frame_done;
 assign line_done_o   = line_done;
 
-// ============================================================
-// 主状态机
-// 顶层只负责发起一帧、等待驱动器完成整帧、插入帧间隔
-// 行扫描循环由 nt39565d_gate_ctrl 内部完成
-// ============================================================
 always @(posedge sys_clk or negedge rst_n) begin
     if (!rst_n) begin
         top_state   <= TOP_IDLE;
@@ -71,10 +86,14 @@ always @(posedge sys_clk or negedge rst_n) begin
         frame_start <= 1'b0;
         line_start  <= 1'b0;
 
+        if (gap_cnt[31:0] == 32'bx) begin
+            gap_cnt <= 32'd0;
+        end
+
         case (top_state)
             TOP_IDLE: begin
-                gap_cnt    <= 32'd0;
-                top_state  <= TOP_START;
+                gap_cnt   <= 32'd0;
+                top_state <= TOP_START;
             end
 
             TOP_START: begin
@@ -83,14 +102,16 @@ always @(posedge sys_clk or negedge rst_n) begin
             end
 
             TOP_WAIT_FRAME: begin
-                if (frame_done) begin
+                if (frame_done_rise) begin
                     gap_cnt   <= 32'd0;
                     top_state <= TOP_FRAME_GAP;
                 end
             end
 
             TOP_FRAME_GAP: begin
-                if (gap_cnt >= FRAME_GAP_CYCLES - 1) begin
+                if (gap_cnt == 32'd0) begin
+                    gap_cnt <= gap_cnt + 1'b1;
+                end else if (gap_cnt >= FRAME_GAP_CYCLES - 1) begin
                     gap_cnt   <= 32'd0;
                     top_state <= TOP_START;
                 end else begin
@@ -98,7 +119,9 @@ always @(posedge sys_clk or negedge rst_n) begin
                 end
             end
 
-            default: top_state <= TOP_IDLE;
+            default: begin
+                top_state <= TOP_IDLE;
+            end
         endcase
     end
 end
@@ -106,13 +129,26 @@ end
 // ============================================================
 // NT39565D Gate Driver 控制模块
 // ============================================================
-nt39565d_gate_ctrl u_nt39565d (
+nt39565d_gate_ctrl #(
+    .CLK_FREQ_MHZ      (25),
+    .CPV_PERIOD_US     (10),
+    .CPV_PW_US_X10     (10),
+    .STV_SETUP_US_X10  (3),
+    .STV_HOLD_US_X10   (4),
+    .OE_PW_US_X10      (10),
+    .XAO_DELAY_US      (20),
+    .OUT_CH_NORMAL     (541),
+    .OUT_CH_2G         (540),
+    .DEFAULT_MODE_SEL  (0),
+    .SCAN_DIRECTION    (1'b0),
+    .USE_DUAL_STV      (1'b0)
+) u_nt39565d (
     .clk            (sys_clk),
     .rst_n          (rst_n),
     .frame_start    (frame_start),
     .line_start     (line_start),
-    .xao_emergency  (1'b0),               // 先固定为0（不触发紧急关断）
-    .line_count     (FRAME_LINES[9:0]),   // 直接传参数给模块
+    .xao_emergency  (1'b0),
+    .line_count     (FRAME_LINES[9:0]),
     .scan_direction (SCAN_DIRECTION),
     .mode_select    (MODE_SELECT),
     .stv_delay_sel  (STV_DELAY_SEL),
