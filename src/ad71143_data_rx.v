@@ -119,6 +119,8 @@ module ad71143_data_rx (
         if (!rst_n) begin
             state <= S_IDLE;
         end else begin
+            if (state != state_next)
+                $display("[%0t] DUT STATE: %0d -> %0d", $time, state, state_next);
             state <= state_next;
         end
     end
@@ -207,12 +209,25 @@ module ad71143_data_rx (
                             header_cds_id   <= lane_a_shift[48];
                             header_temp     <= lane_a_shift[31:16];
                             header_vt       <= lane_a_shift[15:0];
+                            $display("[%0t] DUT HEADER: lane_a_shift=%h", $time, lane_a_shift);
+                            $display("[%0t] DUT HEADER: [63:56]=%h [55:51]=%b [50]=%b [49]=%b [48]=%b [47:32]=%h [31:16]=%h [15:0]=%h",
+                                     $time, lane_a_shift[63:56], lane_a_shift[55:51], lane_a_shift[50],
+                                     lane_a_shift[49], lane_a_shift[48], lane_a_shift[47:32],
+                                     lane_a_shift[31:16], lane_a_shift[15:0]);
+                            $display("[%0t] DUT HEADER: byte=%h ok=%b readdown=%b cds_id=%b temp=%h vt=%h",
+                                     $time, lane_a_shift[63:56],
+                                     (lane_a_shift[63:56]==8'h0A)&&(lane_a_shift[55:51]==5'b0)&&(lane_a_shift[47:32]==16'h0000),
+                                     lane_a_shift[49], lane_a_shift[48],
+                                     lane_a_shift[31:16], lane_a_shift[15:0]);
                         end else if (burst_cnt <= DATA_BURSTS) begin
                             merged_burst         <= merged_burst_next;
                             merged_first_channel <= merged_first_channel_next;
                             merged_last_channel  <= merged_last_channel_next;
                             merged_burst_index   <= burst_cnt - 1'b1;
                             merged_valid         <= 1'b1;
+                            $display("[%0t] DUT MERGE: burst_cnt=%0d readdown=%b merged=%h first_ch=%0d last_ch=%0d",
+                                     $time, burst_cnt, header_readdown, merged_burst_next,
+                                     merged_first_channel_next, merged_last_channel_next);
                         end
 
                         if (burst_cnt < TOTAL_BURSTS - 1)
@@ -254,14 +269,17 @@ module ad71143_data_rx (
             merged_first_channel_next = ((burst_cnt - 1'b1) << 3);
             merged_last_channel_next  = ((burst_cnt - 1'b1) << 3) + 8'd7;
         end else begin
+            // READDOWN=1: Lane A=odd desc (CH7,5,3,1), Lane B=even desc (CH6,4,2,0)
+            // Interleaving A,B gives CH7,6,5,4,3,2,1,0 within each burst
+            // Same merge pattern as READDOWN=0 — lanes already carry correct channels
             merged_burst_next = {
-                b_word0, a_word0,
-                b_word1, a_word1,
-                b_word2, a_word2,
-                b_word3, a_word3
+                a_word0, b_word0,
+                a_word1, b_word1,
+                a_word2, b_word2,
+                a_word3, b_word3
             };
-            merged_first_channel_next = 8'd255 - (((burst_cnt - 1'b1) << 3));
-            merged_last_channel_next  = 8'd248 - (((burst_cnt - 1'b1) << 3));
+            merged_first_channel_next = ((burst_cnt - 1'b1) << 3) + 8'd7;
+            merged_last_channel_next  = ((burst_cnt - 1'b1) << 3);
         end
     end
 

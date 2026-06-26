@@ -87,11 +87,11 @@ module tb_ad71143_data_rx;
     begin
         sync_in = 1'b1;
         repeat (2) @(posedge clk_sys);
-        sync_in = 1'b0;
+        #1 sync_in = 1'b0;
         repeat (2) @(posedge clk_sys);
-        aclk_done = 1'b1;
-        @(posedge clk_sys);
-        aclk_done = 1'b0;
+        #1 aclk_done = 1'b1;
+        repeat (2) @(posedge clk_sys);
+        #1 aclk_done = 1'b0;
     end
     endtask
 
@@ -114,6 +114,8 @@ module tb_ad71143_data_rx;
     begin
         wait(burst_en_out === 1'b1);
 
+        $display("[%0t] send_burst64 START: lane_a=%h lane_b=%h", $time, lane_a, lane_b);
+
         // DUT 在 dclko 域里用 cap_start_tgl_d1/cap_start_tgl_d2 做同步，
         // 需要两个启动边沿后 cap_active_dclko 才真正拉高。
         pulse_dclko();
@@ -126,6 +128,8 @@ module tb_ad71143_data_rx;
             dout_n_B = ~lane_b[k];
             pulse_dclko();
         end
+
+        $display("[%0t] send_burst64 DONE:  lane_a=%h lane_b=%h", $time, lane_a, lane_b);
     end
     endtask
 
@@ -135,6 +139,10 @@ module tb_ad71143_data_rx;
     begin
         for (n = data_bursts_already_sent; n < 32; n = n + 1) begin
             send_burst64(64'h1000_2000_3000_4000 + n, 64'h5000_6000_7000_8000 + n);
+            // wait until DUT enters S_MUTE then back to S_ACT, so next send_burst64
+            // runs in its own S_ACT window
+            @(negedge burst_en_out);
+            wait(burst_en_out === 1'b1);
         end
         send_burst64(64'hDEAD_BEEF_CAFE_1234, 64'h0123_4567_89AB_CDEF);
     end
@@ -147,11 +155,18 @@ module tb_ad71143_data_rx;
         reg [63:0] data_b;
         reg [127:0] expect_merge;
     begin
-        header_a = {8'h0A, 5'b00000, 1'b0, 1'b1, 16'h0000, 16'h1357, 16'h2468};
+        header_a = {8'h0A, 5'b00000, 1'b0, 1'b0, 1'b1, 16'h0000, 16'h1357, 16'h2468};
         header_b = 64'h0000_0000_0000_0000;
         data_a   = {16'h1000, 16'h1002, 16'h1004, 16'h1006};
         data_b   = {16'h1001, 16'h1003, 16'h1005, 16'h1007};
         expect_merge = {16'h1000, 16'h1001, 16'h1002, 16'h1003, 16'h1004, 16'h1005, 16'h1006, 16'h1007};
+
+        $display("=== READDOWN=0 ===");
+        $display("header_a=%h bits: [63:56]=%h [55:51]=%b [50]=%b [49]=%b [48]=%b [47:32]=%h [31:16]=%h [15:0]=%h",
+                 header_a, header_a[63:56], header_a[55:51], header_a[50], header_a[49], header_a[48],
+                 header_a[47:32], header_a[31:16], header_a[15:0]);
+        $display("EXPECT: byte=0a ok=1 readdown=0 cds_id=1 temp=1357 vt=2468 merge=%h first_ch=0 last_ch=7",
+                 expect_merge);
 
         drive_sync_and_aclk();
         merged_seen = 1'b0;
@@ -159,6 +174,10 @@ module tb_ad71143_data_rx;
         send_burst64(header_a, header_b);
         send_burst64(data_a, data_b);
         #50;
+
+        $display("READDOWN=0 RESULT: ok=%0b byte=%h readdown=%0b cds_id=%0b temp=%h vt=%h burst=%h first_ch=%0d last_ch=%0d idx=%0d",
+                 header_ok, header_byte, header_readdown, header_cds_id, header_temp, header_vt,
+                 merged_burst, merged_first_channel, merged_last_channel, merged_burst_index);
 
         if (!merged_seen)                    $fatal(1, "READDOWN=0 merged_valid not seen");
         if (header_byte !== 8'h0A)           $fatal(1, "READDOWN=0 header byte mismatch");
@@ -185,11 +204,19 @@ module tb_ad71143_data_rx;
         reg [63:0] data_b;
         reg [127:0] expect_merge;
     begin
-        header_a = {8'h0A, 5'b00000, 1'b1, 1'b0, 16'h0000, 16'hAAAA, 16'h5555};
+        header_a = {8'h0A, 5'b00000, 1'b0, 1'b1, 1'b0, 16'h0000, 16'hAAAA, 16'h5555};
         header_b = 64'h0000_0000_0000_0000;
-        data_a   = {16'h2000, 16'h2002, 16'h2004, 16'h2006};
-        data_b   = {16'h2001, 16'h2003, 16'h2005, 16'h2007};
-        expect_merge = {16'h2001, 16'h2000, 16'h2003, 16'h2002, 16'h2005, 16'h2004, 16'h2007, 16'h2006};
+        // READDOWN=1: Lane A=odd desc, Lane B=even desc per Figure 37
+        data_a   = {16'h2007, 16'h2005, 16'h2003, 16'h2001};
+        data_b   = {16'h2006, 16'h2004, 16'h2002, 16'h2000};
+        expect_merge = {16'h2007, 16'h2006, 16'h2005, 16'h2004, 16'h2003, 16'h2002, 16'h2001, 16'h2000};
+
+        $display("=== READDOWN=1 ===");
+        $display("header_a=%h bits: [63:56]=%h [55:51]=%b [50]=%b [49]=%b [48]=%b [47:32]=%h [31:16]=%h [15:0]=%h",
+                 header_a, header_a[63:56], header_a[55:51], header_a[50], header_a[49], header_a[48],
+                 header_a[47:32], header_a[31:16], header_a[15:0]);
+        $display("EXPECT: byte=0a ok=1 readdown=1 cds_id=0 temp=AAAA vt=5555 merge=%h first_ch=7 last_ch=0",
+                 expect_merge);
 
         drive_sync_and_aclk();
         merged_seen = 1'b0;
@@ -197,6 +224,10 @@ module tb_ad71143_data_rx;
         send_burst64(header_a, header_b);
         send_burst64(data_a, data_b);
         #50;
+
+        $display("READDOWN=1 RESULT: ok=%0b byte=%h readdown=%0b cds_id=%0b temp=%h vt=%h burst=%h first_ch=%0d last_ch=%0d idx=%0d",
+                 header_ok, header_byte, header_readdown, header_cds_id, header_temp, header_vt,
+                 merged_burst, merged_first_channel, merged_last_channel, merged_burst_index);
 
         if (!merged_seen)                      $fatal(1, "READDOWN=1 merged_valid not seen");
         if (!header_ok)                         $fatal(1, "READDOWN=1 header_ok failed");
@@ -206,8 +237,8 @@ module tb_ad71143_data_rx;
         if (header_temp !== 16'hAAAA)          $fatal(1, "READDOWN=1 header_temp mismatch");
         if (header_vt !== 16'h5555)            $fatal(1, "READDOWN=1 header_vt mismatch");
         if (merged_burst !== expect_merge)     $fatal(1, "READDOWN=1 merged burst mismatch");
-        if (merged_first_channel !== 8'd255)   $fatal(1, "READDOWN=1 first channel mismatch");
-        if (merged_last_channel !== 8'd248)    $fatal(1, "READDOWN=1 last channel mismatch");
+        if (merged_first_channel !== 8'd7)     $fatal(1, "READDOWN=1 first channel mismatch");
+        if (merged_last_channel !== 8'd0)      $fatal(1, "READDOWN=1 last channel mismatch");
         if (merged_burst_index !== 7'd0)       $fatal(1, "READDOWN=1 burst index mismatch");
 
         finish_remaining_bursts(1);
