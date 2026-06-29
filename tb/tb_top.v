@@ -68,11 +68,6 @@ integer total_frames = 2;
 integer frame_cnt_display;
 
 initial begin
-    $dumpfile("vcd/tb_top.vcd");
-    $dumpvars(0, tb_top);
-end
-
-initial begin
     frame_cnt_display = 0;
 
     repeat (total_frames) begin

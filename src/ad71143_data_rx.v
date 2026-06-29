@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 // 按文档 Figure 37 / Figure 38 实现:
 //   - DOUTMODE = 1, 双 LVDS 输出
 //   - 用 DCLKO 上升沿采样 DOUTA / DOUTB
@@ -304,9 +303,18 @@ module ad71143_data_rx (
         end
     end
 
-    assign burst_en = (state == S_ACT);
+    assign burst_en_comb = (state == S_ACT);       // 组合逻辑, 仅用于观察
+    reg  burst_en_reg;                              // 寄存器打断 DCLK 反馈环路
+
+    always @(posedge clk_sys or negedge rst_n) begin
+        if (!rst_n)
+            burst_en_reg <= 1'b0;
+        else
+            burst_en_reg <= (state_next == S_ACT);  // 提前一拍, 与 state 跳变同步
+    end
+
+    assign burst_en     = burst_en_reg;
     assign burst_en_out  = burst_en;
-    assign burst_en_comb = burst_en;
     assign roic_trigger  = (state_next == S_ACT) || (state == S_ACT);
     assign shift_hi      = lane_a_shift[63:56];
     assign shift_lo      = lane_a_shift[7:0];
@@ -314,7 +322,6 @@ module ad71143_data_rx (
     // =========================================================================
     // LVDS I/O
     // =========================================================================
-`ifdef XILINX_PRIMITIVES
     ODDR #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
         .INIT(1'b0),
@@ -363,13 +370,5 @@ module ad71143_data_rx (
         .I  (dout_p_B),
         .IB (dout_n_B)
     );
-`else
-    assign dclk_pre = burst_en ? clk_sys : 1'b0;
-    assign dclk_p_A = dclk_pre;
-    assign dclk_n_A = ~dclk_pre;
-    assign dclko_i  = dclko_p_A;
-    assign dout_a_i = dout_p_A;
-    assign dout_b_i = dout_p_B;
-`endif
 
 endmodule

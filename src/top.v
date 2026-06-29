@@ -64,24 +64,20 @@ module top #(
     output wire         header_ok,
     output wire         rx_line_done
 );
-
-// =========================================================================
-// 时钟架构
-// =========================================================================
-`ifdef XILINX_PRIMITIVES
     wire clk_fb;
     wire pll_locked;
     wire clk_100m;
+    wire clk_200m;
 
     PLLE2_BASE #(
         .BANDWIDTH          ("OPTIMIZED"),
-        .CLKFBOUT_MULT      (20),
+        .CLKFBOUT_MULT      (20),        // VCO = 50MHz × 20 = 1000MHz
         .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (20.0),
-        .CLKOUT0_DIVIDE     (10),
+        .CLKIN1_PERIOD      (20.0),      // 50MHz 输入
+        .CLKOUT0_DIVIDE     (10),        // 1000 / 10 = 100MHz  (AFE ctrl + SPI)
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT0_PHASE      (0.0),
-        .CLKOUT1_DIVIDE     (1),
+        .CLKOUT1_DIVIDE     (5),         // 1000 /  5 = 200MHz  (LVDS data_rx)
         .CLKOUT1_DUTY_CYCLE (0.5),
         .CLKOUT1_PHASE      (0.0),
         .CLKOUT2_DIVIDE     (1),
@@ -102,7 +98,7 @@ module top #(
     ) pll_inst (
         .CLKIN1             (sys_clk),
         .CLKOUT0            (clk_100m),
-        .CLKOUT1            (),
+        .CLKOUT1            (clk_200m),
         .CLKOUT2            (),
         .CLKOUT3            (),
         .CLKOUT4            (),
@@ -113,24 +109,9 @@ module top #(
         .PWRDWN             (1'b0),
         .RST                (1'b0)
     );
-
-    wire gate_clk = sys_clk;
-    wire rst_n = key & pll_locked;
-`else
-    // 仿真: 测试台提供 100MHz sys_clk, gate_clk = 50MHz 分频
-    wire clk_100m = sys_clk;
-    reg  gate_clk;
-
-    wire rst_n;
-    assign rst_n = key;
-
-    always @(posedge clk_100m or negedge rst_n) begin
-        if (!rst_n)
-            gate_clk <= 1'b0;
-        else
-            gate_clk <= ~gate_clk;
-    end
-`endif
+   
+wire gate_clk = sys_clk;
+wire rst_n = key & pll_locked;
 
 // =========================================================================
 // 内部信号
@@ -157,9 +138,9 @@ wire        line_start_pulse;      // CDC 同步后的 line_start (toggle→puls
 // ---- SPI 配置 FSM (100MHz 域) ----
 wire        spi_cfg_done;
 wire        spi_done;
-reg         spi_start;
-reg  [3:0]  spi_reg_addr;
-reg  [9:0]  spi_reg_data;
+wire        spi_start;
+wire [3:0]  spi_reg_addr;
+wire [9:0]  spi_reg_data;
 wire [9:0]  spi_rdback;
 
 // ---- frame_done CDC ----
@@ -526,9 +507,11 @@ ad71143_spi u_spi (
     .spi_sdo    (spi_sdo)
 );
 
-// AD71143 LVDS 数据接收 (100MHz 域 — TODO: 应使用 200MHz 以获得最大 DCLK 速率)
-ad71143_data_rx u_data_rx (
-    .clk_sys              (clk_100m),
+// AD71143 LVDS 数据接收 (200MHz 域 — DCLK = 200MHz max per SPEC)
+ad71143_data_rx #(
+    .MUTE_MIN             (290)     // 200MHz: tBURST=1765ns, 353cyc-64=289→290
+) u_data_rx (
+    .clk_sys              (clk_200m),
     .rst_n                (rst_n),
     .sync_in              (sync),
     .aclk_done            (aclk_done),
