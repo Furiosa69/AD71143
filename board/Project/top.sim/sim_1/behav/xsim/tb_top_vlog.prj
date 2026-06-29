@@ -1,0 +1,14 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../../../src/ad71143_ctrl.v" \
+"../../../../../../src/ad71143_data_rx.v" \
+"../../../../../../src/ad71143_spi.v" \
+"../../../../../../src/nt39565d_ctrl.v" \
+"../../../../../../src/top.v" \
+"../../../../../../tb/tb_top.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
