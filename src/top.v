@@ -62,7 +62,15 @@ module top #(
     output wire [6:0]   merged_burst_index,
     output wire         merged_valid,
     output wire         header_ok,
-    output wire         rx_line_done
+    output wire         rx_line_done,
+
+    // ---- RGMII 发送 ----
+    output wire         rgmii_txc,
+    output wire         rgmii_tx_ctl,
+    output wire         rgmii_txd0,
+    output wire         rgmii_txd1,
+    output wire         rgmii_txd2,
+    output wire         rgmii_txd3
 );
     wire clk_fb;
     wire pll_locked;
@@ -587,5 +595,25 @@ nt39565d_gate_ctrl #(
     .line_done      (line_done      ),
     .frame_done     (frame_done     )
 );
+
+    // =========================================================================
+    // RGMII 桥接: merged_burst → 字节 → RGMII_tx
+    // =========================================================================
+    rgmii_bridge #(
+        .BURST_BYTES(16),
+        .FRAME_SIZE(16)
+    ) u_rgmii_bridge (
+        .sys_clk    (sys_clk),
+        .rst_n      (rst_n),
+        .clk_200m   (clk_200m),
+        .data_in    (merged_burst),
+        .data_valid (merged_valid),
+        .TXC        (rgmii_txc),
+        .TX_CTL     (rgmii_tx_ctl),
+        .TXD0       (rgmii_txd0),
+        .TXD1       (rgmii_txd1),
+        .TXD2       (rgmii_txd2),
+        .TXD3       (rgmii_txd3)
+    );
 
 endmodule

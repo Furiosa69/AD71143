@@ -1,0 +1,10 @@
+0.7
+2020.2
+Oct 13 2023
+20:47:58
+E:/ShiTa_Rob/AD71143/src/MMCM_sim.v,1782726995,systemVerilog,,E:/ShiTa_Rob/AD71143/src/ODDR_sim.v,,MMCME2_BASE,,,,,,,,
+E:/ShiTa_Rob/AD71143/src/ODDR_sim.v,1782727026,systemVerilog,,E:/ShiTa_Rob/AD71143/src/tb_rgmii_bridge.v,,ODDR,,,,,,,,
+E:/ShiTa_Rob/AD71143/src/RGMII_tx.v,1782726888,systemVerilog,,E:/ShiTa_Rob/AD71143/src/MMCM_sim.v,,RGMII_tx,,,,,,,,
+E:/ShiTa_Rob/AD71143/src/rgmii_bridge.v,1782726836,systemVerilog,,E:/ShiTa_Rob/AD71143/src/RGMII_tx.v,,rgmii_bridge,,,,,,,,
+E:/ShiTa_Rob/AD71143/src/tb_rgmii_bridge.v,1782727020,systemVerilog,,E:/Vivado/2023.2/data/verilog/src/glbl.v,,tb_rgmii_bridge,,,,,,,,
+E:/Vivado/2023.2/data/verilog/src/glbl.v,1697210495,systemVerilog,,,,glbl,,,,,,,,

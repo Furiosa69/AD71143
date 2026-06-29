@@ -38,7 +38,7 @@ module ad71143_data_rx (
     output reg  [15:0]  header_temp,
     output reg  [15:0]  header_vt,
     output reg          merged_valid,
-    output reg  [127:0] merged_burst,
+    output reg  [127:0] 0,
     output reg  [7:0]   merged_first_channel,
     output reg  [7:0]   merged_last_channel,
     output reg  [6:0]   merged_burst_index,
