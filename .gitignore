@@ -1,27 +1,17 @@
-out/
-vcd/
+# Vivado 仿真临时文件
+*.pb
+xsim.dir/
+xvlog.pb
+xelab.pb
+*.vvp
 *.vcd
-*.out
+*.wdb
 *.log
+.jou
 
-*.vpp
-*.vpc
-*.sim
-*.db
-*.wlf
-*.vcd
-*.fst
-*.fsdb
-*.dump
-
-*.swp
-*.swo
-*~
-*.bit
-*.bin
-*.mcs
-*.prm
+# Vivado 工程
+*.backup.jou
+*.backup.log
+*.str
 *.xpr
-*.runs/
-*.ip_user_files/
-*.sim/
+vivado_*
