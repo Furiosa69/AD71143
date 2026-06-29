@@ -27,7 +27,8 @@ module nt39565d_gate_ctrl #(
     parameter integer OUT_CH_2G         = 540,
     parameter integer DEFAULT_MODE_SEL  = 0,
     parameter         SCAN_DIRECTION    = 1'b0,
-    parameter         USE_DUAL_STV      = 1'b0
+    parameter         USE_DUAL_STV      = 1'b0,
+    parameter         PER_LINE_TRIG     = 0     // 1=wait for line_start each row
 )(
     input  wire       clk,
     input  wire       rst_n,
@@ -79,6 +80,7 @@ module nt39565d_gate_ctrl #(
     localparam [3:0] CPV_HIGH_S      = 4'd7;
     localparam [3:0] FRAME_END_S     = 4'd8;
     localparam [3:0] XAO_SHUT_S      = 4'd9;
+    localparam [3:0] WAIT_LINE       = 4'd10;
 
     reg [3:0]  state;
     reg [15:0] cnt;
@@ -89,6 +91,7 @@ module nt39565d_gate_ctrl #(
     reg        scan_dir_latched;
     reg        oe_mask_latched;
     reg [15:0] target_lines;
+    reg        frame_pending;
 
     reg        cfg_dual_stv;
     reg        cfg_long_stv;
@@ -188,6 +191,7 @@ module nt39565d_gate_ctrl #(
             scan_dir_latched  <= SCAN_DIRECTION;
             oe_mask_latched   <= 1'b0;
             target_lines      <= OUT_CH_NORMAL[15:0];
+            frame_pending     <= 1'b0;
 
             cpv               <= 1'b0;
             stv1              <= 1'b0;
@@ -214,6 +218,10 @@ module nt39565d_gate_ctrl #(
                 state <= XAO_SHUT_S;
             end
 
+            // 锁存 frame_start，防止脉冲在 busy 期间丢失
+            if (frame_start)
+                frame_pending <= 1'b1;
+
             case (state)
                 IDLE: begin
                     cnt        <= 16'd0;
@@ -235,7 +243,8 @@ module nt39565d_gate_ctrl #(
                     chip_sel2  <= cfg_chip_sel2;
                     oepsn      <= cfg_oepsn;
 
-                    if (frame_start || line_start) begin
+                    if (frame_start || frame_pending || (!PER_LINE_TRIG && line_start)) begin
+                        frame_pending     <= 1'b0;
                         busy              <= 1'b1;
                         mode_latched      <= mode_select;
                         stv_delay_latched <= stv_delay_sel;
@@ -359,10 +368,26 @@ module nt39565d_gate_ctrl #(
                             state <= FRAME_END_S;
                         end else begin
                             shift_cnt <= shift_cnt + 16'd1;
-                            state <= CPV_LOW_S;
+                            if (PER_LINE_TRIG)
+                                state <= WAIT_LINE;
+                            else
+                                state <= CPV_LOW_S;
                         end
                     end else begin
                         cnt <= cnt + 1'b1;
+                    end
+                end
+
+                WAIT_LINE: begin
+                    cpv  <= 1'b0;
+                    stv1 <= 1'b0;
+                    stv2 <= 1'b0;
+                    oe1  <= oe_inactive_level;
+                    oe2  <= oe_inactive_level;
+
+                    if (line_start) begin
+                        cnt   <= 16'd0;
+                        state <= CPV_LOW_S;
                     end
                 end
 

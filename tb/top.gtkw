@@ -1,0 +1,31 @@
+[*]
+[*] GTKWave Analyzer v3.3.127 (w)1999-2026 BSI
+[*] Mon Jun 29 03:00:01 2026
+[*]
+[dumpfile] "/home/furiosa/Projects/shitatechnology/work/ctrl/vcd/tb_top.vcd"
+[dumpfile_mtime] "Mon Jun 29 03:00:01 2026"
+[dumpfile_size] 4907413504
+[savefile] "/home/furiosa/Projects/shitatechnology/work/ctrl/tb/top.gtkw"
+[timestart] 32518038500
+[size] 1920 1033
+[pos] -27 -24
+*-16.200001 32518235000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_top.
+[sst_width] 290
+[signals_width] 150
+[sst_expanded] 1
+[sst_vpaned_height] 307
+@28
+tb_top.u_top.frame_active
+tb_top.u_top.frame_start
+tb_top.u_top.frame_done
+tb_top.u_top.cpv
+tb_top.u_top.aclk
+tb_top.sys_clk
+tb_top.u_top.ctrl_line_start
+@29
+tb_top.u_top.ctrl_line_done
+@28
+tb_top.u_top.frame_done_o
+[pattern_trace] 1
+[pattern_trace] 0

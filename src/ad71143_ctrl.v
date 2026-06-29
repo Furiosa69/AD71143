@@ -18,10 +18,13 @@ module ad71143_ctrl #(
     parameter integer ACLK_PULSES      = 9,
     parameter integer LINE_CYCLES      = 6000,     // 60μs @ 100MHz
     parameter integer RESET_CYCLES     = 1000,     // 10μs
-    parameter integer INIT_WAIT_CYCLES = 10000     // 100μs
+    parameter integer INIT_WAIT_CYCLES = 10000,    // 100μs
+    parameter integer FRAME_LINES      = 541
 ) (
     input  wire         clk,
     input  wire         rst_n,
+
+    input  wire         frame_start,
 
     output wire         roic_reset,
     output wire         sync,
@@ -31,25 +34,29 @@ module ad71143_ctrl #(
     output reg          line_start,
     output reg          line_done,
     output wire [3:0]   aclk_idx,
-    output reg  [9:0]   line_cnt
+    output reg  [9:0]   line_cnt,
+
+    output reg          frame_done
 );
 
     // =========================================================================
     // 主状态机 (Mealy 型: 用时序状态 + 组合输出避免竞争)
     // =========================================================================
-    localparam S_INIT_RESET  = 3'd0;
-    localparam S_INIT_WAIT   = 3'd1;
-    localparam S_SYNC_SETUP  = 3'd2;    // SYNC=0, 等 tSYNCACLK
-    localparam S_ACLK_ACT    = 3'd3;    // ACLK 脉冲序列
-    localparam S_SYNC_HOLD   = 3'd4;    // ACLK 完成后保持 SYNC=0
-    localparam S_LINE_GAP    = 3'd5;    // 行间隔
+    localparam S_INIT_RESET  = 4'd0;
+    localparam S_INIT_WAIT   = 4'd1;
+    localparam S_IDLE        = 4'd2;    // wait for frame_start
+    localparam S_SYNC_SETUP  = 4'd3;    // SYNC=0, 等 tSYNCACLK
+    localparam S_ACLK_ACT    = 4'd4;    // ACLK 脉冲序列
+    localparam S_SYNC_HOLD   = 4'd5;    // ACLK 完成后保持 SYNC=0
+    localparam S_LINE_GAP    = 4'd6;    // 行间隔
 
-    reg [2:0]  state, state_next;
+    reg [3:0]  state, state_next;
     reg [15:0] timer, timer_next;
     reg        init_done_next;
     reg        line_start_next;
     reg        line_done_next;
     reg [9:0]  line_cnt_next;
+    reg        frame_done_next;
 
     // ---- 状态 + 定时器 ----
     always @(posedge clk or negedge rst_n) begin
@@ -60,6 +67,7 @@ module ad71143_ctrl #(
             line_start <= 1'b0;
             line_done  <= 1'b0;
             line_cnt   <= 10'd0;
+            frame_done <= 1'b0;
         end else begin
             state      <= state_next;
             timer      <= timer_next;
@@ -67,6 +75,7 @@ module ad71143_ctrl #(
             line_start <= line_start_next;
             line_done  <= line_done_next;
             line_cnt   <= line_cnt_next;
+            frame_done <= frame_done_next;
         end
     end
 
@@ -79,6 +88,7 @@ module ad71143_ctrl #(
         line_start_next = 1'b0;
         line_done_next  = 1'b0;
         line_cnt_next   = line_cnt;
+        frame_done_next = 1'b0;
 
         case (state)
             S_INIT_RESET: begin
@@ -92,11 +102,19 @@ module ad71143_ctrl #(
 
             S_INIT_WAIT: begin
                 if (timer == INIT_WAIT_CYCLES - 1) begin
-                    state_next     = S_SYNC_SETUP;
+                    state_next     = S_IDLE;
                     timer_next     = 16'd0;
                     init_done_next = 1'b1;
                 end else begin
                     timer_next = timer + 16'd1;
+                end
+            end
+
+            S_IDLE: begin
+                line_cnt_next = 10'd0;
+                if (frame_start) begin
+                    state_next = S_SYNC_SETUP;
+                    timer_next = 16'd0;
                 end
             end
 
@@ -137,13 +155,18 @@ module ad71143_ctrl #(
 
             S_LINE_GAP: begin
                 // 行间隔
-                // 已用: 1(S_LINE_START隐含)+2(S_SYNC_SETUP)+18(S_ACLK)+2(S_SYNC_HOLD)=23
+                // 已用: 2(S_SYNC_SETUP)+18(S_ACLK)+2(S_SYNC_HOLD)=22
                 if (timer == 0) begin
                     line_done_next = 1'b1;
                     line_cnt_next  = line_cnt + 10'd1;
                 end
-                if (timer == LINE_CYCLES - 24) begin
-                    state_next = S_SYNC_SETUP;
+                if (timer == LINE_CYCLES - 23) begin
+                    if (line_cnt >= FRAME_LINES - 1) begin
+                        state_next      = S_IDLE;
+                        frame_done_next = 1'b1;
+                    end else begin
+                        state_next = S_SYNC_SETUP;
+                    end
                     timer_next = 16'd0;
                 end else begin
                     timer_next = timer + 16'd1;
