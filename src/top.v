@@ -47,7 +47,22 @@ module top #(
     output wire frame_active,
     output wire frame_done_o,
     output wire line_done_o,
-    output wire ctrl_init_done_o
+    output wire ctrl_init_done_o,
+
+    // ---- AD71143 LVDS 数据接口 ----
+    output wire dclk_p,
+    output wire dclk_n,
+    input  wire dclko_p_A,
+    input  wire dclko_n_A,
+    input  wire dout_p_A,
+    input  wire dout_n_A,
+    input  wire dout_p_B,
+    input  wire dout_n_B,
+    output wire [127:0] merged_burst,
+    output wire [6:0]   merged_burst_index,
+    output wire         merged_valid,
+    output wire         header_ok,
+    output wire         rx_line_done
 );
 
 // =========================================================================
@@ -128,6 +143,7 @@ wire        ctrl_line_done;
 wire        ctrl_frame_done;
 wire [9:0]  ctrl_line_cnt;
 wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz 域)
+wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl → data_rx)
 
 // ---- 50MHz 域 (gate driver + top FSM) ----
 wire        busy;
@@ -384,6 +400,11 @@ assign spi_reg_data = cfg_data_lut;
 assign spi_start    = cfg_spi_start;
 assign spi_cfg_done = cfg_all_done;
 
+// AD71143 SPEC: 转换期间 CS 必须保持低电平
+// SPI 配置完成后强制 CS=0, 否则使用 SPI 模块的 CS 输出
+wire spi_cs_raw;
+assign spi_cs = spi_cfg_done ? 1'b0 : spi_cs_raw;
+
 // =========================================================================
 // Top FSM (50MHz 域)
 //   POWERUP → WAIT_INIT → WAIT_CFG → IDLE → START → WAIT_FRAME → FRAME_GAP
@@ -485,7 +506,8 @@ ad71143_ctrl #(
     .line_done    (ctrl_line_done),
     .aclk_idx     (),
     .line_cnt     (ctrl_line_cnt),
-    .frame_done   (ctrl_frame_done)
+    .frame_done   (ctrl_frame_done),
+    .aclk_done    (aclk_done)
 );
 
 // AD71143 SPI Master (100MHz 域)
@@ -498,10 +520,44 @@ ad71143_spi u_spi (
     .reg_data   (spi_reg_data),
     .done       (spi_done),
     .reg_rdback (spi_rdback),
-    .spi_cs     (spi_cs),
+    .spi_cs     (spi_cs_raw),
     .spi_sck    (spi_sck),
     .spi_sdi    (spi_sdi),
     .spi_sdo    (spi_sdo)
+);
+
+// AD71143 LVDS 数据接收 (100MHz 域 — TODO: 应使用 200MHz 以获得最大 DCLK 速率)
+ad71143_data_rx u_data_rx (
+    .clk_sys              (clk_100m),
+    .rst_n                (rst_n),
+    .sync_in              (sync),
+    .aclk_done            (aclk_done),
+    .dclk_p_A             (dclk_p),
+    .dclk_n_A             (dclk_n),
+    .dclko_p_A            (dclko_p_A),
+    .dclko_n_A            (dclko_n_A),
+    .dout_p_A             (dout_p_A),
+    .dout_n_A             (dout_n_A),
+    .dout_p_B             (dout_p_B),
+    .dout_n_B             (dout_n_B),
+    .line_done            (rx_line_done),
+    .header_ok            (header_ok),
+    .header_byte          (),
+    .header_readdown      (),
+    .header_cds_id        (),
+    .header_temp          (),
+    .header_vt            (),
+    .merged_valid         (merged_valid),
+    .merged_burst         (merged_burst),
+    .merged_first_channel (),
+    .merged_last_channel  (),
+    .merged_burst_index   (merged_burst_index),
+    .state_debug          (),
+    .shift_hi             (),
+    .shift_lo             (),
+    .burst_en_out         (),
+    .burst_en_comb        (),
+    .roic_trigger         ()
 );
 
 // NT39565D Gate Driver (50MHz 域, 修复 CLK_FREQ_MHZ=50)

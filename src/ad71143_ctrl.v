@@ -36,7 +36,8 @@ module ad71143_ctrl #(
     output wire [3:0]   aclk_idx,
     output reg  [9:0]   line_cnt,
 
-    output reg          frame_done
+    output reg          frame_done,
+    output reg          aclk_done
 );
 
     // =========================================================================
@@ -57,6 +58,7 @@ module ad71143_ctrl #(
     reg        line_done_next;
     reg [9:0]  line_cnt_next;
     reg        frame_done_next;
+    reg        aclk_done_next;
 
     // ---- 状态 + 定时器 ----
     always @(posedge clk or negedge rst_n) begin
@@ -68,6 +70,7 @@ module ad71143_ctrl #(
             line_done  <= 1'b0;
             line_cnt   <= 10'd0;
             frame_done <= 1'b0;
+            aclk_done  <= 1'b0;
         end else begin
             state      <= state_next;
             timer      <= timer_next;
@@ -76,6 +79,7 @@ module ad71143_ctrl #(
             line_done  <= line_done_next;
             line_cnt   <= line_cnt_next;
             frame_done <= frame_done_next;
+            aclk_done  <= aclk_done_next;
         end
     end
 
@@ -89,6 +93,7 @@ module ad71143_ctrl #(
         line_done_next  = 1'b0;
         line_cnt_next   = line_cnt;
         frame_done_next = 1'b0;
+        aclk_done_next  = 1'b0;
 
         case (state)
             S_INIT_RESET: begin
@@ -136,8 +141,9 @@ module ad71143_ctrl #(
                 // timer 0,1 → pulse 0; timer 2,3 → pulse 1; ...
                 // timer 0..17 → 9 个脉冲
                 if (timer == (ACLK_PULSES * 2) - 1) begin
-                    state_next = S_SYNC_HOLD;
-                    timer_next = 16'd0;
+                    state_next     = S_SYNC_HOLD;
+                    timer_next     = 16'd0;
+                    aclk_done_next = 1'b1;
                 end else begin
                     timer_next = timer + 16'd1;
                 end

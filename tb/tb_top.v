@@ -31,6 +31,20 @@ wire        frame_done_o;
 wire        line_done_o;
 wire        ctrl_init_done_o;
 
+wire        dclk_p;
+wire        dclk_n;
+wire        dclko_p_A;
+wire        dclko_n_A;
+wire        dout_p_A;
+wire        dout_n_A;
+wire        dout_p_B;
+wire        dout_n_B;
+wire [127:0] merged_burst;
+wire [6:0]   merged_burst_index;
+wire         merged_valid;
+wire         header_ok;
+wire         rx_line_done;
+
 initial begin
     sys_clk = 1'b0;
     forever #5 sys_clk = ~sys_clk;  // 5ns 半周期 → 10ns 周期 → 100MHz
@@ -121,7 +135,32 @@ top #(
     .frame_active      (frame_active    ),
     .frame_done_o      (frame_done_o    ),
     .line_done_o       (line_done_o     ),
-    .ctrl_init_done_o  (ctrl_init_done_o)
+    .ctrl_init_done_o  (ctrl_init_done_o),
+    .dclk_p            (dclk_p),
+    .dclk_n            (dclk_n),
+    .dclko_p_A         (dclko_p_A),
+    .dclko_n_A         (dclko_n_A),
+    .dout_p_A          (dout_p_A),
+    .dout_n_A          (dout_n_A),
+    .dout_p_B          (dout_p_B),
+    .dout_n_B          (dout_n_B),
+    .merged_burst      (merged_burst),
+    .merged_burst_index(merged_burst_index),
+    .merged_valid      (merged_valid),
+    .header_ok         (header_ok),
+    .rx_line_done      (rx_line_done)
 );
+
+// =========================================================================
+// AFE LVDS echo clock loopback (DCLK → DCLKO, 模拟 AD71143 回波)
+// =========================================================================
+assign dclko_p_A = dclk_p;
+assign dclko_n_A = dclk_n;
+
+// DOUT = 0 (无 AFE 仿真模型, 数据读回全零)
+assign dout_p_A = 1'b0;
+assign dout_n_A = 1'b1;
+assign dout_p_B = 1'b0;
+assign dout_n_B = 1'b1;
 
 endmodule

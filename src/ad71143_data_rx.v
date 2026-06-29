@@ -61,7 +61,7 @@ module ad71143_data_rx (
     localparam integer ACTIVE_DCLK = 64;
     localparam integer DATA_BURSTS = 32;   // dual LVDS: 256ch * 16bit / 128bit-per-burst
     localparam integer TOTAL_BURSTS = 34;  // header + 32 data + config bursts
-    localparam integer MUTE_MIN = 290;
+    parameter  integer MUTE_MIN    = 113;  // tBURST=1765ns: 177cyc-64=113 @ 100MHz (290 @ 200MHz)
 
     reg  [2:0] state;
     reg  [2:0] state_next;
@@ -119,8 +119,6 @@ module ad71143_data_rx (
         if (!rst_n) begin
             state <= S_IDLE;
         end else begin
-            if (state != state_next)
-                $display("[%0t] DUT STATE: %0d -> %0d", $time, state, state_next);
             state <= state_next;
         end
     end
@@ -209,25 +207,12 @@ module ad71143_data_rx (
                             header_cds_id   <= lane_a_shift[48];
                             header_temp     <= lane_a_shift[31:16];
                             header_vt       <= lane_a_shift[15:0];
-                            $display("[%0t] DUT HEADER: lane_a_shift=%h", $time, lane_a_shift);
-                            $display("[%0t] DUT HEADER: [63:56]=%h [55:51]=%b [50]=%b [49]=%b [48]=%b [47:32]=%h [31:16]=%h [15:0]=%h",
-                                     $time, lane_a_shift[63:56], lane_a_shift[55:51], lane_a_shift[50],
-                                     lane_a_shift[49], lane_a_shift[48], lane_a_shift[47:32],
-                                     lane_a_shift[31:16], lane_a_shift[15:0]);
-                            $display("[%0t] DUT HEADER: byte=%h ok=%b readdown=%b cds_id=%b temp=%h vt=%h",
-                                     $time, lane_a_shift[63:56],
-                                     (lane_a_shift[63:56]==8'h0A)&&(lane_a_shift[55:51]==5'b0)&&(lane_a_shift[47:32]==16'h0000),
-                                     lane_a_shift[49], lane_a_shift[48],
-                                     lane_a_shift[31:16], lane_a_shift[15:0]);
                         end else if (burst_cnt <= DATA_BURSTS) begin
                             merged_burst         <= merged_burst_next;
                             merged_first_channel <= merged_first_channel_next;
                             merged_last_channel  <= merged_last_channel_next;
                             merged_burst_index   <= burst_cnt - 1'b1;
                             merged_valid         <= 1'b1;
-                            $display("[%0t] DUT MERGE: burst_cnt=%0d readdown=%b merged=%h first_ch=%0d last_ch=%0d",
-                                     $time, burst_cnt, header_readdown, merged_burst_next,
-                                     merged_first_channel_next, merged_last_channel_next);
                         end
 
                         if (burst_cnt < TOTAL_BURSTS - 1)
