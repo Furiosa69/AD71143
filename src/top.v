@@ -268,7 +268,9 @@ assign cfg_done_synced = cfg_done_sync2;
 
 // =========================================================================
 // SPI 配置 FSM (100MHz 域)
-//   写入 8 个 AD71143 寄存器: Reg3→Reg0→Reg1→Reg2→Reg4→Reg5→Reg6→Reg7
+//   写入全部 16 个 AD71143 寄存器 (ADDR 0-15)
+//   顺序: Reg3(REFDAC)→Reg0(PWR)→Reg1(LPF)→Reg2(Mode)→Reg4~7(Timing)→Reg8~15
+//   值来源: AD71143 SPEC Table 12 + Figure 22 Pipeline Mode 推荐
 // =========================================================================
 localparam CFG_IDLE  = 2'd0;
 localparam CFG_ISSUE = 2'd1;
@@ -276,34 +278,50 @@ localparam CFG_WAIT  = 2'd2;
 localparam CFG_DONE  = 2'd3;
 
 reg [1:0]  cfg_state, cfg_state_next;
-reg [2:0]  cfg_reg_idx;
+reg [3:0]  cfg_reg_idx;
 reg        cfg_spi_start;
 reg        cfg_all_done;
 
-// SPI 配置寄存器 LUT (与 spi_test_top.v 一致)
+// SPI 配置寄存器 LUT — 按推荐上电顺序排列
 wire [3:0] cfg_addr_lut;
 wire [9:0] cfg_data_lut;
 
 assign cfg_addr_lut =
-    (cfg_reg_idx == 3'd0) ? 4'd3  :
-    (cfg_reg_idx == 3'd1) ? 4'd0  :
-    (cfg_reg_idx == 3'd2) ? 4'd1  :
-    (cfg_reg_idx == 3'd3) ? 4'd2  :
-    (cfg_reg_idx == 3'd4) ? 4'd4  :
-    (cfg_reg_idx == 3'd5) ? 4'd5  :
-    (cfg_reg_idx == 3'd6) ? 4'd6  :
-    (cfg_reg_idx == 3'd7) ? 4'd7  :
+    (cfg_reg_idx == 4'd0)  ? 4'd3  :   // Reg3: REFDAC
+    (cfg_reg_idx == 4'd1)  ? 4'd0  :   // Reg0: PWR + IFS
+    (cfg_reg_idx == 4'd2)  ? 4'd1  :   // Reg1: LPF + options
+    (cfg_reg_idx == 4'd3)  ? 4'd2  :   // Reg2: Mode control
+    (cfg_reg_idx == 4'd4)  ? 4'd4  :   // Reg4: INTRST timing
+    (cfg_reg_idx == 4'd5)  ? 4'd5  :   // Reg5: CDS1 timing
+    (cfg_reg_idx == 4'd6)  ? 4'd6  :   // Reg6: CDS2 timing
+    (cfg_reg_idx == 4'd7)  ? 4'd7  :   // Reg7: FA timing
+    (cfg_reg_idx == 4'd8)  ? 4'd8  :   // Reg8: Custom clamp
+    (cfg_reg_idx == 4'd9)  ? 4'd9  :   // Reg9: Reserved
+    (cfg_reg_idx == 4'd10) ? 4'd10 :   // Reg10: Pipeline average
+    (cfg_reg_idx == 4'd11) ? 4'd11 :   // Reg11: LFSR
+    (cfg_reg_idx == 4'd12) ? 4'd12 :   // Reg12: Low power
+    (cfg_reg_idx == 4'd13) ? 4'd13 :   // Reg13: Reserved
+    (cfg_reg_idx == 4'd14) ? 4'd14 :   // Reg14: Reserved
+    (cfg_reg_idx == 4'd15) ? 4'd15 :   // Reg15: Reserved
     4'd0;
 
 assign cfg_data_lut =
-    (cfg_reg_idx == 3'd0) ? 10'h040 :  // Reg3: REFDAC=64 → ~1.5V
-    (cfg_reg_idx == 3'd1) ? 10'h014 :  // Reg0: PWR=Normal, IFS=20
-    (cfg_reg_idx == 3'd2) ? 10'h230 :  // Reg1: LPF=3.9μs, CDS2_RESETEN
-    (cfg_reg_idx == 3'd3) ? 10'h003 :  // Reg2: Pipeline=1, ECHOCLK=1
-    (cfg_reg_idx == 3'd4) ? 10'h070 :  // Reg4: INTRST
-    (cfg_reg_idx == 3'd5) ? 10'h001 :  // Reg5: CDS1
-    (cfg_reg_idx == 3'd6) ? 10'h005 :  // Reg6: CDS2
-    (cfg_reg_idx == 3'd7) ? 10'h002 :  // Reg7: FA
+    (cfg_reg_idx == 4'd0)  ? 10'h040 :  // Reg3:  AZEN=0, REFDAC=64 → 1.5V
+    (cfg_reg_idx == 4'd1)  ? 10'h014 :  // Reg0:  PWR=Normal(000), IFS=20
+    (cfg_reg_idx == 4'd2)  ? 10'h0A0 :  // Reg1:  LPF=3.9μs(01), CDS2_RESETEN=1
+    (cfg_reg_idx == 4'd3)  ? 10'h027 :  // Reg2:  RNDOMIZE=1, DOUTMODE=1, ECHOCLK=1, Pipeline=1
+    (cfg_reg_idx == 4'd4)  ? 10'h082 :  // Reg4:  INTRST_C=8(ACLK8), INTRST_O=2(ACLK2)
+    (cfg_reg_idx == 4'd5)  ? 10'h013 :  // Reg5:  CDS1_C=1(ACLK1), CDS1_O=3(ACLK3)
+    (cfg_reg_idx == 4'd6)  ? 10'h046 :  // Reg6:  CDS2_C=4(ACLK4), CDS2_O=6(ACLK6)
+    (cfg_reg_idx == 4'd7)  ? 10'h025 :  // Reg7:  FA_CDS1=2(ACLK2), FA_CDS2=5(ACLK5)
+    (cfg_reg_idx == 4'd8)  ? 10'h000 :  // Reg8:  CUSTCLMPEN=0 (禁用自定义钳位)
+    (cfg_reg_idx == 4'd9)  ? 10'h000 :  // Reg9:  Reserved
+    (cfg_reg_idx == 4'd10) ? 10'h000 :  // Reg10: PIPELINE_AVGEN=0
+    (cfg_reg_idx == 4'd11) ? 10'h000 :  // Reg11: LFSR_EN=0
+    (cfg_reg_idx == 4'd12) ? 10'h000 :  // Reg12: LP_EN=0 (Normal模式)
+    (cfg_reg_idx == 4'd13) ? 10'h000 :  // Reg13: Reserved
+    (cfg_reg_idx == 4'd14) ? 10'h000 :  // Reg14: Reserved
+    (cfg_reg_idx == 4'd15) ? 10'h000 :  // Reg15: Reserved
     10'h000;
 
 always @(posedge clk_100m or negedge rst_n) begin
@@ -323,9 +341,9 @@ always @(*) begin
         CFG_ISSUE: cfg_state_next = CFG_WAIT;
         CFG_WAIT:  if (spi_done) cfg_state_next = CFG_DONE;
         CFG_DONE: begin
-            if (cfg_reg_idx != 3'd7)
+            if (cfg_reg_idx != 4'd15)
                 cfg_state_next = CFG_ISSUE;
-            // else stay in CFG_DONE permanently (all 8 regs written)
+            // else stay in CFG_DONE permanently (all 16 regs written)
         end
         default: cfg_state_next = CFG_IDLE;
     endcase
@@ -334,14 +352,14 @@ end
 always @(posedge clk_100m or negedge rst_n) begin
     if (!rst_n) begin
         cfg_spi_start <= 1'b0;
-        cfg_reg_idx   <= 3'd0;
+        cfg_reg_idx   <= 4'd0;
         cfg_all_done  <= 1'b0;
     end else begin
         cfg_spi_start <= 1'b0;
 
         case (cfg_state)
             CFG_IDLE: begin
-                cfg_reg_idx  <= 3'd0;
+                cfg_reg_idx  <= 4'd0;
                 cfg_all_done <= 1'b0;
             end
             CFG_ISSUE: begin
@@ -351,10 +369,10 @@ always @(posedge clk_100m or negedge rst_n) begin
                 // wait for spi_done
             end
             CFG_DONE: begin
-                if (cfg_reg_idx == 3'd7)
+                if (cfg_reg_idx == 4'd15)
                     cfg_all_done <= 1'b1;
                 else
-                    cfg_reg_idx <= cfg_reg_idx + 3'd1;
+                    cfg_reg_idx <= cfg_reg_idx + 4'd1;
             end
         endcase
     end
