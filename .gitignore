@@ -8,10 +8,3 @@ xelab.pb
 *.wdb
 *.log
 .jou
-
-# Vivado 工程
-*.backup.jou
-*.backup.log
-*.str
-*.xpr
-vivado_*
