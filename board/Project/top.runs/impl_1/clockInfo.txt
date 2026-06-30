@@ -1,7 +1,7 @@
 -------------------------------------
 | Tool Version : Vivado v.2023.2
-| Date         : Mon Jun 29 15:30:05 2026
-| Host         : Furiosa
+| Date         : Mon Jun 29 19:05:02 2026
+| Host         : DESKTOP-L1V09UT
 | Design       : design_1
 | Device       : xc7a200t-fbg484-2--
 -------------------------------------

@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a200tfbg484-2" LaunchTime="1782718002">
-  <File Type="VDS-TIMINGSUMMARY" Name="top_timing_summary_synth.rpt"/>
-  <File Type="RDS-DCP" Name="top.dcp"/>
-  <File Type="RDS-UTIL-PB" Name="top_utilization_synth.pb"/>
-  <File Type="RDS-UTIL" Name="top_utilization_synth.rpt"/>
-  <File Type="RDS-PROPCONSTRS" Name="top_drc_synth.rpt"/>
-  <File Type="RDS-RDS" Name="top.vds"/>
-  <File Type="REPORTS-TCL" Name="top_reports.tcl"/>
-  <File Type="VDS-TIMING-PB" Name="top_timing_summary_synth.pb"/>
+<GenRun Id="synth_1" LaunchPart="xc7a200tfbg484-2" LaunchTime="1782731040">
   <File Type="PA-TCL" Name="top.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="top_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="top_reports.tcl"/>
+  <File Type="RDS-RDS" Name="top.vds"/>
+  <File Type="RDS-UTIL" Name="top_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="top_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="top.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="top_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="top_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
+    <File Path="$PPRDIR/../../src/RGMII_tx.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <File Path="$PPRDIR/../../src/ad71143_ctrl.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -33,6 +40,13 @@
       </FileInfo>
     </File>
     <File Path="$PPRDIR/../../src/nt39565d_ctrl.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../src/rgmii_bridge.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

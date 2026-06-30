@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Mon Jun 29 15:30:06 2026
-| Host         : Furiosa running 64-bit Arch Linux
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Mon Jun 29 19:05:17 2026
+| Host         : DESKTOP-L1V09UT running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
 | Design       : top
 | Device       : xc7a200t
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |    21 |
-|    Minimum number of control sets                        |    21 |
+| Total control sets                                       |    26 |
+|    Minimum number of control sets                        |    26 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    70 |
+| Unused register locations in slices containing registers |    82 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |    21 |
+| Total control sets |    26 |
 | >= 0 to < 4        |     3 |
 | >= 4 to < 6        |     4 |
 | >= 6 to < 8        |     4 |
-| >= 8 to < 10       |     1 |
+| >= 8 to < 10       |     2 |
 | >= 10 to < 12      |     1 |
 | >= 12 to < 14      |     2 |
 | >= 14 to < 16      |     0 |
-| >= 16              |     6 |
+| >= 16              |    10 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -59,41 +59,46 @@ Table of Contents
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | No           | No                    | No                     |               0 |            0 |
-| No           | No                    | Yes                    |              74 |           37 |
-| No           | Yes                   | No                     |               0 |            0 |
+| No           | No                    | Yes                    |              79 |           49 |
+| No           | Yes                   | No                     |              14 |            6 |
 | Yes          | No                    | No                     |               0 |            0 |
-| Yes          | No                    | Yes                    |             376 |          123 |
-| Yes          | Yes                   | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |             649 |          187 |
+| Yes          | Yes                   | No                     |              32 |            7 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+----------------------+--------------------------------------------+------------------+------------------+----------------+--------------+
-|     Clock Signal     |                Enable Signal               | Set/Reset Signal | Slice Load Count | Bel Load Count | Bels / Slice |
-+----------------------+--------------------------------------------+------------------+------------------+----------------+--------------+
-|  sys_clk_IBUF_BUFG   | u_spi/spi_sdi_i_1_n_0                      | u_data_rx/key    |                1 |              1 |         1.00 |
-|  gate_clk_BUFG       | u_nt39565d/busy_i_1_n_0                    | u_data_rx/key    |                1 |              1 |         1.00 |
-|  clk_200m_BUFG       | u_data_rx/header_ok_i_1_n_0                | u_data_rx/key    |                1 |              1 |         1.00 |
-|  dclko_p_A_IBUF_BUFG |                                            | u_data_rx/key    |                3 |              4 |         1.33 |
-|  sys_clk_IBUF_BUFG   | cfg_reg_idx                                | u_data_rx/key    |                1 |              4 |         4.00 |
-|  gate_clk_BUFG       | u_nt39565d/FSM_sequential_state[3]_i_1_n_0 | u_data_rx/key    |                2 |              4 |         2.00 |
-|  gate_clk_BUFG       | u_nt39565d/cpv_i_1_n_0                     | u_data_rx/key    |                3 |              5 |         1.67 |
-|  clk_200m_BUFG       | u_data_rx/burst_cnt[5]_i_1_n_0             | u_data_rx/key    |                2 |              6 |         3.00 |
-|  clk_200m_BUFG       | u_data_rx/merged_burst_index[5]_i_1_n_0    | u_data_rx/key    |                1 |              6 |         6.00 |
-|  gate_clk_BUFG       | gap_cnt                                    | u_data_rx/key    |                2 |              7 |         3.50 |
-|  gate_clk_BUFG       | FSM_onehot_top_state[6]_i_1_n_0            | u_data_rx/key    |                3 |              7 |         2.33 |
-|  clk_200m_BUFG       | u_data_rx/mute_cnt[8]_i_1_n_0              | u_data_rx/key    |                3 |              9 |         3.00 |
-|  sys_clk_IBUF_BUFG   | u_ad71143_ctrl/line_cnt_next               | u_data_rx/key    |                3 |             10 |         3.33 |
-|  clk_200m_BUFG       |                                            | u_data_rx/key    |                6 |             12 |         2.00 |
-|  gate_clk_BUFG       |                                            | u_data_rx/key    |                8 |             13 |         1.62 |
-|  gate_clk_BUFG       | u_nt39565d/shift_cnt[15]_i_1_n_0           | u_data_rx/key    |                3 |             16 |         5.33 |
-|  gate_clk_BUFG       | u_nt39565d/cnt[15]_i_1_n_0                 | u_data_rx/key    |                4 |             16 |         4.00 |
-|  sys_clk_IBUF_BUFG   | u_spi/bit_cnt                              | u_data_rx/key    |                6 |             20 |         3.33 |
-|  sys_clk_IBUF_BUFG   |                                            | u_data_rx/key    |               20 |             45 |         2.25 |
-|  clk_200m_BUFG       | u_data_rx/merged_valid_i_1_n_0             | u_data_rx/key    |               53 |            128 |         2.42 |
-|  dclko_p_A_IBUF_BUFG | u_data_rx/lane_b_shift                     | u_data_rx/key    |               34 |            135 |         3.97 |
-+----------------------+--------------------------------------------+------------------+------------------+----------------+--------------+
++----------------------+--------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|     Clock Signal     |                Enable Signal               |          Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------------+--------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|  clk_200m_BUFG       | u_data_rx/header_ok_i_1_n_0                | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
+|  clk_100m_BUFG       | u_spi/spi_sdi_i_1_n_0                      | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/busy_i_1_n_0                    | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
+|  clk_100m_BUFG       | cfg_reg_idx                                | u_data_rx/pll_inst                 |                1 |              4 |         4.00 |
+|  dclko_i             |                                            | u_data_rx/pll_inst                 |                3 |              4 |         1.33 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/FSM_sequential_state[3]_i_1_n_0 | u_data_rx/pll_inst                 |                2 |              4 |         2.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/cpv_i_1_n_0                     | u_data_rx/pll_inst                 |                3 |              5 |         1.67 |
+|  clk_200m_BUFG       | u_data_rx/burst_cnt[5]_i_1_n_0             | u_data_rx/pll_inst                 |                3 |              6 |         2.00 |
+|  clk_200m_BUFG       | u_data_rx/merged_burst_index[5]_i_1_n_0    | u_data_rx/pll_inst                 |                2 |              6 |         3.00 |
+|  sys_clk_IBUF_BUFG   | FSM_onehot_top_state[6]_i_1_n_0            | u_data_rx/pll_inst                 |                1 |              7 |         7.00 |
+|  sys_clk_IBUF_BUFG   | gap_cnt                                    | u_data_rx/pll_inst                 |                3 |              7 |         2.33 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/tx_data_125m[7]_i_1_n_0     | u_rgmii_bridge/u_rgmii_tx/pll_inst |                3 |              8 |         2.67 |
+|  clk_200m_BUFG       | u_data_rx/mute_cnt[8]_i_1_n_0              | u_data_rx/pll_inst                 |                4 |              9 |         2.25 |
+|  clk_100m_BUFG       | u_ad71143_ctrl/line_cnt_next               | u_data_rx/pll_inst                 |                3 |             10 |         3.33 |
+|  clk_200m_BUFG       |                                            | u_data_rx/pll_inst                 |               12 |             13 |         1.08 |
+|  sys_clk_IBUF_BUFG   |                                            | u_data_rx/pll_inst                 |                8 |             13 |         1.62 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/cnt[15]_i_1_n_0                 | u_data_rx/pll_inst                 |                5 |             16 |         3.20 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/shift_cnt[15]_i_1_n_0           | u_data_rx/pll_inst                 |                2 |             16 |         8.00 |
+|  rgmii_txc_OBUF_BUFG |                                            | u_rgmii_bridge/u_rgmii_tx/pll_inst |                9 |             19 |         2.11 |
+|  clk_100m_BUFG       | u_spi/bit_cnt                              | u_data_rx/pll_inst                 |                5 |             20 |         4.00 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/u_rgmii_tx/Byte_cnt         | u_rgmii_bridge/u_rgmii_tx/pll_inst |                7 |             32 |         4.57 |
+|  clk_100m_BUFG       |                                            | u_data_rx/pll_inst                 |               23 |             44 |         1.91 |
+|  clk_200m_BUFG       | u_data_rx/merged_valid_i_1_n_0             | u_data_rx/pll_inst                 |               33 |            128 |         3.88 |
+|  clk_200m_BUFG       | u_data_rx/E[0]                             | u_data_rx/pll_inst                 |               37 |            129 |         3.49 |
+|  dclko_i             | u_data_rx/lane_b_shift                     | u_data_rx/pll_inst                 |               28 |            135 |         4.82 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/byte_cnt[7]_i_1_n_0         | u_rgmii_bridge/u_rgmii_tx/pll_inst |               49 |            136 |         2.78 |
++----------------------+--------------------------------------------+------------------------------------+------------------+----------------+--------------+
 
 

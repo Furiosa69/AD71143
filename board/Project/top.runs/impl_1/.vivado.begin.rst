@@ -1,35 +1,10 @@
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1859910" HostCore="24" HostMemory="32262480">
+    <Process Command="vivado.bat" Owner="±±±ùÑó" Host="DESKTOP-L1V09UT" Pid="33712" HostCore="24" HostMemory="034084429824">
     </Process>
 </ProcessHandle>
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1872234" HostCore="24" HostMemory="32262480">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1883356" HostCore="24" HostMemory="32262480">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1894483" HostCore="24" HostMemory="32262480">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1916894" HostCore="24" HostMemory="32262480">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1938955" HostCore="24" HostMemory="32262480">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado" Owner="furiosa" Host="Furiosa" Pid="1961183" HostCore="24" HostMemory="32262480">
+    <Process Command="vivado.bat" Owner="±±±ùÑó" Host="DESKTOP-L1V09UT" Pid="41028" HostCore="24" HostMemory="034084429824">
     </Process>
 </ProcessHandle>
