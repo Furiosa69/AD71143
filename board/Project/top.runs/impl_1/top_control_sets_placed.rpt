@@ -1,8 +1,8 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Mon Jun 29 19:05:17 2026
-| Host         : DESKTOP-L1V09UT running 64-bit major release  (build 9200)
+| Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
+| Date         : Tue Jun 30 14:32:05 2026
+| Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
 | Design       : top
 | Device       : xc7a200t
@@ -73,9 +73,9 @@ Table of Contents
 +----------------------+--------------------------------------------+------------------------------------+------------------+----------------+--------------+
 |     Clock Signal     |                Enable Signal               |          Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
 +----------------------+--------------------------------------------+------------------------------------+------------------+----------------+--------------+
-|  clk_200m_BUFG       | u_data_rx/header_ok_i_1_n_0                | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
-|  clk_100m_BUFG       | u_spi/spi_sdi_i_1_n_0                      | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
 |  sys_clk_IBUF_BUFG   | u_nt39565d/busy_i_1_n_0                    | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
+|  clk_100m_BUFG       | u_spi/spi_sdi_i_1_n_0                      | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
+|  clk_200m_BUFG       | u_data_rx/header_ok_i_1_n_0                | u_data_rx/pll_inst                 |                1 |              1 |         1.00 |
 |  clk_100m_BUFG       | cfg_reg_idx                                | u_data_rx/pll_inst                 |                1 |              4 |         4.00 |
 |  dclko_i             |                                            | u_data_rx/pll_inst                 |                3 |              4 |         1.33 |
 |  sys_clk_IBUF_BUFG   | u_nt39565d/FSM_sequential_state[3]_i_1_n_0 | u_data_rx/pll_inst                 |                2 |              4 |         2.00 |
@@ -89,8 +89,8 @@ Table of Contents
 |  clk_100m_BUFG       | u_ad71143_ctrl/line_cnt_next               | u_data_rx/pll_inst                 |                3 |             10 |         3.33 |
 |  clk_200m_BUFG       |                                            | u_data_rx/pll_inst                 |               12 |             13 |         1.08 |
 |  sys_clk_IBUF_BUFG   |                                            | u_data_rx/pll_inst                 |                8 |             13 |         1.62 |
-|  sys_clk_IBUF_BUFG   | u_nt39565d/cnt[15]_i_1_n_0                 | u_data_rx/pll_inst                 |                5 |             16 |         3.20 |
 |  sys_clk_IBUF_BUFG   | u_nt39565d/shift_cnt[15]_i_1_n_0           | u_data_rx/pll_inst                 |                2 |             16 |         8.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/cnt[15]_i_1_n_0                 | u_data_rx/pll_inst                 |                5 |             16 |         3.20 |
 |  rgmii_txc_OBUF_BUFG |                                            | u_rgmii_bridge/u_rgmii_tx/pll_inst |                9 |             19 |         2.11 |
 |  clk_100m_BUFG       | u_spi/bit_cnt                              | u_data_rx/pll_inst                 |                5 |             20 |         4.00 |
 |  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/u_rgmii_tx/Byte_cnt         | u_rgmii_bridge/u_rgmii_tx/pll_inst |                7 |             32 |         4.57 |
