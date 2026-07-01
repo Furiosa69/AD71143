@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "E:/ShiTa_Rob/AD71143/board/Project/top.runs/synth_1/top.tcl"
+  variable script "/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.tcl"
   variable category "vivado_synth"
 }
 
@@ -70,31 +70,30 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 6
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a200tfbg484-2
 
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir E:/ShiTa_Rob/AD71143/board/Project/top.cache/wt [current_project]
-set_property parent.project_path E:/ShiTa_Rob/AD71143/board/Project/top.xpr [current_project]
+set_property webtalk.parent_dir /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.cache/wt [current_project]
+set_property parent.project_path /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo e:/ShiTa_Rob/AD71143/board/Project/top.cache/ip [current_project]
+set_property ip_output_repo /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  E:/ShiTa_Rob/AD71143/src/RGMII_rx.v
-  E:/ShiTa_Rob/AD71143/src/RGMII_tx.v
-  E:/ShiTa_Rob/AD71143/src/ad71143_ctrl.v
-  E:/ShiTa_Rob/AD71143/src/ad71143_data_rx.v
-  E:/ShiTa_Rob/AD71143/src/ad71143_data_rx_dual.v
-  E:/ShiTa_Rob/AD71143/src/ad71143_spi.v
-  E:/ShiTa_Rob/AD71143/src/nt39565d_ctrl.v
-  E:/ShiTa_Rob/AD71143/src/rgmii_bridge.v
-  E:/ShiTa_Rob/AD71143/src/top.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_ctrl.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx_dual.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_spi.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -105,11 +104,11 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc E:/ShiTa_Rob/AD71143/board/XDC/pin.xdc
-set_property used_in_implementation false [get_files E:/ShiTa_Rob/AD71143/board/XDC/pin.xdc]
+read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc
+set_property used_in_implementation false [get_files /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc]
 
-read_xdc E:/ShiTa_Rob/AD71143/board/XDC/timing.xdc
-set_property used_in_implementation false [get_files E:/ShiTa_Rob/AD71143/board/XDC/timing.xdc]
+read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc
+set_property used_in_implementation false [get_files /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
