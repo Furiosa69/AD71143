@@ -371,4 +371,5 @@ module ad71143_data_rx (
         .IB (dout_n_B)
     );
 
+
 endmodule

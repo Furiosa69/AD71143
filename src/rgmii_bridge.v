@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // RGMII 桥接模块
-//   从 200MHz 域接收 128-bit burst 数据
+//   从 200MHz 域接收 burst 数据 (位宽可配)
 //   CDC → 125MHz 域 → 字节序列化 → RGMII_tx 发送
 //   每个 burst 作为一帧发送 (FRAME_SIZE 字节, 默认 16)
 //
@@ -16,7 +16,7 @@ module rgmii_bridge #(
 
     // ---- 200MHz 域输入 (来自 ad71143_data_rx) ----
     input  wire         clk_200m,
-    input  wire [127:0] data_in,         // merged_burst
+    input  wire [BURST_WIDTH-1:0] data_in,  // merged_burst
     input  wire         data_valid,      // merged_valid
 
     // ---- RGMII 输出 ----
@@ -73,12 +73,12 @@ module rgmii_bridge #(
     // =====================================================================
     // 200MHz 域: 捕获 burst, 生成 CDC toggle
     // =====================================================================
-    reg [127:0] burst_hold_200m;
-    reg         valid_toggle_200m;
+    reg [BURST_WIDTH-1:0] burst_hold_200m;
+    reg                   valid_toggle_200m;
 
     always @(posedge clk_200m or negedge rst_n) begin
         if (!rst_n) begin
-            burst_hold_200m   <= 128'd0;
+            burst_hold_200m   <= {BURST_WIDTH{1'b0}};
             valid_toggle_200m <= 1'b0;
         end else if (data_valid) begin
             burst_hold_200m   <= data_in;
@@ -108,7 +108,7 @@ module rgmii_bridge #(
     // =====================================================================
     // 125MHz 域: 字节移位寄存器 + RGMII_tx 控制
     // =====================================================================
-    reg [127:0] shift_reg;
+    reg [BURST_WIDTH-1:0] shift_reg;
     reg [7:0]   byte_cnt;
     reg         tx_start_125m;
     reg [7:0]   tx_data_125m;
@@ -121,7 +121,7 @@ module rgmii_bridge #(
 
     always @(posedge clk_125m or negedge rgmii_rst_n) begin
         if (!rgmii_rst_n) begin
-            shift_reg     <= 128'd0;
+            shift_reg     <= {BURST_WIDTH{1'b0}};
             byte_cnt      <= 8'd0;
             tx_start_125m <= 1'b0;
             tx_data_125m  <= 8'd0;
@@ -144,8 +144,8 @@ module rgmii_bridge #(
                 end else begin
                     // 预加载 tx_data: 每个时钟从 shift_reg 取一字节
                     // shift_reg[127:120] 是第一个字节，[7:0] 是最后一个
-                    tx_data_125m <= shift_reg[127 -: 8];
-                    shift_reg    <= {shift_reg[119:0], 8'd0};
+                    tx_data_125m <= shift_reg[BURST_WIDTH-1 -: 8];
+                    shift_reg    <= {shift_reg[BURST_WIDTH-9:0], 8'd0};
                     byte_cnt     <= byte_cnt + 1;
                 end
             end else begin
