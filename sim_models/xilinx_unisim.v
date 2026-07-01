@@ -420,3 +420,93 @@ module PLLE2_BASE #(
     assign CLKFBOUT = clk0;
     assign LOCKED   = locked_reg;
 endmodule
+
+// =============================================================================
+// IDDR — Double Data Rate Input Register
+// =============================================================================
+module IDDR #(
+    parameter DDR_CLK_EDGE = "OPPOSITE_EDGE",
+    parameter INIT_Q1      = 1'b0,
+    parameter INIT_Q2      = 1'b0,
+    parameter SRTYPE       = "SYNC"
+) (
+    output reg Q1,
+    output reg Q2,
+    input  wire C,
+    input  wire CE,
+    input  wire D,
+    input  wire R,
+    input  wire S
+);
+    always @(posedge C or posedge R) begin
+        if (R) Q1 <= 1'b0; else if (CE) Q1 <= D;
+    end
+    always @(negedge C or posedge R) begin
+        if (R) Q2 <= 1'b0; else if (CE) Q2 <= D;
+    end
+endmodule
+
+// =============================================================================
+// MMCME2_BASE — Mixed-Mode Clock Manager (简化行为模型)
+// =============================================================================
+module MMCME2_BASE #(
+    parameter BANDWIDTH          = "OPTIMIZED",
+    parameter CLKFBOUT_MULT_F    = 5.0,
+    parameter CLKFBOUT_PHASE     = 0.0,
+    parameter CLKIN1_PERIOD      = 0.0,
+    parameter CLKOUT0_DIVIDE_F   = 1.0,
+    parameter CLKOUT0_DUTY_CYCLE = 0.5,
+    parameter CLKOUT0_PHASE      = 0.0,
+    parameter CLKOUT1_DIVIDE     = 1,
+    parameter CLKOUT2_DIVIDE     = 1,
+    parameter CLKOUT3_DIVIDE     = 1,
+    parameter CLKOUT4_DIVIDE     = 1,
+    parameter CLKOUT5_DIVIDE     = 1,
+    parameter CLKOUT6_DIVIDE     = 1,
+    parameter DIVCLK_DIVIDE      = 1,
+    parameter REF_JITTER1        = 0.0,
+    parameter STARTUP_WAIT       = "FALSE"
+) (
+    input  wire CLKIN1,
+    input  wire CLKFBIN,
+    input  wire PWRDWN,
+    input  wire RST,
+    output wire CLKOUT0,
+    output wire CLKOUT1,
+    output wire CLKOUT2,
+    output wire CLKOUT3,
+    output wire CLKOUT4,
+    output wire CLKOUT5,
+    output wire CLKOUT6,
+    output wire CLKFBOUT,
+    output wire LOCKED
+);
+    // 简化: CLKOUT0 = CLKIN1 × (CLKFBOUT_MULT_F / CLKOUT0_DIVIDE_F / DIVCLK_DIVIDE)
+    // 用于仿真, 直接用 CLKIN1 (testbench 负责提供正确频率)
+    reg locked_reg;
+    reg [7:0] rst_cnt;
+
+    always @(posedge CLKIN1 or posedge RST) begin
+        if (RST) begin
+            locked_reg <= 1'b0;
+            rst_cnt    <= 8'd0;
+        end else begin
+            if (rst_cnt < 8'd100) begin
+                rst_cnt    <= rst_cnt + 1'b1;
+                locked_reg <= 1'b0;
+            end else begin
+                locked_reg <= 1'b1;
+            end
+        end
+    end
+
+    assign CLKOUT0  = CLKIN1;
+    assign CLKOUT1  = CLKIN1;
+    assign CLKOUT2  = 1'b0;
+    assign CLKOUT3  = 1'b0;
+    assign CLKOUT4  = 1'b0;
+    assign CLKOUT5  = 1'b0;
+    assign CLKOUT6  = 1'b0;
+    assign CLKFBOUT = CLKIN1;
+    assign LOCKED   = locked_reg;
+endmodule

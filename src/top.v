@@ -20,14 +20,23 @@ module top #(
 )(
     input  wire sys_clk,
     input  wire key,
-    input  wire spi_sdo,
+    input  wire spi_sdo_p0,
+    input  wire spi_sdo_p1,
 
-    output wire roic_reset,
-    output wire sync,
-    output wire aclk,
-    output wire spi_cs,
-    output wire spi_sck,
-    output wire spi_sdi,
+    output wire roic_reset_p0,
+    output wire roic_reset_p1,
+    output wire sync_p0,
+    output wire sync_p1,
+    output wire aclk_p0,
+    output wire aclk_p1,
+    // SPI Panel 0
+    output wire spi_cs_p0,
+    output wire spi_sck_p0,
+    output wire spi_sdi_p0,
+    // SPI Panel 1
+    output wire spi_cs_p1,
+    output wire spi_sck_p1,
+    output wire spi_sdi_p1,
 
     output wire cpv,
     output wire stv1,
@@ -50,27 +59,50 @@ module top #(
     output wire ctrl_init_done_o,
 
     // ---- AD71143 LVDS 数据接口 ----
-    output wire dclk_p,
-    output wire dclk_n,
-    input  wire dclko_p_A,
-    input  wire dclko_n_A,
-    input  wire dout_p_A,
-    input  wire dout_n_A,
-    input  wire dout_p_B,
-    input  wire dout_n_B,
-    output wire [127:0] merged_burst,
+    // Panel 0
+    output wire         dclk_p_A0,
+    output wire         dclk_n_A0,
+    input  wire         dclko_p_A0,
+    input  wire         dclko_n_A0,
+    input  wire         dout_p_A0,
+    input  wire         dout_n_A0,
+    input  wire         dout_p_B0,
+    input  wire         dout_n_B0,
+    // Panel 1
+    output wire         dclk_p_A1,
+    output wire         dclk_n_A1,
+    input  wire         dclko_p_A1,
+    input  wire         dclko_n_A1,
+    input  wire         dout_p_A1,
+    input  wire         dout_n_A1,
+    input  wire         dout_p_B1,
+    input  wire         dout_n_B1,
+
+    output wire [255:0] merged_burst,
     output wire [6:0]   merged_burst_index,
     output wire         merged_valid,
     output wire         header_ok,
     output wire         rx_line_done,
 
-    // ---- RGMII 发送 ----
+    // ---- RGMII ----
+    output wire         rgmii_rst_n,     // PHY 异步复位
+    // TX
     output wire         rgmii_txc,
     output wire         rgmii_tx_ctl,
     output wire         rgmii_txd0,
     output wire         rgmii_txd1,
     output wire         rgmii_txd2,
-    output wire         rgmii_txd3
+    output wire         rgmii_txd3,
+    // RX
+    input  wire         rgmii_rxc,
+    input  wire         rgmii_rx_ctl,
+    input  wire         rgmii_rxd0,
+    input  wire         rgmii_rxd1,
+    input  wire         rgmii_rxd2,
+    input  wire         rgmii_rxd3,
+    // MDIO (共用)
+    output wire         rgmii_mdc,
+    inout  wire         rgmii_mdio
 );
     wire clk_fb;
     wire pll_locked;
@@ -121,6 +153,9 @@ module top #(
 wire gate_clk = sys_clk;
 wire rst_n = key & pll_locked;
 
+// RGMII PHY 异步复位 (与系统复位同步)
+assign rgmii_rst_n = rst_n;
+
 // =========================================================================
 // 内部信号
 // =========================================================================
@@ -133,6 +168,16 @@ wire        ctrl_frame_done;
 wire [9:0]  ctrl_line_cnt;
 wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz 域)
 wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl → data_rx)
+// AFE 控制信号 (内部 → 两 Panel 扇出)
+wire roic_reset_int;
+wire sync_int;
+wire aclk_int;
+assign roic_reset_p0 = roic_reset_int;
+assign roic_reset_p1 = roic_reset_int;
+assign sync_p0       = sync_int;
+assign sync_p1       = sync_int;
+assign aclk_p0       = aclk_int;
+assign aclk_p1       = aclk_int;
 
 // ---- 50MHz 域 (gate driver + top FSM) ----
 wire        busy;
@@ -145,11 +190,15 @@ wire        line_start_pulse;      // CDC 同步后的 line_start (toggle→puls
 
 // ---- SPI 配置 FSM (100MHz 域) ----
 wire        spi_cfg_done;
-wire        spi_done;
+wire        spi_done_p0;
+wire        spi_done_p1;
+wire        spi_done;              // 两 Panel 均完成
 wire        spi_start;
 wire [3:0]  spi_reg_addr;
 wire [9:0]  spi_reg_data;
-wire [9:0]  spi_rdback;
+wire [9:0]  spi_rdback_p0;
+wire [9:0]  spi_rdback_p1;
+assign spi_done = spi_done_p0 && spi_done_p1;
 
 // ---- frame_done CDC ----
 reg         frame_done_toggle_100m;
@@ -391,8 +440,10 @@ assign spi_cfg_done = cfg_all_done;
 
 // AD71143 SPEC: 转换期间 CS 必须保持低电平
 // SPI 配置完成后强制 CS=0, 否则使用 SPI 模块的 CS 输出
-wire spi_cs_raw;
-assign spi_cs = spi_cfg_done ? 1'b0 : spi_cs_raw;
+wire spi_cs_raw_p0;
+wire spi_cs_raw_p1;
+assign spi_cs_p0 = spi_cfg_done ? 1'b0 : spi_cs_raw_p0;
+assign spi_cs_p1 = spi_cfg_done ? 1'b0 : spi_cs_raw_p1;
 
 // =========================================================================
 // Top FSM (50MHz 域)
@@ -487,9 +538,9 @@ ad71143_ctrl #(
     .clk          (clk_100m),
     .rst_n        (rst_n),
     .frame_start  (frame_start_100m),
-    .roic_reset   (roic_reset),
-    .sync         (sync),
-    .aclk         (aclk),
+    .roic_reset   (roic_reset_int),
+    .sync         (sync_int),
+    .aclk         (aclk_int),
     .init_done    (ctrl_init_done),
     .line_start   (ctrl_line_start),
     .line_done    (ctrl_line_done),
@@ -499,57 +550,72 @@ ad71143_ctrl #(
     .aclk_done    (aclk_done)
 );
 
-// AD71143 SPI Master (100MHz 域)
-ad71143_spi u_spi (
-    .clk_sys    (clk_100m),
-    .rst_n      (rst_n),
-    .start      (spi_start),
-    .rw         (1'b1),           // always write for config
-    .reg_addr   (spi_reg_addr),
-    .reg_data   (spi_reg_data),
-    .done       (spi_done),
-    .reg_rdback (spi_rdback),
-    .spi_cs     (spi_cs_raw),
-    .spi_sck    (spi_sck),
-    .spi_sdi    (spi_sdi),
-    .spi_sdo    (spi_sdo)
-);
 
-// AD71143 LVDS 数据接收 (200MHz 域 — DCLK = 200MHz max per SPEC)
-ad71143_data_rx #(
-    .MUTE_MIN             (290)     // 200MHz: tBURST=1765ns, 353cyc-64=289→290
-) u_data_rx (
-    .clk_sys              (clk_200m),
-    .rst_n                (rst_n),
-    .sync_in              (sync),
-    .aclk_done            (aclk_done),
-    .dclk_p_A             (dclk_p),
-    .dclk_n_A             (dclk_n),
-    .dclko_p_A            (dclko_p_A),
-    .dclko_n_A            (dclko_n_A),
-    .dout_p_A             (dout_p_A),
-    .dout_n_A             (dout_n_A),
-    .dout_p_B             (dout_p_B),
-    .dout_n_B             (dout_n_B),
-    .line_done            (rx_line_done),
-    .header_ok            (header_ok),
-    .header_byte          (),
-    .header_readdown      (),
-    .header_cds_id        (),
-    .header_temp          (),
-    .header_vt            (),
-    .merged_valid         (merged_valid),
-    .merged_burst         (merged_burst),
-    .merged_first_channel (),
-    .merged_last_channel  (),
-    .merged_burst_index   (merged_burst_index),
-    .state_debug          (),
-    .shift_hi             (),
-    .shift_lo             (),
-    .burst_en_out         (),
-    .burst_en_comb        (),
-    .roic_trigger         ()
-);
+	// AD71143 SPI Master Panel 0 (100MHz 域)
+	ad71143_spi u_spi_p0 (
+	    .clk_sys    (clk_100m),
+	    .rst_n      (rst_n),
+	    .start      (spi_start),
+	    .rw         (1'b1),
+	    .reg_addr   (spi_reg_addr),
+	    .reg_data   (spi_reg_data),
+	    .done       (spi_done_p0),
+	    .reg_rdback (spi_rdback_p0),
+	    .spi_cs     (spi_cs_raw_p0),
+	    .spi_sck    (spi_sck_p0),
+	    .spi_sdi    (spi_sdi_p0),
+	    .spi_sdo    (spi_sdo_p0)
+	);
+
+	// AD71143 SPI Master Panel 1 (100MHz 域, 与 Panel 0 并行配置)
+	ad71143_spi u_spi_p1 (
+	    .clk_sys    (clk_100m),
+	    .rst_n      (rst_n),
+	    .start      (spi_start),
+	    .rw         (1'b1),
+	    .reg_addr   (spi_reg_addr),
+	    .reg_data   (spi_reg_data),
+	    .done       (spi_done_p1),
+	    .reg_rdback (spi_rdback_p1),
+	    .spi_cs     (spi_cs_raw_p1),
+	    .spi_sck    (spi_sck_p1),
+	    .spi_sdi    (spi_sdi_p1),
+	    .spi_sdo    (spi_sdo_p1)
+	);
+
+// AD71143 双 Panel LVDS 数据接收 (200MHz 域)
+	ad71143_data_rx_dual #(
+	    .MUTE_MIN             (290)     // 200MHz: tBURST=1765ns, 353cyc-64=289->290
+	) u_data_rx_dual (
+	    .clk_sys              (clk_200m),
+	    .rst_n                (rst_n),
+	    .sync_in              (sync_int),
+	    .aclk_done            (aclk_done),
+	    .dclk_p_A0            (dclk_p_A0),
+	    .dclk_n_A0            (dclk_n_A0),
+	    .dclko_p_A0           (dclko_p_A0),
+	    .dclko_n_A0           (dclko_n_A0),
+	    .dout_p_A0            (dout_p_A0),
+	    .dout_n_A0            (dout_n_A0),
+	    .dout_p_B0            (dout_p_B0),
+	    .dout_n_B0            (dout_n_B0),
+	    .dclk_p_A1            (dclk_p_A1),
+	    .dclk_n_A1            (dclk_n_A1),
+	    .dclko_p_A1           (dclko_p_A1),
+	    .dclko_n_A1           (dclko_n_A1),
+	    .dout_p_A1            (dout_p_A1),
+	    .dout_n_A1            (dout_n_A1),
+	    .dout_p_B1            (dout_p_B1),
+	    .dout_n_B1            (dout_n_B1),
+	    .line_done            (rx_line_done),
+	    .header_ok            (header_ok),
+	    .merged_valid         (merged_valid),
+	    .merged_burst         (merged_burst),
+	    .merged_burst_index   (merged_burst_index),
+	    .state_debug_0        (),
+	    .state_debug_1        (),
+	    .burst_en_out         ()
+	);
 
 // NT39565D Gate Driver (50MHz 域, 修复 CLK_FREQ_MHZ=50)
 nt39565d_gate_ctrl #(
@@ -600,8 +666,9 @@ nt39565d_gate_ctrl #(
     // RGMII 桥接: merged_burst → 字节 → RGMII_tx
     // =========================================================================
     rgmii_bridge #(
-        .BURST_BYTES(16),
-        .FRAME_SIZE(16)
+        .BURST_WIDTH (256),
+        .BURST_BYTES (32),
+        .FRAME_SIZE  (32)
     ) u_rgmii_bridge (
         .sys_clk    (sys_clk),
         .rst_n      (rst_n),
@@ -614,6 +681,23 @@ nt39565d_gate_ctrl #(
         .TXD1       (rgmii_txd1),
         .TXD2       (rgmii_txd2),
         .TXD3       (rgmii_txd3)
+    );
+
+    // =========================================================================
+    // RGMII 接收: PHY → FPGA
+    // =========================================================================
+    RGMII_rx #(
+        .FRAME_SIZE(64)
+    ) u_rgmii_rx (
+        .rst_n      (rst_n),
+        .RXC        (rgmii_rxc),
+        .RX_CTL     (rgmii_rx_ctl),
+        .RXD0       (rgmii_rxd0),
+        .RXD1       (rgmii_rxd1),
+        .RXD2       (rgmii_rxd2),
+        .RXD3       (rgmii_rxd3),
+        .MDC        (rgmii_mdc),
+        .MDIO       (rgmii_mdio)
     );
 
 endmodule

@@ -4,14 +4,24 @@ module tb_top;
 
 reg         sys_clk;
 reg         key;
-reg         spi_sdo;
+reg         spi_sdo_p0;
+reg         spi_sdo_p1;
 
-wire        roic_reset;
-wire        sync;
-wire        aclk;
-wire        spi_cs;
-wire        spi_sck;
-wire        spi_sdi;
+wire        roic_reset_p0;
+    .roic_reset_p1      (roic_reset_p1  ),
+wire        roic_reset_p1;
+wire        sync_p0;
+    .sync_p1            (sync_p1        ),
+wire        sync_p1;
+wire        aclk_p0;
+    .aclk_p1            (aclk_p1        ),
+wire        aclk_p1;
+wire        spi_cs_p0;
+wire        spi_sck_p0;
+wire        spi_sdi_p0;
+wire        spi_cs_p1;
+wire        spi_sck_p1;
+wire        spi_sdi_p1;
 wire        cpv;
 wire        stv1;
 wire        stv2;
@@ -31,15 +41,23 @@ wire        frame_done_o;
 wire        line_done_o;
 wire        ctrl_init_done_o;
 
-wire        dclk_p;
-wire        dclk_n;
-wire        dclko_p_A;
-wire        dclko_n_A;
-wire        dout_p_A;
-wire        dout_n_A;
-wire        dout_p_B;
-wire        dout_n_B;
-wire [127:0] merged_burst;
+wire        dclk_p_A0;
+wire        dclk_n_A0;
+wire        dclko_p_A0;
+wire        dclko_n_A0;
+wire        dout_p_A0;
+wire        dout_n_A0;
+wire        dout_p_B0;
+wire        dout_n_B0;
+wire        dclk_p_A1;
+wire        dclk_n_A1;
+wire        dclko_p_A1;
+wire        dclko_n_A1;
+wire        dout_p_A1;
+wire        dout_n_A1;
+wire        dout_p_B1;
+wire        dout_n_B1;
+wire [255:0] merged_burst;
 wire [6:0]   merged_burst_index;
 wire         merged_valid;
 wire         header_ok;
@@ -51,7 +69,8 @@ initial begin
 end
 
 initial begin
-    spi_sdo = 1'b0;     // placeholder: ROIC 未连接时读回 0
+    spi_sdo_p0 = 1'b0;
+    spi_sdo_p1 = 1'b0;     // placeholder: ROIC 未连接时读回 0
 end
 
 initial begin
@@ -106,13 +125,20 @@ top #(
 ) u_top (
     .sys_clk           (sys_clk         ),
     .key               (key             ),
-    .spi_sdo           (spi_sdo         ),
-    .roic_reset        (roic_reset      ),
-    .sync              (sync            ),
-    .aclk              (aclk            ),
-    .spi_cs            (spi_cs          ),
-    .spi_sck           (spi_sck         ),
-    .spi_sdi           (spi_sdi         ),
+    .spi_sdo_p1         (spi_sdo_p1     ),
+    .spi_sdo_p0         (spi_sdo_p0     ),
+    .roic_reset_p0      (roic_reset_p0  ),
+    .roic_reset_p1      (roic_reset_p1  ),
+    .sync_p0            (sync_p0        ),
+    .sync_p1            (sync_p1        ),
+    .aclk_p0            (aclk_p0        ),
+    .aclk_p1            (aclk_p1        ),
+    .spi_cs_p1          (spi_cs_p1      ),
+    .spi_cs_p0          (spi_cs_p0      ),
+    .spi_sck_p1         (spi_sck_p1     ),
+    .spi_sck_p0         (spi_sck_p0     ),
+    .spi_sdi_p1         (spi_sdi_p1     ),
+    .spi_sdi_p0         (spi_sdi_p0     ),
     .cpv               (cpv             ),
     .stv1              (stv1            ),
     .stv2              (stv2            ),
@@ -131,14 +157,22 @@ top #(
     .frame_done_o      (frame_done_o    ),
     .line_done_o       (line_done_o     ),
     .ctrl_init_done_o  (ctrl_init_done_o),
-    .dclk_p            (dclk_p),
-    .dclk_n            (dclk_n),
-    .dclko_p_A         (dclko_p_A),
-    .dclko_n_A         (dclko_n_A),
-    .dout_p_A          (dout_p_A),
-    .dout_n_A          (dout_n_A),
-    .dout_p_B          (dout_p_B),
-    .dout_n_B          (dout_n_B),
+    .dclk_p_A0          (dclk_p_A0),
+    .dclk_n_A0          (dclk_n_A0),
+    .dclko_p_A0         (dclko_p_A0),
+    .dclko_n_A0         (dclko_n_A0),
+    .dout_p_A0          (dout_p_A0),
+    .dout_n_A0          (dout_n_A0),
+    .dout_p_B0          (dout_p_B0),
+    .dout_n_B0          (dout_n_B0),
+    .dclk_p_A1          (dclk_p_A1),
+    .dclk_n_A1          (dclk_n_A1),
+    .dclko_p_A1         (dclko_p_A1),
+    .dclko_n_A1         (dclko_n_A1),
+    .dout_p_A1          (dout_p_A1),
+    .dout_n_A1          (dout_n_A1),
+    .dout_p_B1          (dout_p_B1),
+    .dout_n_B1          (dout_n_B1),
     .merged_burst      (merged_burst),
     .merged_burst_index(merged_burst_index),
     .merged_valid      (merged_valid),
@@ -149,13 +183,19 @@ top #(
 // =========================================================================
 // AFE LVDS echo clock loopback (DCLK → DCLKO, 模拟 AD71143 回波)
 // =========================================================================
-assign dclko_p_A = dclk_p;
-assign dclko_n_A = dclk_n;
+assign dclko_p_A0 = dclk_p_A0;
+assign dclko_n_A0 = dclk_n_A0;
+assign dclko_p_A1 = dclk_p_A1;
+assign dclko_n_A1 = dclk_n_A1;
 
 // DOUT = 0 (无 AFE 仿真模型, 数据读回全零)
-assign dout_p_A = 1'b0;
-assign dout_n_A = 1'b1;
-assign dout_p_B = 1'b0;
-assign dout_n_B = 1'b1;
+assign dout_p_A0 = 1'b0;
+assign dout_n_A0 = 1'b1;
+assign dout_p_B0 = 1'b0;
+assign dout_n_B0 = 1'b1;
+assign dout_p_A1 = 1'b0;
+assign dout_n_A1 = 1'b1;
+assign dout_p_B1 = 1'b0;
+assign dout_n_B1 = 1'b1;
 
 endmodule
