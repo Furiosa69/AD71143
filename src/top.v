@@ -119,7 +119,6 @@ module top #(
     wire clk_fb;
     wire pll_locked;
     wire clk_100m;
-    wire clk_200m;
 
     wire cpv;
     wire xao;
@@ -177,7 +176,7 @@ module top #(
         .CLKOUT0_DIVIDE     (10),        // 1000 / 10 = 100MHz  (AFE ctrl + SPI)
         .CLKOUT0_DUTY_CYCLE (0.5),
         .CLKOUT0_PHASE      (0.0),
-        .CLKOUT1_DIVIDE     (5),         // 1000 /  5 = 200MHz  (LVDS data_rx)
+        .CLKOUT1_DIVIDE     (1),
         .CLKOUT1_DUTY_CYCLE (0.5),
         .CLKOUT1_PHASE      (0.0),
         .CLKOUT2_DIVIDE     (1),
@@ -198,7 +197,7 @@ module top #(
     ) pll_inst (
         .CLKIN1             (sys_clk),
         .CLKOUT0            (clk_100m),
-        .CLKOUT1            (clk_200m),
+        .CLKOUT1            (),
         .CLKOUT2            (),
         .CLKOUT3            (),
         .CLKOUT4            (),
@@ -643,11 +642,11 @@ ad71143_ctrl #(
 	    .spi_sdo    (spi_sdo_p1)
 	);
 
-// AD71143 双 Panel LVDS 数据接收 (200MHz 域)
+// AD71143 双 Panel LVDS 数据接收 (100MHz 域)
 	ad71143_data_rx_dual #(
-	    .MUTE_MIN             (290)     // 200MHz: tBURST=1765ns, 353cyc-64=289->290
+	    .MUTE_MIN             (113)     // 100MHz: tBURST=1765ns, 177cyc-64=113
 	) u_data_rx_dual (
-	    .clk_sys              (clk_200m),
+	    .clk_sys              (clk_100m),
 	    .rst_n                (rst_n),
 	    .sync_in              (sync_int),
 	    .aclk_done            (aclk_done),
@@ -733,7 +732,7 @@ nt39565d_gate_ctrl #(
     ) u_rgmii_bridge (
         .sys_clk    (sys_clk),
         .rst_n      (rst_n),
-        .clk_200m   (clk_200m),
+        .clk_100m   (clk_100m),
         .data_in    (merged_burst),
         .data_valid (merged_valid),
         .TXC        (rgmii_txc),

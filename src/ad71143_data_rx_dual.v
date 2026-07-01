@@ -10,12 +10,12 @@
 `timescale 1ns / 1ps
 
 module ad71143_data_rx_dual #(
-    parameter integer MUTE_MIN = 290   // 200MHz: 353cyc - 64 = 289 → 290
+    parameter integer MUTE_MIN = 113   // 100MHz: 177cyc - 64 = 113
 ) (
     // =========================================================================
     // 共享系统信号
     // =========================================================================
-    input  wire         clk_sys,        // 200MHz
+    input  wire         clk_sys,        // 100MHz
     input  wire         rst_n,
 
     input  wire         sync_in,        // SYNC, 低有效 = 新行

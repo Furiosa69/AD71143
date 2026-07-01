@@ -60,7 +60,7 @@ module ad71143_data_rx (
     localparam integer ACTIVE_DCLK = 64;
     localparam integer DATA_BURSTS = 32;   // dual LVDS: 256ch * 16bit / 128bit-per-burst
     localparam integer TOTAL_BURSTS = 34;  // header + 32 data + config bursts
-    parameter  integer MUTE_MIN    = 113;  // tBURST=1765ns: 177cyc-64=113 @ 100MHz (290 @ 200MHz)
+    parameter  integer MUTE_MIN    = 113;  // tBURST=1765ns: 177cyc-64=113 @ 100MHz
 
     reg  [2:0] state;
     reg  [2:0] state_next;
