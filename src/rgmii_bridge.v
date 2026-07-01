@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 // RGMII 桥接模块
-//   从 200MHz 域接收 burst 数据 (位宽可配)
+//   从 100MHz 域接收 burst 数据 (位宽可配)
 //   CDC → 125MHz 域 → 字节序列化 → RGMII_tx 发送
 //   每个 burst 作为一帧发送 (FRAME_SIZE 字节, 默认 16)
 //
@@ -14,8 +14,8 @@ module rgmii_bridge #(
     input  wire         sys_clk,         // 50MHz 系统时钟
     input  wire         rst_n,           // 异步复位，低有效
 
-    // ---- 200MHz 域输入 (来自 ad71143_data_rx) ----
-    input  wire         clk_200m,
+    // ---- 100MHz 域输入 (来自 ad71143_data_rx) ----
+    input  wire         clk_100m,
     input  wire [BURST_WIDTH-1:0] data_in,  // merged_burst
     input  wire         data_valid,      // merged_valid
 
@@ -71,18 +71,18 @@ module rgmii_bridge #(
     wire rgmii_rst_n = rst_n & mmcm_locked;
 
     // =====================================================================
-    // 200MHz 域: 捕获 burst, 生成 CDC toggle
+    // 100MHz 域: 捕获 burst, 生成 CDC toggle
     // =====================================================================
-    reg [BURST_WIDTH-1:0] burst_hold_200m;
-    reg                   valid_toggle_200m;
+    reg [BURST_WIDTH-1:0] burst_hold_100m;
+    reg                   valid_toggle_100m;
 
-    always @(posedge clk_200m or negedge rst_n) begin
+    always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
-            burst_hold_200m   <= {BURST_WIDTH{1'b0}};
-            valid_toggle_200m <= 1'b0;
+            burst_hold_100m   <= {BURST_WIDTH{1'b0}};
+            valid_toggle_100m <= 1'b0;
         end else if (data_valid) begin
-            burst_hold_200m   <= data_in;
-            valid_toggle_200m <= ~valid_toggle_200m;
+            burst_hold_100m   <= data_in;
+            valid_toggle_100m <= ~valid_toggle_100m;
         end
     end
 
@@ -97,7 +97,7 @@ module rgmii_bridge #(
             valid_sync2_125m <= 1'b0;
             valid_sync3_125m <= 1'b0;
         end else begin
-            valid_sync1_125m <= valid_toggle_200m;
+            valid_sync1_125m <= valid_toggle_100m;
             valid_sync2_125m <= valid_sync1_125m;
             valid_sync3_125m <= valid_sync2_125m;
         end
@@ -131,7 +131,7 @@ module rgmii_bridge #(
 
             if (burst_ready_125m) begin
                 // 新 burst 到达，锁存数据
-                shift_reg <= burst_hold_200m;
+                shift_reg <= burst_hold_100m;
                 byte_cnt  <= 8'd0;
                 sending   <= 1'b1;
             end
