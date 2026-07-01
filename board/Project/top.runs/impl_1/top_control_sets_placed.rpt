@@ -1,0 +1,109 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
+| Date         : Wed Jul  1 17:15:54 2026
+| Host         : DESKTOP-L1V09UT running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
+| Design       : top
+| Device       : xc7a200t
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    31 |
+|    Minimum number of control sets                        |    31 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |    82 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    31 |
+| >= 0 to < 4        |     2 |
+| >= 4 to < 6        |     2 |
+| >= 6 to < 8        |     4 |
+| >= 8 to < 10       |     3 |
+| >= 10 to < 12      |     2 |
+| >= 12 to < 14      |     1 |
+| >= 14 to < 16      |     0 |
+| >= 16              |    17 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |               0 |            0 |
+| No           | No                    | Yes                    |             105 |           53 |
+| No           | Yes                   | No                     |              14 |            6 |
+| Yes          | No                    | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |            1711 |          473 |
+| Yes          | Yes                   | No                     |              32 |           10 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------------+-------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|     Clock Signal     |                  Enable Signal                  |          Set/Reset Signal          | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------------+-------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+|  clk_100m_BUFG       | u_spi_p0/spi_sdi                                | u_data_rx_dual/u_panel0/pll_inst   |                1 |              1 |         1.00 |
+|  clk_100m_BUFG       | u_spi_p1/spi_sdi_i_1__0_n_0                     | u_data_rx_dual/u_panel0/pll_inst   |                1 |              1 |         1.00 |
+|  clk_100m_BUFG       | cfg_reg_idx[3]_i_1_n_0                          | u_data_rx_dual/u_panel0/pll_inst   |                1 |              4 |         4.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/FSM_sequential_state[3]_i_1_n_0      | u_data_rx_dual/u_panel0/pll_inst   |                4 |              4 |         1.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel0/burst_cnt[5]_i_1_n_0    | u_data_rx_dual/u_panel0/pll_inst   |                2 |              6 |         3.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel1/burst_cnt[5]_i_1__0_n_0 | u_data_rx_dual/u_panel0/pll_inst   |                2 |              6 |         3.00 |
+|  sys_clk_IBUF_BUFG   | FSM_onehot_top_state[6]_i_1_n_0                 | u_data_rx_dual/u_panel0/pll_inst   |                2 |              7 |         3.50 |
+|  sys_clk_IBUF_BUFG   | gap_cnt0                                        | u_data_rx_dual/u_panel0/pll_inst   |                3 |              7 |         2.33 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/tx_data_125m[7]_i_1_n_0          | u_rgmii_bridge/u_rgmii_tx/pll_inst |                2 |              8 |         4.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel0/mute_cnt[8]_i_1_n_0     | u_data_rx_dual/u_panel0/pll_inst   |                3 |              9 |         3.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel1/mute_cnt[8]_i_1__0_n_0  | u_data_rx_dual/u_panel0/pll_inst   |                3 |              9 |         3.00 |
+|  clk_100m_BUFG       | u_ad71143_ctrl/line_cnt_next                    | u_data_rx_dual/u_panel0/pll_inst   |                5 |             10 |         2.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/cpv_i_1_n_0                          | u_data_rx_dual/u_panel0/pll_inst   |                4 |             10 |         2.50 |
+|  sys_clk_IBUF_BUFG   |                                                 | u_data_rx_dual/u_panel0/pll_inst   |                4 |             13 |         3.25 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/cnt[15]_i_1_n_0                      | u_data_rx_dual/u_panel0/pll_inst   |                4 |             16 |         4.00 |
+|  sys_clk_IBUF_BUFG   | u_nt39565d/shift_cnt[15]_i_1_n_0                | u_data_rx_dual/u_panel0/pll_inst   |                4 |             16 |         4.00 |
+|  clk_100m_BUFG       | u_spi_p0/sel                                    | u_data_rx_dual/u_panel0/pll_inst   |                6 |             20 |         3.33 |
+|  clk_100m_BUFG       | u_spi_p1/shift_reg[15]_i_1__0_n_0               | u_data_rx_dual/u_panel0/pll_inst   |                5 |             20 |         4.00 |
+|  rgmii_txc_OBUF_BUFG |                                                 | u_rgmii_bridge/u_rgmii_tx/pll_inst |                9 |             21 |         2.33 |
+|  clk_200m_BUFG       |                                                 | u_data_rx_dual/u_panel0/pll_inst   |               20 |             32 |         1.60 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/u_rgmii_tx/Byte_cnt              | u_rgmii_bridge/u_rgmii_tx/pll_inst |               10 |             32 |         3.20 |
+|  clk_100m_BUFG       |                                                 | u_data_rx_dual/u_panel0/pll_inst   |               26 |             53 |         2.04 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel0/merged_valid_i_1_n_0    | u_data_rx_dual/u_panel0/pll_inst   |               33 |            128 |         3.88 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel0/E[0]                    | u_data_rx_dual/u_panel0/pll_inst   |               27 |            128 |         4.74 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel1/E[0]                    | u_data_rx_dual/u_panel0/pll_inst   |               30 |            128 |         4.27 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel1/merged_valid_i_1__0_n_0 | u_data_rx_dual/u_panel0/pll_inst   |               32 |            128 |         4.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel0/lane_b_shift_1          | u_data_rx_dual/u_panel0/pll_inst   |               27 |            134 |         4.96 |
+|  clk_200m_BUFG       | u_data_rx_dual/u_panel1/lane_b_shift            | u_data_rx_dual/u_panel0/pll_inst   |               29 |            134 |         4.62 |
+|  clk_200m_BUFG       | u_data_rx_dual/p0_captured1                     | u_data_rx_dual/u_panel0/pll_inst   |               64 |            256 |         4.00 |
+|  clk_200m_BUFG       | u_data_rx_dual/E[0]                             | u_data_rx_dual/u_panel0/pll_inst   |               84 |            257 |         3.06 |
+|  rgmii_txc_OBUF_BUFG | u_rgmii_bridge/byte_cnt[7]_i_1_n_0              | u_rgmii_bridge/u_rgmii_tx/pll_inst |               95 |            264 |         2.78 |
++----------------------+-------------------------------------------------+------------------------------------+------------------+----------------+--------------+
+
+

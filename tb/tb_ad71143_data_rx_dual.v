@@ -19,12 +19,10 @@ module tb_ad71143_data_rx_dual;
     reg         aclk_done;
 
     // =========================================================================
-    // Panel 0 LVDS
+    // Panel 0 LVDS (DCLK 由 DUT 输出, TB 只驱动 DOUT 数据)
     // =========================================================================
     wire        dclk_p_A0;
     wire        dclk_n_A0;
-    reg         dclko_p_A0;
-    reg         dclko_n_A0;
     reg         dout_p_A0;
     reg         dout_n_A0;
     reg         dout_p_B0;
@@ -35,8 +33,6 @@ module tb_ad71143_data_rx_dual;
     // =========================================================================
     wire        dclk_p_A1;
     wire        dclk_n_A1;
-    reg         dclko_p_A1;
-    reg         dclko_n_A1;
     reg         dout_p_A1;
     reg         dout_n_A1;
     reg         dout_p_B1;
@@ -74,8 +70,6 @@ module tb_ad71143_data_rx_dual;
 
         .dclk_p_A0          (dclk_p_A0),
         .dclk_n_A0          (dclk_n_A0),
-        .dclko_p_A0         (dclko_p_A0),
-        .dclko_n_A0         (dclko_n_A0),
         .dout_p_A0          (dout_p_A0),
         .dout_n_A0          (dout_n_A0),
         .dout_p_B0          (dout_p_B0),
@@ -83,8 +77,6 @@ module tb_ad71143_data_rx_dual;
 
         .dclk_p_A1          (dclk_p_A1),
         .dclk_n_A1          (dclk_n_A1),
-        .dclko_p_A1         (dclko_p_A1),
-        .dclko_n_A1         (dclko_n_A1),
         .dout_p_A1          (dout_p_A1),
         .dout_n_A1          (dout_n_A1),
         .dout_p_B1          (dout_p_B1),
@@ -131,28 +123,14 @@ module tb_ad71143_data_rx_dual;
         #1 sync_in = 1'b0;           // SYNC 下降沿 = 新行开始
         repeat (2) @(posedge clk_sys);
         #1 aclk_done = 1'b1;         // ACLK 序列完成
-        repeat (2) @(posedge clk_sys);
+        @(posedge clk_sys);           // DUT 锁存 aclk_done, cap_start toggle
         #1 aclk_done = 1'b0;
     end
     endtask
 
     // =========================================================================
-    // DCLKO 脉冲 (两 Panel 同时)
-    // =========================================================================
-    task automatic pulse_dclko_both;
-    begin
-        #5;
-        dclko_p_A0 = 1'b1; dclko_n_A0 = 1'b0;
-        dclko_p_A1 = 1'b1; dclko_n_A1 = 1'b0;
-        #10;
-        dclko_p_A0 = 1'b0; dclko_n_A0 = 1'b1;
-        dclko_p_A1 = 1'b0; dclko_n_A1 = 1'b1;
-        #10;
-    end
-    endtask
-
-    // =========================================================================
     // 发送一个 Burst 到两 Panel (各 64 bit × 2 lane = 128 bit per panel)
+    // DCLK 内部回环: dclk_pre 上升沿 = clk_sys 上升沿
     // =========================================================================
     task automatic send_burst64_dual;
         input [63:0] lane_a0, lane_b0;   // Panel 0: Lane A (even), Lane B (odd)
@@ -164,18 +142,24 @@ module tb_ad71143_data_rx_dual;
         $display("[%0t] send_burst START p0_a=%h p0_b=%h p1_a=%h p1_b=%h",
                  $time, lane_a0, lane_b0, lane_a1, lane_b1);
 
-        // 2 个预热 DCLKO: 让 DCLKO 域的 toggle 同步器传播 cap_start
-        pulse_dclko_both();
-        pulse_dclko_both();
+        // 等待 cap_start 同步 (需要 2 个 dclk_pre 上升沿)
+        @(negedge clk_sys);
+        @(posedge clk_sys);  // dclk_pre 上升沿 #1
+        @(negedge clk_sys);
+        @(posedge clk_sys);  // dclk_pre 上升沿 #2: toggle detect
 
-        // 64 bit, MSB first
+        // 64 bit, MSB first: 先等时钟边沿再设数据
         for (k = 63; k >= 0; k = k - 1) begin
+            @(negedge clk_sys);
             dout_p_A0 = lane_a0[k]; dout_n_A0 = ~lane_a0[k];
             dout_p_B0 = lane_b0[k]; dout_n_B0 = ~lane_b0[k];
             dout_p_A1 = lane_a1[k]; dout_n_A1 = ~lane_a1[k];
             dout_p_B1 = lane_b1[k]; dout_n_B1 = ~lane_b1[k];
-            pulse_dclko_both();
         end
+        // 最后一个数据需要等一拍让下一个 posedge 采样
+        @(negedge clk_sys);
+        // 等待 cap_done CDC 传播, burst_en_out 拉低后再返回
+        @(negedge burst_en_out);
 
         $display("[%0t] send_burst DONE  p0_a=%h p0_b=%h p1_a=%h p1_b=%h",
                  $time, lane_a0, lane_b0, lane_a1, lane_b1);
@@ -190,16 +174,17 @@ module tb_ad71143_data_rx_dual;
         integer n;
     begin
         for (n = data_bursts_already_sent; n < 32; n = n + 1) begin
+            // send_burst64_dual 内部已等待 cap_done, 退出时 burst_en_out=0
+            wait(burst_en_out === 1'b1);
             send_burst64_dual(
                 64'h1000_2000_3000_4000 + n,   // p0 lane A
                 64'h5000_6000_7000_8000 + n,   // p0 lane B
                 64'hA000_B000_C000_D000 + n,   // p1 lane A
                 64'hE000_F000_0000_1000 + n    // p1 lane B
             );
-            @(negedge burst_en_out);
-            wait(burst_en_out === 1'b1);
         end
         // 最后一个 Burst: 配置寄存器
+        wait(burst_en_out === 1'b1);
         send_burst64_dual(
             64'hDEAD_BEEF_CAFE_1234, 64'h0123_4567_89AB_CDEF,  // p0
             64'hF00D_F00D_F00D_F00D, 64'hBEEF_BEEF_BEEF_BEEF   // p1
@@ -366,10 +351,8 @@ module tb_ad71143_data_rx_dual;
         rst_n       = 1'b0;
         sync_in     = 1'b1;
         aclk_done   = 1'b0;
-        dclko_p_A0  = 1'b0; dclko_n_A0 = 1'b1;
         dout_p_A0   = 1'b0; dout_n_A0  = 1'b1;
         dout_p_B0   = 1'b0; dout_n_B0  = 1'b1;
-        dclko_p_A1  = 1'b0; dclko_n_A1 = 1'b1;
         dout_p_A1   = 1'b0; dout_n_A1  = 1'b1;
         dout_p_B1   = 1'b0; dout_n_B1  = 1'b1;
 
@@ -387,10 +370,8 @@ module tb_ad71143_data_rx_dual;
         rst_n       = 1'b1;
         sync_in     = 1'b1;
         aclk_done   = 1'b0;
-        dclko_p_A0  = 1'b0; dclko_n_A0 = 1'b1;
         dout_p_A0   = 1'b0; dout_n_A0  = 1'b1;
         dout_p_B0   = 1'b0; dout_n_B0  = 1'b1;
-        dclko_p_A1  = 1'b0; dclko_n_A1 = 1'b1;
         dout_p_A1   = 1'b0; dout_n_A1  = 1'b1;
         dout_p_B1   = 1'b0; dout_n_B1  = 1'b1;
         repeat (5) @(posedge clk_sys);

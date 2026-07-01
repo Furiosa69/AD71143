@@ -2,13 +2,13 @@
 //  AD71143 AFE + NT39565D Gate Driver 集成顶层
 //
 //  时钟架构:
-//    HW  (`ifdef XILINX_PRIMITIVES):  sys_clk (50MHz pin) → PLL → clk_100m (100MHz)
+//    HW  (`ifdef XILINX_PRIMITIVES):  sys_clk (50MHz pin) �? PLL �? clk_100m (100MHz)
 //                                     gate_clk = sys_clk (50MHz)
 //    SIM (`else):                     sys_clk = 100MHz from testbench
 //                                     gate_clk = sys_clk / 2 divider (50MHz)
 //
-//  50MHz 域: nt39565d_gate_ctrl, top FSM
-//  100MHz 域: ad71143_ctrl, ad71143_spi, SPI config FSM
+//  50MHz �?: nt39565d_gate_ctrl, top FSM
+//  100MHz �?: ad71143_ctrl, ad71143_spi, SPI config FSM
 //
 module top #(
     parameter integer FRAME_LINES      = 541,
@@ -74,8 +74,6 @@ module top #(
     // Panel 0
     output wire         dclk_p_A0,
     output wire         dclk_n_A0,
-    input  wire         dclko_p_A0,
-    input  wire         dclko_n_A0,
     input  wire         dout_p_A0,
     input  wire         dout_n_A0,
     input  wire         dout_p_B0,
@@ -83,19 +81,10 @@ module top #(
     // Panel 1
     output wire         dclk_p_A1,
     output wire         dclk_n_A1,
-    input  wire         dclko_p_A1,
-    input  wire         dclko_n_A1,
     input  wire         dout_p_A1,
     input  wire         dout_n_A1,
     input  wire         dout_p_B1,
     input  wire         dout_n_B1,
-
-    output wire [255:0] merged_burst,
-    output wire [6:0]   merged_burst_index,
-    output wire         merged_valid,
-    output wire         header_ok,
-    output wire         rx_line_done,
-
     // ---- RGMII ----
     output wire         rgmii_rst_n,     // PHY 异步复位
     // TX
@@ -116,6 +105,18 @@ module top #(
     output wire         rgmii_mdc,
     inout  wire         rgmii_mdio
 );
+
+    // ---- 内部调试信号 (不引�?) ----
+    wire [255:0] merged_burst;
+    wire [6:0]   merged_burst_index;
+    wire         merged_valid;
+    wire         header_ok;
+    wire         rx_line_done;
+    wire         frame_active;
+    wire         frame_done_o;
+    wire         line_done_o;
+    wire         ctrl_init_done_o;
+ 
     wire clk_fb;
     wire pll_locked;
     wire clk_100m;
@@ -213,22 +214,22 @@ module top #(
 wire gate_clk = sys_clk;
 wire rst_n = key & pll_locked;
 
-// RGMII PHY 异步复位 (与系统复位同步)
+// RGMII PHY 异步复位 (与系统复位同�?)
 assign rgmii_rst_n = rst_n;
 
 // =========================================================================
 // 内部信号
 // =========================================================================
 
-// ---- 100MHz 域 (AFE control) ----
+// ---- 100MHz �? (AFE control) ----
 wire        ctrl_init_done;
 wire        ctrl_line_start;
 wire        ctrl_line_done;
 wire        ctrl_frame_done;
 wire [9:0]  ctrl_line_cnt;
-wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz 域)
-wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl → data_rx)
-// AFE 控制信号 (内部 → 两 Panel 扇出)
+wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz �?)
+wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl �? data_rx)
+// AFE 控制信号 (内部 �? �? Panel 扇出)
 wire roic_reset_int;
 wire sync_int;
 wire aclk_int;
@@ -239,20 +240,20 @@ assign sync_p1       = sync_int;
 assign aclk_p0       = aclk_int;
 assign aclk_p1       = aclk_int;
 
-// ---- 50MHz 域 (gate driver + top FSM) ----
+// ---- 50MHz �? (gate driver + top FSM) ----
 wire        busy;
 wire        line_done;
 wire        frame_done;
-reg         frame_start;           // top FSM 发出的 frame_start 脉冲
+reg         frame_start;           // top FSM 发出�? frame_start 脉冲
 wire        init_done_synced;      // CDC 同步后的 init_done
 wire        cfg_done_synced;       // CDC 同步后的 spi_cfg_done
 wire        line_start_pulse;      // CDC 同步后的 line_start (toggle→pulse)
 
-// ---- SPI 配置 FSM (100MHz 域) ----
+// ---- SPI 配置 FSM (100MHz �?) ----
 wire        spi_cfg_done;
 wire        spi_done_p0;
 wire        spi_done_p1;
-wire        spi_done;              // 两 Panel 均完成
+wire        spi_done;              // �? Panel 均完�?
 wire        spi_start;
 wire [3:0]  spi_reg_addr;
 wire [9:0]  spi_reg_data;
@@ -262,10 +263,10 @@ assign spi_done = spi_done_p0 && spi_done_p1;
 
 // ---- frame_done CDC ----
 reg         frame_done_toggle_100m;
-wire        frame_done_rise;       // 50MHz 域 frame_done 边沿检测
+wire        frame_done_rise;       // 50MHz �? frame_done 边沿�?�?
 
 // =========================================================================
-// CDC: ctrl_init_done (100MHz → 50MHz, 2-FF level sync)
+// CDC: ctrl_init_done (100MHz �? 50MHz, 2-FF level sync)
 // =========================================================================
 reg init_done_sync1, init_done_sync2;
 
@@ -282,7 +283,7 @@ end
 assign init_done_synced = init_done_sync2;
 
 // =========================================================================
-// CDC: ctrl_line_start (100MHz → 50MHz, toggle + 2-FF + edge detect)
+// CDC: ctrl_line_start (100MHz �? 50MHz, toggle + 2-FF + edge detect)
 // =========================================================================
 reg ctrl_line_start_toggle;
 
@@ -310,7 +311,7 @@ end
 assign line_start_pulse = line_start_sync2 ^ line_start_sync3;
 
 // =========================================================================
-// CDC: frame_start (50MHz → 100MHz, toggle + 2-FF + edge detect)
+// CDC: frame_start (50MHz �? 100MHz, toggle + 2-FF + edge detect)
 // =========================================================================
 reg frame_start_toggle_50m;
 
@@ -338,7 +339,7 @@ end
 assign frame_start_100m = frame_start_sync2 ^ frame_start_sync3;
 
 // =========================================================================
-// CDC: ctrl_frame_done (100MHz → 50MHz, toggle + 2-FF + edge detect)
+// CDC: ctrl_frame_done (100MHz �? 50MHz, toggle + 2-FF + edge detect)
 // =========================================================================
 always @(posedge clk_100m or negedge rst_n) begin
     if (!rst_n)
@@ -364,7 +365,7 @@ end
 assign frame_done_rise = frame_done_sync2 ^ frame_done_sync3;
 
 // =========================================================================
-// CDC: spi_cfg_done (100MHz → 50MHz, 2-FF level sync)
+// CDC: spi_cfg_done (100MHz �? 50MHz, 2-FF level sync)
 // =========================================================================
 reg cfg_done_sync1, cfg_done_sync2;
 
@@ -381,10 +382,10 @@ end
 assign cfg_done_synced = cfg_done_sync2;
 
 // =========================================================================
-// SPI 配置 FSM (100MHz 域)
-//   写入全部 16 个 AD71143 寄存器 (ADDR 0-15)
+// SPI 配置 FSM (100MHz �?)
+//   写入全部 16 �? AD71143 寄存�? (ADDR 0-15)
 //   顺序: Reg3(REFDAC)→Reg0(PWR)→Reg1(LPF)→Reg2(Mode)→Reg4~7(Timing)→Reg8~15
-//   值来源: AD71143 SPEC Table 12 + Figure 22 Pipeline Mode 推荐
+//   值来�?: AD71143 SPEC Table 12 + Figure 22 Pipeline Mode 推荐
 // =========================================================================
 localparam CFG_IDLE  = 2'd0;
 localparam CFG_ISSUE = 2'd1;
@@ -396,7 +397,7 @@ reg [3:0]  cfg_reg_idx;
 reg        cfg_spi_start;
 reg        cfg_all_done;
 
-// SPI 配置寄存器 LUT — 按推荐上电顺序排列
+// SPI 配置寄存�? LUT �? 按推荐上电顺序排�?
 wire [3:0] cfg_addr_lut;
 wire [9:0] cfg_data_lut;
 
@@ -420,7 +421,7 @@ assign cfg_addr_lut =
     4'd0;
 
 assign cfg_data_lut =
-    (cfg_reg_idx == 4'd0)  ? 10'h040 :  // Reg3:  AZEN=0, REFDAC=64 → 1.5V
+    (cfg_reg_idx == 4'd0)  ? 10'h040 :  // Reg3:  AZEN=0, REFDAC=64 �? 1.5V
     (cfg_reg_idx == 4'd1)  ? 10'h014 :  // Reg0:  PWR=Normal(000), IFS=20
     (cfg_reg_idx == 4'd2)  ? 10'h0A0 :  // Reg1:  LPF=3.9μs(01), CDS2_RESETEN=1
     (cfg_reg_idx == 4'd3)  ? 10'h027 :  // Reg2:  RNDOMIZE=1, DOUTMODE=1, ECHOCLK=1, Pipeline=1
@@ -428,7 +429,7 @@ assign cfg_data_lut =
     (cfg_reg_idx == 4'd5)  ? 10'h013 :  // Reg5:  CDS1_C=1(ACLK1), CDS1_O=3(ACLK3)
     (cfg_reg_idx == 4'd6)  ? 10'h046 :  // Reg6:  CDS2_C=4(ACLK4), CDS2_O=6(ACLK6)
     (cfg_reg_idx == 4'd7)  ? 10'h025 :  // Reg7:  FA_CDS1=2(ACLK2), FA_CDS2=5(ACLK5)
-    (cfg_reg_idx == 4'd8)  ? 10'h000 :  // Reg8:  CUSTCLMPEN=0 (禁用自定义钳位)
+    (cfg_reg_idx == 4'd8)  ? 10'h000 :  // Reg8:  CUSTCLMPEN=0 (禁用自定义钳�?)
     (cfg_reg_idx == 4'd9)  ? 10'h000 :  // Reg9:  Reserved
     (cfg_reg_idx == 4'd10) ? 10'h000 :  // Reg10: PIPELINE_AVGEN=0
     (cfg_reg_idx == 4'd11) ? 10'h000 :  // Reg11: LFSR_EN=0
@@ -498,16 +499,16 @@ assign spi_reg_data = cfg_data_lut;
 assign spi_start    = cfg_spi_start;
 assign spi_cfg_done = cfg_all_done;
 
-// AD71143 SPEC: 转换期间 CS 必须保持低电平
-// SPI 配置完成后强制 CS=0, 否则使用 SPI 模块的 CS 输出
+// AD71143 SPEC: 转换期间 CS 必须保持低电�?
+// SPI 配置完成后强�? CS=0, 否则使用 SPI 模块�? CS 输出
 wire spi_cs_raw_p0;
 wire spi_cs_raw_p1;
 assign spi_cs_p0 = spi_cfg_done ? 1'b0 : spi_cs_raw_p0;
 assign spi_cs_p1 = spi_cfg_done ? 1'b0 : spi_cs_raw_p1;
 
 // =========================================================================
-// Top FSM (50MHz 域)
-//   POWERUP → WAIT_INIT → WAIT_CFG → IDLE → START → WAIT_FRAME → FRAME_GAP
+// Top FSM (50MHz �?)
+//   POWERUP �? WAIT_INIT �? WAIT_CFG �? IDLE �? START �? WAIT_FRAME �? FRAME_GAP
 // =========================================================================
 localparam TOP_POWERUP    = 3'd0;
 localparam TOP_WAIT_INIT  = 3'd1;
@@ -587,7 +588,7 @@ end
 // 模块例化
 // =========================================================================
 
-// AD71143 AFE 控制 (100MHz 域)
+// AD71143 AFE 控制 (100MHz �?)
 ad71143_ctrl #(
     .ACLK_PULSES      (9),
     .LINE_CYCLES      (6000),
@@ -611,7 +612,7 @@ ad71143_ctrl #(
 );
 
 
-	// AD71143 SPI Master Panel 0 (100MHz 域)
+	// AD71143 SPI Master Panel 0 (100MHz �?)
 	ad71143_spi u_spi_p0 (
 	    .clk_sys    (clk_100m),
 	    .rst_n      (rst_n),
@@ -627,7 +628,7 @@ ad71143_ctrl #(
 	    .spi_sdo    (spi_sdo_p0)
 	);
 
-	// AD71143 SPI Master Panel 1 (100MHz 域, 与 Panel 0 并行配置)
+	// AD71143 SPI Master Panel 1 (100MHz �?, �? Panel 0 并行配置)
 	ad71143_spi u_spi_p1 (
 	    .clk_sys    (clk_100m),
 	    .rst_n      (rst_n),
@@ -643,7 +644,7 @@ ad71143_ctrl #(
 	    .spi_sdo    (spi_sdo_p1)
 	);
 
-// AD71143 双 Panel LVDS 数据接收 (200MHz 域)
+// AD71143 �? Panel LVDS 数据接收 (200MHz �?)
 	ad71143_data_rx_dual #(
 	    .MUTE_MIN             (290)     // 200MHz: tBURST=1765ns, 353cyc-64=289->290
 	) u_data_rx_dual (
@@ -653,16 +654,14 @@ ad71143_ctrl #(
 	    .aclk_done            (aclk_done),
 	    .dclk_p_A0            (dclk_p_A0),
 	    .dclk_n_A0            (dclk_n_A0),
-	    .dclko_p_A0           (dclko_p_A0),
-	    .dclko_n_A0           (dclko_n_A0),
+
 	    .dout_p_A0            (dout_p_A0),
 	    .dout_n_A0            (dout_n_A0),
 	    .dout_p_B0            (dout_p_B0),
 	    .dout_n_B0            (dout_n_B0),
 	    .dclk_p_A1            (dclk_p_A1),
 	    .dclk_n_A1            (dclk_n_A1),
-	    .dclko_p_A1           (dclko_p_A1),
-	    .dclko_n_A1           (dclko_n_A1),
+
 	    .dout_p_A1            (dout_p_A1),
 	    .dout_n_A1            (dout_n_A1),
 	    .dout_p_B1            (dout_p_B1),
@@ -677,7 +676,7 @@ ad71143_ctrl #(
 	    .burst_en_out         ()
 	);
 
-// NT39565D Gate Driver (50MHz 域, 修复 CLK_FREQ_MHZ=50)
+// NT39565D Gate Driver (50MHz �?, 修复 CLK_FREQ_MHZ=50)
 nt39565d_gate_ctrl #(
     .CLK_FREQ_MHZ      (50  ),
     .CPV_PERIOD_US     (10  ),
@@ -724,7 +723,7 @@ nt39565d_gate_ctrl #(
 );
 
     // =========================================================================
-    // RGMII 桥接: merged_burst → 字节 → RGMII_tx
+    // RGMII 桥接: merged_burst �? 字节 �? RGMII_tx
     // =========================================================================
     rgmii_bridge #(
         .BURST_WIDTH (256),
@@ -745,7 +744,7 @@ nt39565d_gate_ctrl #(
     );
 
     // =========================================================================
-    // RGMII 接收: PHY → FPGA
+    // RGMII 接收: PHY �? FPGA
     // =========================================================================
     RGMII_rx #(
         .FRAME_SIZE(64)

@@ -22,9 +22,6 @@ module ad71143_data_rx (
     output wire         dclk_p_A,
     output wire         dclk_n_A,
 
-    input  wire         dclko_p_A,
-    input  wire         dclko_n_A,
-
     input  wire         dout_p_A,
     input  wire         dout_n_A,
     input  wire         dout_p_B,
@@ -337,25 +334,20 @@ module ad71143_data_rx (
     );
 
     OBUFDS #(
-        .IOSTANDARD("LVDS_33")
+        .IOSTANDARD("LVDS_25")
     ) obufds_dclk (
         .O  (dclk_p_A),
         .OB (dclk_n_A),
         .I  (dclk_pre)
     );
 
-    IBUFDS #(
-        .DIFF_TERM("TRUE"),
-        .IOSTANDARD("LVDS_33")
-    ) ibufds_dclko (
-        .O  (dclko_i),
-        .I  (dclko_p_A),
-        .IB (dclko_n_A)
-    );
+    // DCLKO 引脚不存在，用 clk_sys 直接作内部采样时钟
+    // clk_sys 与 dclk_pre (ODDR 输出) 同频同相, cap_active_dclko 门控实际采样
+    assign dclko_i = clk_sys;
 
     IBUFDS #(
         .DIFF_TERM("TRUE"),
-        .IOSTANDARD("LVDS_33")
+        .IOSTANDARD("LVDS_25")
     ) ibufds_dout_a (
         .O  (dout_a_i),
         .I  (dout_p_A),
@@ -364,7 +356,7 @@ module ad71143_data_rx (
 
     IBUFDS #(
         .DIFF_TERM("TRUE"),
-        .IOSTANDARD("LVDS_33")
+        .IOSTANDARD("LVDS_25")
     ) ibufds_dout_b (
         .O  (dout_b_i),
         .I  (dout_p_B),

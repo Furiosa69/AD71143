@@ -61,10 +61,6 @@ set_property PACKAGE_PIN R14  [get_ports chip_sel2_l]
 set_property PACKAGE_PIN R18  [get_ports oepsn_l]
 set_property PACKAGE_PIN W19  [get_ports xao_l]
 
-## set_property PACKAGE_PIN  [get_ports frame_active]
-## set_property PACKAGE_PIN  [get_ports frame_done_o]
-## set_property PACKAGE_PIN  [get_ports line_done_o]
-## set_property PACKAGE_PIN  [get_ports ctrl_init_done_o]
 
 # ---- AD71143 LVDS 数据 Panel 0 ----
 set_property PACKAGE_PIN J20 [get_ports dclk_p_A0]
@@ -108,26 +104,26 @@ set_property IOSTANDARD LVCMOS33 [get_ports sys_clk]
 set_property IOSTANDARD LVCMOS33 [get_ports key]
 
 # ---- AD71143 AFE 控制 Panel 0 ----
-set_property IOSTANDARD LVCMOS33 [get_ports roic_reset_p0]
-set_property IOSTANDARD LVCMOS33 [get_ports sync_p0]
-set_property IOSTANDARD LVCMOS33 [get_ports aclk_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports roic_reset_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports sync_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports aclk_p0]
 
 # ---- AD71143 AFE 控制 Panel 1 ----
-set_property IOSTANDARD LVCMOS33 [get_ports roic_reset_p1]
-set_property IOSTANDARD LVCMOS33 [get_ports sync_p1]
-set_property IOSTANDARD LVCMOS33 [get_ports aclk_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports roic_reset_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports sync_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports aclk_p1]
 
 # ---- AD71143 SPI Panel 0 ----
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sdo_p0]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_cs_p0]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sck_p0]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sdi_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sdo_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_cs_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sck_p0]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sdi_p0]
 
 # ---- AD71143 SPI Panel 1 ----
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sdo_p1]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_cs_p1]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sck_p1]
-set_property IOSTANDARD LVCMOS33 [get_ports spi_sdi_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sdo_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_cs_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sck_p1]
+set_property IOSTANDARD LVCMOS25 [get_ports spi_sdi_p1]
 
 # ---- NT39565D 栅极驱动 ----
 set_property IOSTANDARD LVCMOS33 [get_ports cpv_r]
@@ -161,12 +157,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports stv_mode_l]
 set_property IOSTANDARD LVCMOS33 [get_ports chip_sel1_l]
 set_property IOSTANDARD LVCMOS33 [get_ports chip_sel2_l]
 set_property IOSTANDARD LVCMOS33 [get_ports oepsn_l]
-
-# ---- 状态输出 ----
-# set_property IOSTANDARD LVCMOS33 [get_ports frame_active]
-# set_property IOSTANDARD LVCMOS33 [get_ports frame_done_o]
-# set_property IOSTANDARD LVCMOS33 [get_ports line_done_o]
-# set_property IOSTANDARD LVCMOS33 [get_ports ctrl_init_done_o]
 
 # ---- AD71143 LVDS 数据 Panel 0 ----
 set_property IOSTANDARD LVDS_25 [get_ports dclk_p_A0]

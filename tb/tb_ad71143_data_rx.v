@@ -7,8 +7,6 @@ module tb_ad71143_data_rx;
     reg         aclk_done;
     wire        dclk_p_A;
     wire        dclk_n_A;
-    reg         dclko_p_A;
-    reg         dclko_n_A;
     reg         dout_p_A;
     reg         dout_n_A;
     reg         dout_p_B;
@@ -44,8 +42,6 @@ module tb_ad71143_data_rx;
         .aclk_done(aclk_done),
         .dclk_p_A(dclk_p_A),
         .dclk_n_A(dclk_n_A),
-        .dclko_p_A(dclko_p_A),
-        .dclko_n_A(dclko_n_A),
         .dout_p_A(dout_p_A),
         .dout_n_A(dout_n_A),
         .dout_p_B(dout_p_B),
@@ -90,44 +86,41 @@ module tb_ad71143_data_rx;
         #1 sync_in = 1'b0;
         repeat (2) @(posedge clk_sys);
         #1 aclk_done = 1'b1;
-        repeat (2) @(posedge clk_sys);
+        @(posedge clk_sys);    // DUT 锁存 aclk_done, cap_start toggle, burst_en=1
         #1 aclk_done = 1'b0;
+        // 此处状态: state=S_WAIT→S_ACT(下一拍), burst_en=1
+        // 调用 send_burst64 时 wait(burst_en) 立即触发,
+        // warmup 的第一个 @(posedge) = state 变为 S_ACT 且 dclk_pre 首次上升沿
     end
     endtask
 
-    task automatic pulse_dclko;
-    begin
-        #5;
-        dclko_p_A = 1'b1;
-        dclko_n_A = 1'b0;
-        #10;
-        dclko_p_A = 1'b0;
-        dclko_n_A = 1'b1;
-        #10;
-    end
-    endtask
-
+    // DCLK 内部回环: dclk_pre 上升沿 = clk_sys 上升沿
     task automatic send_burst64;
         input [63:0] lane_a;
         input [63:0] lane_b;
         integer k;
     begin
         wait(burst_en_out === 1'b1);
+        $display("[%0t] DBG: burst_en=1, state_debug=%0d", $time, state_debug);
 
         $display("[%0t] send_burst64 START: lane_a=%h lane_b=%h", $time, lane_a, lane_b);
 
-        // DUT 在 dclko 域里用 cap_start_tgl_d1/cap_start_tgl_d2 做同步，
-        // 需要两个启动边沿后 cap_active_dclko 才真正拉高。
-        pulse_dclko();
-        pulse_dclko();
+        // 等 cap_start toggle 传播: 2 个 dclk_pre 上升沿 → toggle detect
+        @(negedge clk_sys);
+        @(posedge clk_sys);
+        @(negedge clk_sys);
+        @(posedge clk_sys);
 
+        // 64 bit, MSB first
         for (k = 63; k >= 0; k = k - 1) begin
+            @(negedge clk_sys);
             dout_p_A = lane_a[k];
             dout_n_A = ~lane_a[k];
             dout_p_B = lane_b[k];
             dout_n_B = ~lane_b[k];
-            pulse_dclko();
         end
+        @(negedge clk_sys);
+        @(negedge burst_en_out);
 
         $display("[%0t] send_burst64 DONE:  lane_a=%h lane_b=%h", $time, lane_a, lane_b);
     end
@@ -138,12 +131,13 @@ module tb_ad71143_data_rx;
         integer n;
     begin
         for (n = data_bursts_already_sent; n < 32; n = n + 1) begin
-            send_burst64(64'h1000_2000_3000_4000 + n, 64'h5000_6000_7000_8000 + n);
-            // wait until DUT enters S_MUTE then back to S_ACT, so next send_burst64
-            // runs in its own S_ACT window
-            @(negedge burst_en_out);
+            // send_burst64 内部已等待 cap_done, 退出时 burst_en_out=0
+            // 等待 MUTE 结束, burst_en_out 重新拉高后再发下一个 burst
             wait(burst_en_out === 1'b1);
+            send_burst64(64'h1000_2000_3000_4000 + n, 64'h5000_6000_7000_8000 + n);
         end
+        // 最后一个 burst
+        wait(burst_en_out === 1'b1);
         send_burst64(64'hDEAD_BEEF_CAFE_1234, 64'h0123_4567_89AB_CDEF);
     end
     endtask
@@ -255,8 +249,6 @@ module tb_ad71143_data_rx;
         rst_n     = 1'b0;
         sync_in   = 1'b1;
         aclk_done = 1'b0;
-        dclko_p_A = 1'b0;
-        dclko_n_A = 1'b1;
         dout_p_A  = 1'b0;
         dout_n_A  = 1'b1;
         dout_p_B  = 1'b0;
@@ -274,8 +266,6 @@ module tb_ad71143_data_rx;
         rst_n     = 1'b1;
         sync_in   = 1'b1;
         aclk_done = 1'b0;
-        dclko_p_A = 1'b0;
-        dclko_n_A = 1'b1;
         dout_p_A  = 1'b0;
         dout_n_A  = 1'b1;
         dout_p_B  = 1'b0;

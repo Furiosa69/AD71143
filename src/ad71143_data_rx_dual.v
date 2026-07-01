@@ -2,8 +2,8 @@
 // AD71143 双 Panel LVDS 数据接收 — DDR 模式 (DOUTMODE=1)
 // =============================================================================
 // 封装两个 ad71143_data_rx 实例, 共享 sync_in/aclk_done, 各自独立 LVDS 物理口
-// 每 Panel: 2 对 DOUT (Lane A/B) + 1 对 DCLK + 1 对 DCLKO → DDR 模式
-// 两 Panel 共计: 4 对 DOUT + 2 对 DCLK + 2 对 DCLKO
+// 每 Panel: 2 对 DOUT (Lane A/B) + 1 对 DCLK → DDR 模式
+// 两 Panel 共计: 4 对 DOUT + 2 对 DCLK (内部回环采样, 无 DCLKO 引脚)
 //
 // 输出拼接: merged_burst[255:0] = {panel1_burst[127:0], panel0_burst[127:0]}
 // =============================================================================
@@ -28,10 +28,6 @@ module ad71143_data_rx_dual #(
     output wire         dclk_p_A0,
     output wire         dclk_n_A0,
 
-    // DCLKO 输入 (ROIC0 → FPGA, Echo Clock)
-    input  wire         dclko_p_A0,
-    input  wire         dclko_n_A0,
-
     // DOUT Lane A 输入 (偶数通道)
     input  wire         dout_p_A0,
     input  wire         dout_n_A0,
@@ -46,10 +42,6 @@ module ad71143_data_rx_dual #(
     // DCLK 输出 (FPGA → ROIC1)
     output wire         dclk_p_A1,
     output wire         dclk_n_A1,
-
-    // DCLKO 输入 (ROIC1 → FPGA, Echo Clock)
-    input  wire         dclko_p_A1,
-    input  wire         dclko_n_A1,
 
     // DOUT Lane A 输入 (偶数通道)
     input  wire         dout_p_A1,
@@ -106,8 +98,6 @@ module ad71143_data_rx_dual #(
 
         .dclk_p_A             (dclk_p_A0),
         .dclk_n_A             (dclk_n_A0),
-        .dclko_p_A            (dclko_p_A0),
-        .dclko_n_A            (dclko_n_A0),
         .dout_p_A             (dout_p_A0),
         .dout_n_A             (dout_n_A0),
         .dout_p_B             (dout_p_B0),
@@ -147,8 +137,6 @@ module ad71143_data_rx_dual #(
 
         .dclk_p_A             (dclk_p_A1),
         .dclk_n_A             (dclk_n_A1),
-        .dclko_p_A            (dclko_p_A1),
-        .dclko_n_A            (dclko_n_A1),
         .dout_p_A             (dout_p_A1),
         .dout_n_A             (dout_n_A1),
         .dout_p_B             (dout_p_B1),

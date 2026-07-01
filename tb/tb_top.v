@@ -41,25 +41,18 @@ wire        ctrl_init_done_o;
 
 wire        dclk_p_A0;
 wire        dclk_n_A0;
-wire        dclko_p_A0;
-wire        dclko_n_A0;
+
 wire        dout_p_A0;
 wire        dout_n_A0;
 wire        dout_p_B0;
 wire        dout_n_B0;
 wire        dclk_p_A1;
 wire        dclk_n_A1;
-wire        dclko_p_A1;
-wire        dclko_n_A1;
+
 wire        dout_p_A1;
 wire        dout_n_A1;
 wire        dout_p_B1;
 wire        dout_n_B1;
-wire [255:0] merged_burst;
-wire [6:0]   merged_burst_index;
-wire         merged_valid;
-wire         header_ok;
-wire         rx_line_done;
 
 initial begin
     sys_clk = 1'b0;
@@ -169,36 +162,19 @@ top #(
     .oepsn_l            (oepsn          ),
     .dclk_p_A0          (dclk_p_A0      ),
     .dclk_n_A0          (dclk_n_A0      ),
-    .dclko_p_A0         (dclko_p_A0     ),
-    .dclko_n_A0         (dclko_n_A0     ),
     .dout_p_A0          (dout_p_A0      ),
     .dout_n_A0          (dout_n_A0      ),
     .dout_p_B0          (dout_p_B0      ),
     .dout_n_B0          (dout_n_B0      ),
     .dclk_p_A1          (dclk_p_A1      ),
     .dclk_n_A1          (dclk_n_A1      ),
-    .dclko_p_A1         (dclko_p_A1     ),
-    .dclko_n_A1         (dclko_n_A1     ),
     .dout_p_A1          (dout_p_A1      ),
     .dout_n_A1          (dout_n_A1      ),
     .dout_p_B1          (dout_p_B1      ),
     .dout_n_B1          (dout_n_B1      ),
-    .merged_burst       (merged_burst   ),
-    .merged_burst_index (merged_burst_index),
-    .merged_valid       (merged_valid   ),
-    .header_ok          (header_ok      ),
-    .rx_line_done       (rx_line_done   )
 );
 
-// =========================================================================
-// AFE LVDS echo clock loopback (DCLK → DCLKO, 模拟 AD71143 回波)
-// =========================================================================
-assign dclko_p_A0 = dclk_p_A0;
-assign dclko_n_A0 = dclk_n_A0;
-assign dclko_p_A1 = dclk_p_A1;
-assign dclko_n_A1 = dclk_n_A1;
-
-// DOUT = 0 (无 AFE 仿真模型, 数据读回全零)
+// DOUT = 0 (无 AFE 仿真模型, 数据读回全零, DCLK 由 DUT 内部回环)
 assign dout_p_A0 = 1'b0;
 assign dout_n_A0 = 1'b1;
 assign dout_p_B0 = 1'b0;

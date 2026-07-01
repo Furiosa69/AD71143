@@ -7,10 +7,14 @@
 # Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 # 
 
+echo "This script was generated under a different operating system."
+echo "Please update the PATH and LD_LIBRARY_PATH variables below, before executing this script"
+exit
+
 if [ -z "$PATH" ]; then
-  PATH=/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/ids_lite/ISE/bin/lin64:/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/bin
+  PATH=E:/Vivado/2023.2/ids_lite/ISE/bin/nt64;E:/Vivado/2023.2/ids_lite/ISE/lib/nt64:E:/Vivado/2023.2/bin
 else
-  PATH=/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/ids_lite/ISE/bin/lin64:/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/bin:$PATH
+  PATH=E:/Vivado/2023.2/ids_lite/ISE/bin/nt64;E:/Vivado/2023.2/ids_lite/ISE/lib/nt64:E:/Vivado/2023.2/bin:$PATH
 fi
 export PATH
 
@@ -21,7 +25,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1'
+HD_PWD='E:/ShiTa_Rob/AD71143/board/Project/top.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
