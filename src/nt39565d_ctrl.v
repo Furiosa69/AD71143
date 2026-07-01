@@ -48,6 +48,7 @@ module nt39565d_gate_ctrl #(
     output reg        oe2,
     output reg        ud,
     output reg        lr,
+    output reg        xao,
 
     output reg        mode1,
     output reg        mode2,
@@ -216,6 +217,7 @@ module nt39565d_gate_ctrl #(
 
             if (xao_emergency) begin
                 state <= XAO_SHUT_S;
+                xao   <= 1'b1;
             end
 
             // 锁存 frame_start，防止脉冲在 busy 期间丢失
@@ -422,6 +424,7 @@ module nt39565d_gate_ctrl #(
 
                     if (!xao_emergency) begin
                         xao_cnt <= 16'd0;
+                        xao <= 0;
                         cnt <= 16'd0;
                         shift_cnt <= 16'd0;
                         state <= IDLE;

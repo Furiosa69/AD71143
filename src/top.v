@@ -29,25 +29,44 @@ module top #(
     output wire spi_sck,
     output wire spi_sdi,
 
-    output wire cpv,
-    output wire stv1,
-    output wire stv2,
-    output wire oe1,
-    output wire oe2,
-    output wire ud,
-    output wire lr,
-    output wire mode1,
-    output wire mode2,
-    output wire sel,
-    output wire stv_mode,
-    output wire chip_sel1,
-    output wire chip_sel2,
-    output wire oepsn,
+    // ---- NT38 ----
+    output wire cpv_r,
+    output wire xao_r,
+    output wire stv1_r,
+    output wire stv2_r,
+    output wire oe1_r,
+    output wire oe2_r,
+    output wire ud_r,
+    output wire lr_r,
+    output wire mode1_r,
+    output wire mode2_r,
+    output wire sel_r,
+    output wire stv_mode_r,
+    output wire chip_sel1_r,
+    output wire chip_sel2_r,
+    output wire oepsn_r,
 
-    output wire frame_active,
-    output wire frame_done_o,
-    output wire line_done_o,
-    output wire ctrl_init_done_o,
+    output wire cpv_l,
+    output wire xao_l,
+    output wire stv1_l,
+    output wire stv2_l,
+    output wire oe1_l,
+    output wire oe2_l,
+    output wire ud_l,
+    output wire lr_l,
+    output wire mode1_l,
+    output wire mode2_l,
+    output wire sel_l,
+    output wire stv_mode_l,
+    output wire chip_sel1_l,
+    output wire chip_sel2_l,
+    output wire oepsn_l,
+
+    // 调试接口
+//    output wire frame_active,
+//    output wire frame_done_o,
+//    output wire line_done_o,
+//    output wire ctrl_init_done_o,
 
     // ---- AD71143 LVDS 数据接口 ----
     output wire dclk_p,
@@ -76,6 +95,54 @@ module top #(
     wire pll_locked;
     wire clk_100m;
     wire clk_200m;
+
+    wire cpv;
+    wire xao;
+    wire stv1;
+    wire stv2;
+    wire oe1;
+    wire oe2;
+    wire ud;
+    wire lr;
+    wire mode1;
+    wire mode2;
+    wire sel;
+    wire stv_mode;
+    wire chip_sel1;
+    wire chip_sel2;
+    wire oepsn;
+
+    assign cpv_r = cpv;
+    assign xao_r = xao;
+    assign stv1_r = stv1;
+    assign stv2_r = stv2;
+    assign oe1_r = oe1;
+    assign oe2_r = oe2;
+    assign ud_r = ud;
+    assign lr_r = lr;
+    assign mode1_r = mode1;
+    assign mode2_r = mode2;
+    assign sel_r = sel;
+    assign stv_mode_r = stv_mode;
+    assign chip_sel1_r = chip_sel1;
+    assign chip_sel2_r = chip_sel2;
+    assign oepsn_r = oepsn;
+
+    assign cpv_l = cpv;
+    assign xao_l = xao;
+    assign stv1_l = stv1;
+    assign stv2_l = stv2;
+    assign oe1_l = oe1;
+    assign oe2_l = oe2;
+    assign ud_l = ud;
+    assign lr_l = lr;
+    assign mode1_l = mode1;
+    assign mode2_l = mode2;
+    assign sel_l = sel;
+    assign stv_mode_l = stv_mode;
+    assign chip_sel1_l = chip_sel1;
+    assign chip_sel2_l = chip_sel2;
+    assign oepsn_l = oepsn;
 
     PLLE2_BASE #(
         .BANDWIDTH          ("OPTIMIZED"),
@@ -409,6 +476,10 @@ localparam TOP_FRAME_GAP  = 3'd6;
 reg [2:0]  top_state;
 reg [31:0] gap_cnt;
 
+wire frame_active;
+wire frame_done_o;
+wire line_done_o;
+wire ctrl_init_done_o;
 assign frame_active  = busy;
 assign frame_done_o  = frame_done_rise;
 assign line_done_o   = ctrl_line_done;
@@ -578,6 +649,7 @@ nt39565d_gate_ctrl #(
     .stv_delay_sel  (STV_DELAY_SEL  ),
     .oe_mask_en     (OE_MASK_EN     ),
     .cpv            (cpv            ),
+    .xao            (xao            ),
     .stv1           (stv1           ),
     .stv2           (stv2           ),
     .oe1            (oe1            ),

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Tue Jun 30 14:32:36 2026
+| Date         : Wed Jul  1 14:49:23 2026
 | Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
 | Design       : top
@@ -23,14 +23,14 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 278
+             Violations found: 281
 +-----------+------------------+-------------------------------+------------+
 | Rule      | Severity         | Description                   | Violations |
 +-----------+------------------+-------------------------------+------------+
 | TIMING-17 | Critical Warning | Non-clocked sequential cell   | 139        |
 | LUTAR-1   | Warning          | LUT drives async reset alert  | 2          |
 | TIMING-16 | Warning          | Large setup violation         | 129        |
-| TIMING-18 | Warning          | Missing input or output delay | 8          |
+| TIMING-18 | Warning          | Missing input or output delay | 11         |
 +-----------+------------------+-------------------------------+------------+
 
 2. REPORT DETAILS
@@ -732,13 +732,16 @@ Related violations: <none>
 
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell u_data_rx/FSM_sequential_state[2]_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) gap_cnt_reg[0]/CLR, gap_cnt_reg[1]/CLR, gap_cnt_reg[2]/CLR,
-gap_cnt_reg[3]/CLR, gap_cnt_reg[4]/CLR, gap_cnt_reg[5]/CLR,
-gap_cnt_reg[6]/CLR, init_done_sync1_reg/CLR, init_done_sync2_reg/CLR,
-line_start_sync1_reg/CLR, line_start_sync2_reg/CLR,
-line_start_sync3_reg/CLR, u_ad71143_ctrl/sync_reg_reg_lopt_replica/PRE,
+LUT cell u_data_rx/FSM_sequential_state[2]_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) gap_cnt_reg[5]/CLR, gap_cnt_reg[6]/CLR, init_done_sync1_reg/CLR,
+init_done_sync2_reg/CLR, line_start_sync1_reg/CLR,
+line_start_sync2_reg/CLR, line_start_sync3_reg/CLR,
+u_ad71143_ctrl/sync_reg_reg_lopt_replica/PRE,
 u_data_rx/merged_valid_reg_lopt_replica/CLR,
-u_nt39565d/oe1_reg_lopt_replica/PRE (the first 15 of 579 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+u_nt39565d/cpv_reg_lopt_replica/CLR, u_nt39565d/oe1_reg_lopt_replica/PRE,
+u_nt39565d/oe1_reg_lopt_replica_2/PRE,
+u_nt39565d/oe1_reg_lopt_replica_3/PRE,
+u_nt39565d/stv1_reg_lopt_replica/CLR, u_nt39565d/stv2_reg_lopt_replica/CLR
+ (the first 15 of 582 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 LUTAR-1#2 Warning
@@ -761,647 +764,647 @@ Related violations: <none>
 
 TIMING-16#1 Warning
 Large setup violation  
-There is a large setup violation of -1.575 ns between u_rgmii_bridge/burst_hold_200m_reg[113]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[113]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.575 ns between u_rgmii_bridge/burst_hold_200m_reg[57]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[57]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#2 Warning
 Large setup violation  
-There is a large setup violation of -1.594 ns between u_rgmii_bridge/burst_hold_200m_reg[96]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[96]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.582 ns between u_rgmii_bridge/burst_hold_200m_reg[2]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[2]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#3 Warning
 Large setup violation  
-There is a large setup violation of -1.596 ns between u_rgmii_bridge/burst_hold_200m_reg[42]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[42]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.593 ns between u_rgmii_bridge/burst_hold_200m_reg[47]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[47]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#4 Warning
 Large setup violation  
-There is a large setup violation of -1.605 ns between u_rgmii_bridge/burst_hold_200m_reg[97]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[97]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.594 ns between u_rgmii_bridge/burst_hold_200m_reg[3]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[3]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#5 Warning
 Large setup violation  
-There is a large setup violation of -1.617 ns between u_rgmii_bridge/burst_hold_200m_reg[29]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[29]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.606 ns between u_rgmii_bridge/burst_hold_200m_reg[76]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[76]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#6 Warning
 Large setup violation  
-There is a large setup violation of -1.625 ns between u_rgmii_bridge/burst_hold_200m_reg[104]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[104]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.620 ns between u_rgmii_bridge/burst_hold_200m_reg[67]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[67]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#7 Warning
 Large setup violation  
-There is a large setup violation of -1.636 ns between u_rgmii_bridge/burst_hold_200m_reg[62]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[62]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.626 ns between u_rgmii_bridge/burst_hold_200m_reg[38]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[38]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#8 Warning
 Large setup violation  
-There is a large setup violation of -1.641 ns between u_rgmii_bridge/burst_hold_200m_reg[110]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[110]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.628 ns between u_rgmii_bridge/burst_hold_200m_reg[83]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[83]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#9 Warning
 Large setup violation  
-There is a large setup violation of -1.644 ns between u_rgmii_bridge/burst_hold_200m_reg[98]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[98]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.629 ns between u_rgmii_bridge/burst_hold_200m_reg[17]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[17]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#10 Warning
 Large setup violation  
-There is a large setup violation of -1.646 ns between u_rgmii_bridge/burst_hold_200m_reg[91]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[91]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.634 ns between u_rgmii_bridge/burst_hold_200m_reg[24]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[24]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#11 Warning
 Large setup violation  
-There is a large setup violation of -1.651 ns between u_rgmii_bridge/burst_hold_200m_reg[14]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[14]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.634 ns between u_rgmii_bridge/burst_hold_200m_reg[6]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[6]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#12 Warning
 Large setup violation  
-There is a large setup violation of -1.655 ns between u_rgmii_bridge/burst_hold_200m_reg[32]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[32]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.641 ns between u_rgmii_bridge/burst_hold_200m_reg[72]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[72]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#13 Warning
 Large setup violation  
-There is a large setup violation of -1.655 ns between u_rgmii_bridge/burst_hold_200m_reg[87]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[87]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.647 ns between u_rgmii_bridge/burst_hold_200m_reg[26]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[26]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#14 Warning
 Large setup violation  
-There is a large setup violation of -1.656 ns between u_rgmii_bridge/burst_hold_200m_reg[34]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[34]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.649 ns between u_rgmii_bridge/burst_hold_200m_reg[13]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[13]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#15 Warning
 Large setup violation  
-There is a large setup violation of -1.657 ns between u_rgmii_bridge/burst_hold_200m_reg[51]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[51]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.654 ns between u_rgmii_bridge/burst_hold_200m_reg[41]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[41]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#16 Warning
 Large setup violation  
-There is a large setup violation of -1.657 ns between u_rgmii_bridge/burst_hold_200m_reg[71]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[71]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.655 ns between u_rgmii_bridge/burst_hold_200m_reg[64]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[64]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#17 Warning
 Large setup violation  
-There is a large setup violation of -1.659 ns between u_rgmii_bridge/burst_hold_200m_reg[26]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[26]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.656 ns between u_rgmii_bridge/burst_hold_200m_reg[9]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[9]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#18 Warning
 Large setup violation  
-There is a large setup violation of -1.659 ns between u_rgmii_bridge/burst_hold_200m_reg[99]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[99]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.658 ns between u_rgmii_bridge/burst_hold_200m_reg[18]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[18]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#19 Warning
 Large setup violation  
-There is a large setup violation of -1.662 ns between u_rgmii_bridge/burst_hold_200m_reg[27]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[27]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.658 ns between u_rgmii_bridge/burst_hold_200m_reg[77]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[77]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#20 Warning
 Large setup violation  
-There is a large setup violation of -1.664 ns between u_rgmii_bridge/burst_hold_200m_reg[46]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[46]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.659 ns between u_rgmii_bridge/burst_hold_200m_reg[36]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[36]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#21 Warning
 Large setup violation  
-There is a large setup violation of -1.664 ns between u_rgmii_bridge/burst_hold_200m_reg[67]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[67]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.661 ns between u_rgmii_bridge/burst_hold_200m_reg[20]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[20]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#22 Warning
 Large setup violation  
-There is a large setup violation of -1.671 ns between u_rgmii_bridge/burst_hold_200m_reg[106]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[106]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.665 ns between u_rgmii_bridge/burst_hold_200m_reg[60]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[60]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#23 Warning
 Large setup violation  
-There is a large setup violation of -1.672 ns between u_rgmii_bridge/burst_hold_200m_reg[73]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[73]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.674 ns between u_rgmii_bridge/burst_hold_200m_reg[11]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[11]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#24 Warning
 Large setup violation  
-There is a large setup violation of -1.673 ns between u_rgmii_bridge/burst_hold_200m_reg[105]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[105]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.680 ns between u_rgmii_bridge/burst_hold_200m_reg[33]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[33]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#25 Warning
 Large setup violation  
-There is a large setup violation of -1.673 ns between u_rgmii_bridge/burst_hold_200m_reg[56]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[56]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.682 ns between u_rgmii_bridge/burst_hold_200m_reg[5]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[5]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#26 Warning
 Large setup violation  
-There is a large setup violation of -1.676 ns between u_rgmii_bridge/burst_hold_200m_reg[64]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[64]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.684 ns between u_rgmii_bridge/burst_hold_200m_reg[1]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[1]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#27 Warning
 Large setup violation  
-There is a large setup violation of -1.677 ns between u_rgmii_bridge/burst_hold_200m_reg[78]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[78]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.686 ns between u_rgmii_bridge/burst_hold_200m_reg[69]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[69]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#28 Warning
 Large setup violation  
-There is a large setup violation of -1.679 ns between u_rgmii_bridge/burst_hold_200m_reg[17]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[17]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.686 ns between u_rgmii_bridge/burst_hold_200m_reg[75]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[75]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#29 Warning
 Large setup violation  
-There is a large setup violation of -1.679 ns between u_rgmii_bridge/burst_hold_200m_reg[28]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[28]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.687 ns between u_rgmii_bridge/burst_hold_200m_reg[68]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[68]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#30 Warning
 Large setup violation  
-There is a large setup violation of -1.680 ns between u_rgmii_bridge/burst_hold_200m_reg[40]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[40]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.689 ns between u_rgmii_bridge/burst_hold_200m_reg[52]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[52]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#31 Warning
 Large setup violation  
-There is a large setup violation of -1.681 ns between u_rgmii_bridge/burst_hold_200m_reg[115]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[115]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.691 ns between u_rgmii_bridge/burst_hold_200m_reg[35]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[35]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#32 Warning
 Large setup violation  
-There is a large setup violation of -1.687 ns between u_rgmii_bridge/burst_hold_200m_reg[43]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[43]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.698 ns between u_rgmii_bridge/burst_hold_200m_reg[56]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[56]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#33 Warning
 Large setup violation  
-There is a large setup violation of -1.688 ns between u_rgmii_bridge/burst_hold_200m_reg[75]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[75]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.704 ns between u_rgmii_bridge/burst_hold_200m_reg[8]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[8]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#34 Warning
 Large setup violation  
-There is a large setup violation of -1.689 ns between u_rgmii_bridge/burst_hold_200m_reg[36]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[36]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.708 ns between u_rgmii_bridge/burst_hold_200m_reg[97]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[97]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#35 Warning
 Large setup violation  
-There is a large setup violation of -1.689 ns between u_rgmii_bridge/burst_hold_200m_reg[90]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[90]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.709 ns between u_rgmii_bridge/burst_hold_200m_reg[43]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[43]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#36 Warning
 Large setup violation  
-There is a large setup violation of -1.690 ns between u_rgmii_bridge/burst_hold_200m_reg[95]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[95]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.710 ns between u_rgmii_bridge/burst_hold_200m_reg[91]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[91]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#37 Warning
 Large setup violation  
-There is a large setup violation of -1.693 ns between u_rgmii_bridge/burst_hold_200m_reg[44]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[44]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.711 ns between u_rgmii_bridge/burst_hold_200m_reg[59]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[59]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#38 Warning
 Large setup violation  
-There is a large setup violation of -1.694 ns between u_rgmii_bridge/burst_hold_200m_reg[116]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[116]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.712 ns between u_rgmii_bridge/burst_hold_200m_reg[93]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[93]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#39 Warning
 Large setup violation  
-There is a large setup violation of -1.694 ns between u_rgmii_bridge/burst_hold_200m_reg[76]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[76]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.713 ns between u_rgmii_bridge/burst_hold_200m_reg[23]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[23]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#40 Warning
 Large setup violation  
-There is a large setup violation of -1.695 ns between u_rgmii_bridge/burst_hold_200m_reg[103]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[103]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.715 ns between u_rgmii_bridge/burst_hold_200m_reg[32]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[32]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#41 Warning
 Large setup violation  
-There is a large setup violation of -1.695 ns between u_rgmii_bridge/burst_hold_200m_reg[123]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[123]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.716 ns between u_rgmii_bridge/burst_hold_200m_reg[80]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[80]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#42 Warning
 Large setup violation  
-There is a large setup violation of -1.695 ns between u_rgmii_bridge/burst_hold_200m_reg[47]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[47]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.721 ns between u_rgmii_bridge/burst_hold_200m_reg[61]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[61]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#43 Warning
 Large setup violation  
-There is a large setup violation of -1.695 ns between u_rgmii_bridge/burst_hold_200m_reg[58]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[58]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.722 ns between u_rgmii_bridge/burst_hold_200m_reg[100]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[100]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#44 Warning
 Large setup violation  
-There is a large setup violation of -1.697 ns between u_rgmii_bridge/burst_hold_200m_reg[121]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[121]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.722 ns between u_rgmii_bridge/burst_hold_200m_reg[78]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[78]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#45 Warning
 Large setup violation  
-There is a large setup violation of -1.698 ns between u_rgmii_bridge/burst_hold_200m_reg[117]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[117]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.722 ns between u_rgmii_bridge/burst_hold_200m_reg[90]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[90]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#46 Warning
 Large setup violation  
-There is a large setup violation of -1.698 ns between u_rgmii_bridge/burst_hold_200m_reg[7]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[7]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.723 ns between u_rgmii_bridge/burst_hold_200m_reg[63]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[63]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#47 Warning
 Large setup violation  
-There is a large setup violation of -1.699 ns between u_rgmii_bridge/burst_hold_200m_reg[21]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[21]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.725 ns between u_rgmii_bridge/burst_hold_200m_reg[54]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[54]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#48 Warning
 Large setup violation  
-There is a large setup violation of -1.700 ns between u_rgmii_bridge/burst_hold_200m_reg[31]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[31]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.727 ns between u_rgmii_bridge/burst_hold_200m_reg[104]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[104]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#49 Warning
 Large setup violation  
-There is a large setup violation of -1.701 ns between u_rgmii_bridge/burst_hold_200m_reg[88]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[88]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.729 ns between u_rgmii_bridge/valid_toggle_200m_reg/C (clocked by clk_200m) and u_rgmii_bridge/valid_sync1_125m_reg/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#50 Warning
 Large setup violation  
-There is a large setup violation of -1.708 ns between u_rgmii_bridge/burst_hold_200m_reg[23]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[23]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.732 ns between u_rgmii_bridge/burst_hold_200m_reg[44]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[44]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#51 Warning
 Large setup violation  
-There is a large setup violation of -1.709 ns between u_rgmii_bridge/burst_hold_200m_reg[2]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[2]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.733 ns between u_rgmii_bridge/burst_hold_200m_reg[4]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[4]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#52 Warning
 Large setup violation  
-There is a large setup violation of -1.709 ns between u_rgmii_bridge/burst_hold_200m_reg[83]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[83]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.736 ns between u_rgmii_bridge/burst_hold_200m_reg[112]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[112]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#53 Warning
 Large setup violation  
-There is a large setup violation of -1.710 ns between u_rgmii_bridge/burst_hold_200m_reg[124]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[124]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.736 ns between u_rgmii_bridge/burst_hold_200m_reg[55]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[55]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#54 Warning
 Large setup violation  
-There is a large setup violation of -1.710 ns between u_rgmii_bridge/burst_hold_200m_reg[19]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[19]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.736 ns between u_rgmii_bridge/burst_hold_200m_reg[70]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[70]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#55 Warning
 Large setup violation  
-There is a large setup violation of -1.710 ns between u_rgmii_bridge/burst_hold_200m_reg[89]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[89]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.741 ns between u_rgmii_bridge/burst_hold_200m_reg[19]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[19]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#56 Warning
 Large setup violation  
-There is a large setup violation of -1.711 ns between u_rgmii_bridge/burst_hold_200m_reg[61]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[61]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.741 ns between u_rgmii_bridge/burst_hold_200m_reg[28]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[28]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#57 Warning
 Large setup violation  
-There is a large setup violation of -1.711 ns between u_rgmii_bridge/burst_hold_200m_reg[77]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[77]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.742 ns between u_rgmii_bridge/burst_hold_200m_reg[46]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[46]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#58 Warning
 Large setup violation  
-There is a large setup violation of -1.714 ns between u_rgmii_bridge/burst_hold_200m_reg[16]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[16]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.743 ns between u_rgmii_bridge/burst_hold_200m_reg[113]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[113]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#59 Warning
 Large setup violation  
-There is a large setup violation of -1.714 ns between u_rgmii_bridge/burst_hold_200m_reg[33]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[33]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.743 ns between u_rgmii_bridge/burst_hold_200m_reg[39]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[39]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#60 Warning
 Large setup violation  
-There is a large setup violation of -1.716 ns between u_rgmii_bridge/burst_hold_200m_reg[101]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[101]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.744 ns between u_rgmii_bridge/burst_hold_200m_reg[25]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[25]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#61 Warning
 Large setup violation  
-There is a large setup violation of -1.716 ns between u_rgmii_bridge/burst_hold_200m_reg[127]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[127]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.746 ns between u_rgmii_bridge/burst_hold_200m_reg[62]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[62]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#62 Warning
 Large setup violation  
-There is a large setup violation of -1.717 ns between u_rgmii_bridge/burst_hold_200m_reg[0]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[0]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.751 ns between u_rgmii_bridge/burst_hold_200m_reg[12]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[12]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#63 Warning
 Large setup violation  
-There is a large setup violation of -1.717 ns between u_rgmii_bridge/burst_hold_200m_reg[85]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[85]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.751 ns between u_rgmii_bridge/burst_hold_200m_reg[14]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[14]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#64 Warning
 Large setup violation  
-There is a large setup violation of -1.719 ns between u_rgmii_bridge/burst_hold_200m_reg[72]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[72]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.751 ns between u_rgmii_bridge/burst_hold_200m_reg[30]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[30]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#65 Warning
 Large setup violation  
-There is a large setup violation of -1.720 ns between u_rgmii_bridge/burst_hold_200m_reg[114]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[114]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.752 ns between u_rgmii_bridge/burst_hold_200m_reg[118]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[118]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#66 Warning
 Large setup violation  
-There is a large setup violation of -1.721 ns between u_rgmii_bridge/burst_hold_200m_reg[68]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[68]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.754 ns between u_rgmii_bridge/burst_hold_200m_reg[126]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[126]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#67 Warning
 Large setup violation  
-There is a large setup violation of -1.725 ns between u_rgmii_bridge/burst_hold_200m_reg[60]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[60]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.754 ns between u_rgmii_bridge/burst_hold_200m_reg[15]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[15]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#68 Warning
 Large setup violation  
-There is a large setup violation of -1.727 ns between u_rgmii_bridge/burst_hold_200m_reg[59]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[59]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.755 ns between u_rgmii_bridge/burst_hold_200m_reg[34]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[34]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#69 Warning
 Large setup violation  
-There is a large setup violation of -1.732 ns between u_rgmii_bridge/burst_hold_200m_reg[119]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[119]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.760 ns between u_rgmii_bridge/burst_hold_200m_reg[37]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[37]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#70 Warning
 Large setup violation  
-There is a large setup violation of -1.733 ns between u_rgmii_bridge/burst_hold_200m_reg[50]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[50]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.763 ns between u_rgmii_bridge/burst_hold_200m_reg[22]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[22]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#71 Warning
 Large setup violation  
-There is a large setup violation of -1.734 ns between u_rgmii_bridge/burst_hold_200m_reg[1]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[1]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.763 ns between u_rgmii_bridge/burst_hold_200m_reg[7]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[7]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#72 Warning
 Large setup violation  
-There is a large setup violation of -1.736 ns between u_rgmii_bridge/burst_hold_200m_reg[55]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[55]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.766 ns between u_rgmii_bridge/burst_hold_200m_reg[82]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[82]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#73 Warning
 Large setup violation  
-There is a large setup violation of -1.738 ns between u_rgmii_bridge/burst_hold_200m_reg[37]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[37]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.767 ns between u_rgmii_bridge/burst_hold_200m_reg[16]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[16]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#74 Warning
 Large setup violation  
-There is a large setup violation of -1.742 ns between u_rgmii_bridge/burst_hold_200m_reg[5]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[5]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.769 ns between u_rgmii_bridge/burst_hold_200m_reg[84]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[84]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#75 Warning
 Large setup violation  
-There is a large setup violation of -1.742 ns between u_rgmii_bridge/burst_hold_200m_reg[9]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[9]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.771 ns between u_rgmii_bridge/burst_hold_200m_reg[119]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[119]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#76 Warning
 Large setup violation  
-There is a large setup violation of -1.743 ns between u_rgmii_bridge/burst_hold_200m_reg[92]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[92]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.771 ns between u_rgmii_bridge/burst_hold_200m_reg[51]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[51]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#77 Warning
 Large setup violation  
-There is a large setup violation of -1.746 ns between u_rgmii_bridge/burst_hold_200m_reg[6]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[6]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.772 ns between u_rgmii_bridge/burst_hold_200m_reg[86]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[86]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#78 Warning
 Large setup violation  
-There is a large setup violation of -1.749 ns between u_rgmii_bridge/valid_toggle_200m_reg/C (clocked by clk_200m) and u_rgmii_bridge/valid_sync1_125m_reg/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.776 ns between u_rgmii_bridge/burst_hold_200m_reg[111]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[111]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#79 Warning
 Large setup violation  
-There is a large setup violation of -1.750 ns between u_rgmii_bridge/burst_hold_200m_reg[111]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[111]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.777 ns between u_rgmii_bridge/burst_hold_200m_reg[10]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[10]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#80 Warning
 Large setup violation  
-There is a large setup violation of -1.751 ns between u_rgmii_bridge/burst_hold_200m_reg[81]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[81]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.777 ns between u_rgmii_bridge/burst_hold_200m_reg[127]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[127]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#81 Warning
 Large setup violation  
-There is a large setup violation of -1.753 ns between u_rgmii_bridge/burst_hold_200m_reg[108]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[108]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.777 ns between u_rgmii_bridge/burst_hold_200m_reg[40]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[40]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#82 Warning
 Large setup violation  
-There is a large setup violation of -1.753 ns between u_rgmii_bridge/burst_hold_200m_reg[25]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[25]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.778 ns between u_rgmii_bridge/burst_hold_200m_reg[96]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[96]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#83 Warning
 Large setup violation  
-There is a large setup violation of -1.753 ns between u_rgmii_bridge/burst_hold_200m_reg[3]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[3]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.783 ns between u_rgmii_bridge/burst_hold_200m_reg[45]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[45]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#84 Warning
 Large setup violation  
-There is a large setup violation of -1.755 ns between u_rgmii_bridge/burst_hold_200m_reg[70]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[70]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.788 ns between u_rgmii_bridge/burst_hold_200m_reg[53]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[53]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#85 Warning
 Large setup violation  
-There is a large setup violation of -1.756 ns between u_rgmii_bridge/burst_hold_200m_reg[15]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[15]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.788 ns between u_rgmii_bridge/burst_hold_200m_reg[79]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[79]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#86 Warning
 Large setup violation  
-There is a large setup violation of -1.756 ns between u_rgmii_bridge/burst_hold_200m_reg[65]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[65]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.790 ns between u_rgmii_bridge/burst_hold_200m_reg[50]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[50]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#87 Warning
 Large setup violation  
-There is a large setup violation of -1.756 ns between u_rgmii_bridge/burst_hold_200m_reg[93]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[93]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.793 ns between u_rgmii_bridge/burst_hold_200m_reg[99]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[99]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#88 Warning
 Large setup violation  
-There is a large setup violation of -1.757 ns between u_rgmii_bridge/burst_hold_200m_reg[35]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[35]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.796 ns between u_rgmii_bridge/burst_hold_200m_reg[73]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[73]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#89 Warning
 Large setup violation  
-There is a large setup violation of -1.761 ns between u_rgmii_bridge/burst_hold_200m_reg[84]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[84]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.797 ns between u_rgmii_bridge/burst_hold_200m_reg[123]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[123]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#90 Warning
 Large setup violation  
-There is a large setup violation of -1.763 ns between u_rgmii_bridge/burst_hold_200m_reg[52]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[52]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.799 ns between u_rgmii_bridge/burst_hold_200m_reg[42]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[42]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#91 Warning
 Large setup violation  
-There is a large setup violation of -1.764 ns between u_rgmii_bridge/burst_hold_200m_reg[100]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[100]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.802 ns between u_rgmii_bridge/burst_hold_200m_reg[0]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[0]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#92 Warning
 Large setup violation  
-There is a large setup violation of -1.764 ns between u_rgmii_bridge/burst_hold_200m_reg[120]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[120]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.803 ns between u_rgmii_bridge/burst_hold_200m_reg[107]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[107]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#93 Warning
 Large setup violation  
-There is a large setup violation of -1.765 ns between u_rgmii_bridge/burst_hold_200m_reg[86]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[86]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.807 ns between u_rgmii_bridge/burst_hold_200m_reg[92]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[92]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#94 Warning
 Large setup violation  
-There is a large setup violation of -1.766 ns between u_rgmii_bridge/burst_hold_200m_reg[12]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[12]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.808 ns between u_rgmii_bridge/burst_hold_200m_reg[124]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[124]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#95 Warning
 Large setup violation  
-There is a large setup violation of -1.768 ns between u_rgmii_bridge/burst_hold_200m_reg[66]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[66]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.808 ns between u_rgmii_bridge/burst_hold_200m_reg[58]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[58]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#96 Warning
 Large setup violation  
-There is a large setup violation of -1.769 ns between u_rgmii_bridge/burst_hold_200m_reg[45]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[45]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.809 ns between u_rgmii_bridge/burst_hold_200m_reg[122]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[122]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#97 Warning
 Large setup violation  
-There is a large setup violation of -1.769 ns between u_rgmii_bridge/burst_hold_200m_reg[80]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[80]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.815 ns between u_rgmii_bridge/burst_hold_200m_reg[66]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[66]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#98 Warning
 Large setup violation  
-There is a large setup violation of -1.772 ns between u_rgmii_bridge/burst_hold_200m_reg[112]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[112]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.815 ns between u_rgmii_bridge/burst_hold_200m_reg[71]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[71]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#99 Warning
 Large setup violation  
-There is a large setup violation of -1.772 ns between u_rgmii_bridge/burst_hold_200m_reg[4]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[4]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.816 ns between u_rgmii_bridge/burst_hold_200m_reg[27]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[27]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#100 Warning
 Large setup violation  
-There is a large setup violation of -1.773 ns between u_rgmii_bridge/burst_hold_200m_reg[102]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[102]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.817 ns between u_rgmii_bridge/burst_hold_200m_reg[29]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[29]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#101 Warning
 Large setup violation  
-There is a large setup violation of -1.774 ns between u_rgmii_bridge/burst_hold_200m_reg[125]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[125]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.819 ns between u_rgmii_bridge/burst_hold_200m_reg[88]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[88]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#102 Warning
 Large setup violation  
-There is a large setup violation of -1.775 ns between u_rgmii_bridge/burst_hold_200m_reg[69]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[69]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.822 ns between u_rgmii_bridge/burst_hold_200m_reg[81]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[81]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#103 Warning
 Large setup violation  
-There is a large setup violation of -1.775 ns between u_rgmii_bridge/burst_hold_200m_reg[74]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[74]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.835 ns between u_rgmii_bridge/burst_hold_200m_reg[48]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[48]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#104 Warning
 Large setup violation  
-There is a large setup violation of -1.777 ns between u_rgmii_bridge/burst_hold_200m_reg[30]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[30]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.835 ns between u_rgmii_bridge/burst_hold_200m_reg[49]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[49]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#105 Warning
 Large setup violation  
-There is a large setup violation of -1.778 ns between u_rgmii_bridge/burst_hold_200m_reg[94]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[94]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.836 ns between u_rgmii_bridge/burst_hold_200m_reg[106]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[106]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#106 Warning
 Large setup violation  
-There is a large setup violation of -1.779 ns between u_rgmii_bridge/burst_hold_200m_reg[82]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[82]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.836 ns between u_rgmii_bridge/burst_hold_200m_reg[117]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[117]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#107 Warning
 Large setup violation  
-There is a large setup violation of -1.780 ns between u_rgmii_bridge/burst_hold_200m_reg[48]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[48]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.836 ns between u_rgmii_bridge/burst_hold_200m_reg[120]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[120]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#108 Warning
 Large setup violation  
-There is a large setup violation of -1.780 ns between u_rgmii_bridge/burst_hold_200m_reg[63]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[63]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.838 ns between u_rgmii_bridge/burst_hold_200m_reg[102]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[102]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#109 Warning
 Large setup violation  
-There is a large setup violation of -1.782 ns between u_rgmii_bridge/burst_hold_200m_reg[39]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[39]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.855 ns between u_rgmii_bridge/burst_hold_200m_reg[74]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[74]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#110 Warning
 Large setup violation  
-There is a large setup violation of -1.783 ns between u_rgmii_bridge/burst_hold_200m_reg[49]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[49]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.868 ns between u_rgmii_bridge/burst_hold_200m_reg[31]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[31]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#111 Warning
 Large setup violation  
-There is a large setup violation of -1.785 ns between u_rgmii_bridge/burst_hold_200m_reg[11]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[11]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.871 ns between u_rgmii_bridge/burst_hold_200m_reg[116]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[116]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#112 Warning
 Large setup violation  
-There is a large setup violation of -1.786 ns between u_rgmii_bridge/burst_hold_200m_reg[41]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[41]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.876 ns between u_rgmii_bridge/burst_hold_200m_reg[114]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[114]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#113 Warning
 Large setup violation  
-There is a large setup violation of -1.794 ns between u_rgmii_bridge/burst_hold_200m_reg[57]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[57]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.880 ns between u_rgmii_bridge/burst_hold_200m_reg[105]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[105]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#114 Warning
 Large setup violation  
-There is a large setup violation of -1.797 ns between u_rgmii_bridge/burst_hold_200m_reg[38]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[38]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.884 ns between u_rgmii_bridge/burst_hold_200m_reg[115]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[115]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#115 Warning
 Large setup violation  
-There is a large setup violation of -1.798 ns between u_rgmii_bridge/burst_hold_200m_reg[20]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[20]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.885 ns between u_rgmii_bridge/burst_hold_200m_reg[85]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[85]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#116 Warning
 Large setup violation  
-There is a large setup violation of -1.802 ns between u_rgmii_bridge/burst_hold_200m_reg[109]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[109]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.886 ns between u_rgmii_bridge/burst_hold_200m_reg[65]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[65]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#117 Warning
 Large setup violation  
-There is a large setup violation of -1.803 ns between u_rgmii_bridge/burst_hold_200m_reg[126]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[126]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.887 ns between u_rgmii_bridge/burst_hold_200m_reg[103]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[103]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#118 Warning
 Large setup violation  
-There is a large setup violation of -1.806 ns between u_rgmii_bridge/burst_hold_200m_reg[79]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[79]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.890 ns between u_rgmii_bridge/burst_hold_200m_reg[94]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[94]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#119 Warning
 Large setup violation  
-There is a large setup violation of -1.809 ns between u_rgmii_bridge/burst_hold_200m_reg[107]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[107]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.900 ns between u_rgmii_bridge/burst_hold_200m_reg[101]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[101]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#120 Warning
 Large setup violation  
-There is a large setup violation of -1.811 ns between u_rgmii_bridge/burst_hold_200m_reg[24]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[24]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.912 ns between u_rgmii_bridge/burst_hold_200m_reg[109]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[109]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#121 Warning
 Large setup violation  
-There is a large setup violation of -1.813 ns between u_rgmii_bridge/burst_hold_200m_reg[54]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[54]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.914 ns between u_rgmii_bridge/burst_hold_200m_reg[89]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[89]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#122 Warning
 Large setup violation  
-There is a large setup violation of -1.816 ns between u_rgmii_bridge/burst_hold_200m_reg[13]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[13]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.916 ns between u_rgmii_bridge/burst_hold_200m_reg[95]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[95]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#123 Warning
 Large setup violation  
-There is a large setup violation of -1.823 ns between u_rgmii_bridge/burst_hold_200m_reg[8]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[8]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.924 ns between u_rgmii_bridge/burst_hold_200m_reg[110]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[110]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#124 Warning
 Large setup violation  
-There is a large setup violation of -1.826 ns between u_rgmii_bridge/burst_hold_200m_reg[18]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[18]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.929 ns between u_rgmii_bridge/burst_hold_200m_reg[87]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[87]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#125 Warning
 Large setup violation  
-There is a large setup violation of -1.842 ns between u_rgmii_bridge/burst_hold_200m_reg[118]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[118]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.944 ns between u_rgmii_bridge/burst_hold_200m_reg[108]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[108]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#126 Warning
 Large setup violation  
-There is a large setup violation of -1.845 ns between u_rgmii_bridge/burst_hold_200m_reg[122]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[122]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.949 ns between u_rgmii_bridge/burst_hold_200m_reg[121]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[121]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#127 Warning
 Large setup violation  
-There is a large setup violation of -1.862 ns between u_rgmii_bridge/burst_hold_200m_reg[22]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[22]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.956 ns between u_rgmii_bridge/burst_hold_200m_reg[98]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[98]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#128 Warning
 Large setup violation  
-There is a large setup violation of -1.882 ns between u_rgmii_bridge/burst_hold_200m_reg[10]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[10]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.987 ns between u_rgmii_bridge/burst_hold_200m_reg[21]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[21]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#129 Warning
 Large setup violation  
-There is a large setup violation of -1.891 ns between u_rgmii_bridge/burst_hold_200m_reg[53]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[53]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.990 ns between u_rgmii_bridge/burst_hold_200m_reg[125]/C (clocked by clk_200m) and u_rgmii_bridge/shift_reg_reg[125]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-18#1 Warning
@@ -1411,37 +1414,52 @@ Related violations: <none>
 
 TIMING-18#2 Warning
 Missing input or output delay  
-An output delay is missing on cpv relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on cpv_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#3 Warning
 Missing input or output delay  
-An output delay is missing on frame_active relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on cpv_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#4 Warning
 Missing input or output delay  
-An output delay is missing on frame_done_o relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe1_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#5 Warning
 Missing input or output delay  
-An output delay is missing on oe1 relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe1_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#6 Warning
 Missing input or output delay  
-An output delay is missing on oe2 relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe2_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#7 Warning
 Missing input or output delay  
-An output delay is missing on stv1 relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe2_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 TIMING-18#8 Warning
 Missing input or output delay  
-An output delay is missing on stv2 relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on stv1_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+Related violations: <none>
+
+TIMING-18#9 Warning
+Missing input or output delay  
+An output delay is missing on stv1_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+Related violations: <none>
+
+TIMING-18#10 Warning
+Missing input or output delay  
+An output delay is missing on stv2_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+Related violations: <none>
+
+TIMING-18#11 Warning
+Missing input or output delay  
+An output delay is missing on stv2_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
 Related violations: <none>
 
 
