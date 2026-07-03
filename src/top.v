@@ -1,12 +1,6 @@
 //
 //  AD71143 AFE + NT39565D Gate Driver 集成顶层
 //
-//  时钟架构:
-//    HW  (`ifdef XILINX_PRIMITIVES):  sys_clk (50MHz pin) �? PLL �? clk_100m (100MHz)
-//                                     gate_clk = sys_clk (50MHz)
-//    SIM (`else):                     sys_clk = 100MHz from testbench
-//                                     gate_clk = sys_clk / 2 divider (50MHz)
-//
 //  50MHz �?: nt39565d_gate_ctrl, top FSM
 //  100MHz �?: ad71143_ctrl, ad71143_spi, SPI config FSM
 //
@@ -117,9 +111,9 @@ module top #(
     wire         line_done_o;
     wire         ctrl_init_done_o;
  
-    wire clk_fb;
     wire pll_locked;
     wire clk_100m;
+    wire clk_125m;
 
     wire cpv;
     wire xao;
@@ -136,7 +130,8 @@ module top #(
     wire chip_sel1;
     wire chip_sel2;
     wire oepsn;
-
+    wire gate_clk;
+    
     assign cpv_r = cpv;
     assign xao_r = xao;
     assign stv1_r = stv1;
@@ -169,48 +164,15 @@ module top #(
     assign chip_sel2_l = chip_sel2;
     assign oepsn_l = oepsn;
 
-    PLLE2_BASE #(
-        .BANDWIDTH          ("OPTIMIZED"),
-        .CLKFBOUT_MULT      (20),        // VCO = 50MHz × 20 = 1000MHz
-        .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (20.0),      // 50MHz 输入
-        .CLKOUT0_DIVIDE     (10),        // 1000 / 10 = 100MHz  (AFE ctrl + SPI)
-        .CLKOUT0_DUTY_CYCLE (0.5),
-        .CLKOUT0_PHASE      (0.0),
-        .CLKOUT1_DIVIDE     (1),
-        .CLKOUT1_DUTY_CYCLE (0.5),
-        .CLKOUT1_PHASE      (0.0),
-        .CLKOUT2_DIVIDE     (1),
-        .CLKOUT2_DUTY_CYCLE (0.5),
-        .CLKOUT2_PHASE      (0.0),
-        .CLKOUT3_DIVIDE     (1),
-        .CLKOUT3_DUTY_CYCLE (0.5),
-        .CLKOUT3_PHASE      (0.0),
-        .CLKOUT4_DIVIDE     (1),
-        .CLKOUT4_DUTY_CYCLE (0.5),
-        .CLKOUT4_PHASE      (0.0),
-        .CLKOUT5_DIVIDE     (1),
-        .CLKOUT5_DUTY_CYCLE (0.5),
-        .CLKOUT5_PHASE      (0.0),
-        .DIVCLK_DIVIDE      (1),
-        .REF_JITTER1        (0.010),
-        .STARTUP_WAIT       ("FALSE")
-    ) pll_inst (
-        .CLKIN1             (sys_clk),
-        .CLKOUT0            (clk_100m),
-        .CLKOUT1            (),
-        .CLKOUT2            (),
-        .CLKOUT3            (),
-        .CLKOUT4            (),
-        .CLKOUT5            (),
-        .CLKFBOUT           (clk_fb),
-        .CLKFBIN            (clk_fb),
-        .LOCKED             (pll_locked),
-        .PWRDWN             (1'b0),
-        .RST                (1'b0)
+    clk_wiz_0 u_mmcm(
+        .clk_in1    (sys_clk),
+        .clk_out1   (gate_clk),
+        .clk_out2   (clk_100m),
+        .clk_out3   (clk_125m),
+        .locked     (pll_locked)
     );
    
-wire gate_clk = sys_clk;
+
 wire rst_n = key & pll_locked;
 
 // RGMII PHY 异步复位 (与系统复位同�?)
@@ -724,14 +686,10 @@ nt39565d_gate_ctrl #(
     // =========================================================================
     // RGMII 桥接: merged_burst �? 字节 �? RGMII_tx
     // =========================================================================
-    rgmii_bridge #(
-        .BURST_WIDTH (256),
-        .BURST_BYTES (32),
-        .FRAME_SIZE  (32)
-    ) u_rgmii_bridge (
-        .sys_clk    (sys_clk),
+    rgmii_bridge u_rgmii_bridge (
         .rst_n      (rst_n),
         .clk_100m   (clk_100m),
+        .clk_125m   (clk_125m),
         .data_in    (merged_burst),
         .data_valid (merged_valid),
         .TXC        (rgmii_txc),

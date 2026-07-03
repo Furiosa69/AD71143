@@ -171,7 +171,7 @@ top #(
     .dout_p_A1          (dout_p_A1      ),
     .dout_n_A1          (dout_n_A1      ),
     .dout_p_B1          (dout_p_B1      ),
-    .dout_n_B1          (dout_n_B1      ),
+    .dout_n_B1          (dout_n_B1      )
 );
 
 // DOUT = 0 (无 AFE 仿真模型, 数据读回全零, DCLK 由 DUT 内部回环)

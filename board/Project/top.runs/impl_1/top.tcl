@@ -134,9 +134,11 @@ OPTRACE "set parameters" START { }
   set_property parent.project_path /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.xpr [current_project]
   set_property ip_output_repo /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
+  set_property XPM_LIBRARIES XPM_CDC [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp
+  read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc
@@ -306,6 +308,7 @@ set rc [catch {
   create_msg_db write_bitstream.pb
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }
+  set_property XPM_LIBRARIES XPM_CDC [current_project]
   catch { write_mem_info -force -no_partial_mmi top.mmi }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }

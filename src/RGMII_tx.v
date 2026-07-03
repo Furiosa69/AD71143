@@ -10,7 +10,8 @@ module RGMII_tx (
     output wire         TXD0,       //RGMII 发送数据 bit0
     output wire         TXD1,       //RGMII 发送数据 bit1
     output wire         TXD2,       //RGMII 发送数据 bit2
-    output wire         TXD3        //RGMII 发送数据 bit3
+    output wire         TXD3,       //RGMII 发送数据 bit3
+    output wire         tx_req      //告诉上层"下一拍需要 tx_data", 与 next_state==DATA 同步
 );
 
     parameter FRAME_SIZE   = 64;        //一帧数据字节数
@@ -106,6 +107,8 @@ module RGMII_tx (
             endcase
         end
     end
+
+    assign tx_req = (next_state == DATA);
 
     // ============ ODDR 原语例化 ============
     // TX_CTL: 上升沿 = TX_EN, 下降沿 = TX_EN xor TX_ER

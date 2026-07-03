@@ -74,7 +74,7 @@ IDLE → STV_SETUP → STV1_ASSERT → STV_HOLD → CPV_LOW → CPV_HIGH → (�
 **输出信号**：
 - `cpv`: 移位时钟（≤200kHz）
 - `stv1`: 帧起始脉冲
-- `oe1/oe2`: 输出使能（高有效）
+- `oe1/oe2`: 输出使能（低有效）
 - `line_done`: 单行扫描完成脉冲
 - `frame_done`: 一帧扫描完成脉冲
 

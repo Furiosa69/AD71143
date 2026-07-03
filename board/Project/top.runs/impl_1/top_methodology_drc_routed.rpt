@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Wed Jul  1 17:42:00 2026
+| Date         : Fri Jul  3 14:37:06 2026
 | Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
 | Design       : top
@@ -23,125 +23,96 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 18
-+-----------+----------+-------------------------------+------------+
-| Rule      | Severity | Description                   | Violations |
-+-----------+----------+-------------------------------+------------+
-| LUTAR-1   | Warning  | LUT drives async reset alert  | 2          |
-| TIMING-16 | Warning  | Large setup violation         | 5          |
-| TIMING-18 | Warning  | Missing input or output delay | 11         |
-+-----------+----------+-------------------------------+------------+
+             Violations found: 14
++-----------+----------+--------------------------------------------------------+------------+
+| Rule      | Severity | Description                                            | Violations |
++-----------+----------+--------------------------------------------------------+------------+
+| LUTAR-1   | Warning  | LUT drives async reset alert                           | 1          |
+| TIMING-18 | Warning  | Missing input or output delay                          | 11         |
+| XDCC-1    | Warning  | Scoped Clock constraint overwritten with the same name | 1          |
+| XDCC-7    | Warning  | Scoped Clock constraint overwritten on the same source | 1          |
++-----------+----------+--------------------------------------------------------+------------+
 
 2. REPORT DETAILS
 -----------------
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell u_data_rx_dual/u_panel0/FSM_sequential_state[2]_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) gap_cnt_reg[1]/CLR, gap_cnt_reg[2]/CLR, gap_cnt_reg[3]/CLR,
-gap_cnt_reg[4]/CLR, gap_cnt_reg[5]/CLR, gap_cnt_reg[6]/CLR,
-init_done_sync1_reg/CLR, init_done_sync2_reg/CLR, line_start_sync1_reg/CLR,
-line_start_sync2_reg/CLR, line_start_sync3_reg/CLR,
-u_ad71143_ctrl/aclk_reg_reg_lopt_replica/CLR,
+LUT cell u_data_rx_dual/u_panel0/FSM_sequential_state[2]_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) gap_cnt_reg[0]/CLR, gap_cnt_reg[1]/CLR, gap_cnt_reg[2]/CLR,
+gap_cnt_reg[3]/CLR, gap_cnt_reg[4]/CLR, gap_cnt_reg[5]/CLR,
+gap_cnt_reg[6]/CLR, init_done_sync1_reg/CLR, init_done_sync2_reg/CLR,
+line_start_sync1_reg/CLR, line_start_sync2_reg/CLR,
+line_start_sync3_reg/CLR, u_ad71143_ctrl/aclk_reg_reg_lopt_replica/CLR,
 u_ad71143_ctrl/sync_reg_reg_lopt_replica/PRE,
-u_ad71143_ctrl/sync_reg_reg_lopt_replica_2/PRE,
-u_nt39565d/stv2_reg_lopt_replica/CLR (the first 15 of 1533 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
-Related violations: <none>
-
-LUTAR-1#2 Warning
-LUT drives async reset alert  
-LUT cell u_rgmii_bridge/u_rgmii_tx/FSM_sequential_state[1]_i_1__3, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_rgmii_bridge/shift_reg_reg[98]/CLR, u_rgmii_bridge/shift_reg_reg[99]/CLR,
-u_rgmii_bridge/shift_reg_reg[9]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[0]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[1]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[2]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[3]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[4]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[5]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[6]/CLR,
-u_rgmii_bridge/tx_data_125m_reg[7]/CLR,
-u_rgmii_bridge/tx_start_125m_reg/CLR,
-u_rgmii_bridge/valid_sync1_125m_reg/CLR,
-u_rgmii_bridge/valid_sync2_125m_reg/CLR,
-u_rgmii_bridge/valid_sync3_125m_reg/CLR (the first 15 of 279 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
-Related violations: <none>
-
-TIMING-16#1 Warning
-Large setup violation  
-There is a large setup violation of -1.011 ns between u_rgmii_bridge/burst_hold_100m_reg[239]/C (clocked by clk_100m) and u_rgmii_bridge/shift_reg_reg[239]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
-Related violations: <none>
-
-TIMING-16#2 Warning
-Large setup violation  
-There is a large setup violation of -1.013 ns between u_rgmii_bridge/burst_hold_100m_reg[203]/C (clocked by clk_100m) and u_rgmii_bridge/shift_reg_reg[203]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
-Related violations: <none>
-
-TIMING-16#3 Warning
-Large setup violation  
-There is a large setup violation of -1.021 ns between u_rgmii_bridge/burst_hold_100m_reg[17]/C (clocked by clk_100m) and u_rgmii_bridge/shift_reg_reg[17]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
-Related violations: <none>
-
-TIMING-16#4 Warning
-Large setup violation  
-There is a large setup violation of -1.043 ns between u_rgmii_bridge/burst_hold_100m_reg[96]/C (clocked by clk_100m) and u_rgmii_bridge/shift_reg_reg[96]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
-Related violations: <none>
-
-TIMING-16#5 Warning
-Large setup violation  
-There is a large setup violation of -1.055 ns between u_rgmii_bridge/burst_hold_100m_reg[132]/C (clocked by clk_100m) and u_rgmii_bridge/shift_reg_reg[132]/D (clocked by rgmii_txc_OBUF). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+u_nt39565d/stv2_reg_lopt_replica/CLR (the first 15 of 1820 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 TIMING-18#1 Warning
 Missing input or output delay  
-An input delay is missing on key relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An input delay is missing on key relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#2 Warning
 Missing input or output delay  
-An output delay is missing on cpv_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on cpv_l relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#3 Warning
 Missing input or output delay  
-An output delay is missing on cpv_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on cpv_r relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#4 Warning
 Missing input or output delay  
-An output delay is missing on oe1_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe1_l relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#5 Warning
 Missing input or output delay  
-An output delay is missing on oe1_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe1_r relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#6 Warning
 Missing input or output delay  
-An output delay is missing on oe2_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe2_l relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#7 Warning
 Missing input or output delay  
-An output delay is missing on oe2_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on oe2_r relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#8 Warning
 Missing input or output delay  
-An output delay is missing on stv1_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on stv1_l relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#9 Warning
 Missing input or output delay  
-An output delay is missing on stv1_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on stv1_r relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#10 Warning
 Missing input or output delay  
-An output delay is missing on stv2_l relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on stv2_l relative to the rising and/or falling clock edge(s) of sys_clk.
 Related violations: <none>
 
 TIMING-18#11 Warning
 Missing input or output delay  
-An output delay is missing on stv2_r relative to the rising and/or falling clock edge(s) of T_sys_clk.
+An output delay is missing on stv2_r relative to the rising and/or falling clock edge(s) of sys_clk.
+Related violations: <none>
+
+XDCC-1#1 Warning
+Scoped Clock constraint overwritten with the same name  
+A new clock constraint create_clock overrides a previous scoped clock constraint with the same name. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
+New: create_clock -period 20.000 -name sys_clk -waveform {0.000 10.000} [get_ports sys_clk] (Source: /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc (Line: 5))
+Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xdc (Line: 53))
+Related violations: <none>
+
+XDCC-7#1 Warning
+Scoped Clock constraint overwritten on the same source  
+A new clock constraint create_clock overrides a previous scoped clock constraint defined on the same source. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
+New: create_clock -period 20.000 -name sys_clk -waveform {0.000 10.000} [get_ports sys_clk] (Source: /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc (Line: 5))
+Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xdc (Line: 53))
 Related violations: <none>
 
 

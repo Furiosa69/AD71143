@@ -3,13 +3,13 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Wed Jul  1 17:37:51 2026
-# Process ID: 200891
+# Start of session at: Fri Jul  3 14:33:27 2026
+# Process ID: 402957
 # Current directory: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1
 # Command line: vivado -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
 # Log file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.vds
 # Journal file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/vivado.jou
-# Running On: Furiosa, OS: Linux, CPU Frequency: 1833.345 MHz, CPU Physical cores: 24, Host memory: 33036 MB
+# Running On: Furiosa, OS: Linux, CPU Frequency: 5186.096 MHz, CPU Physical cores: 24, Host memory: 33036 MB
 #-----------------------------------------------------------
 source top.tcl -notrace
 Command: synth_design -top top -part xc7a200tfbg484-2
@@ -19,39 +19,17 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200
 INFO: [Device 21-403] Loading part xc7a200tfbg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 200916
+INFO: [Synth 8-7075] Helper process launched with PID 402996
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2062.602 ; gain = 404.715 ; free physical = 676 ; free virtual = 44843
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2072.008 ; gain = 404.684 ; free physical = 1588 ; free virtual = 51127
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-6157] synthesizing module 'top' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:13]
-INFO: [Synth 8-6157] synthesizing module 'PLLE2_BASE' [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:111430]
-	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
-	Parameter CLKFBOUT_MULT bound to: 20 - type: integer 
-	Parameter CLKFBOUT_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKIN1_PERIOD bound to: 20.000000 - type: double 
-	Parameter CLKOUT0_DIVIDE bound to: 10 - type: integer 
-	Parameter CLKOUT0_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT0_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT1_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT1_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT1_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT2_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT2_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT2_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT3_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT3_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT3_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT4_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT4_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT4_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT5_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT5_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT5_PHASE bound to: 0.000000 - type: double 
-	Parameter DIVCLK_DIVIDE bound to: 1 - type: integer 
-	Parameter REF_JITTER1 bound to: 0.010000 - type: double 
-	Parameter STARTUP_WAIT bound to: FALSE - type: string 
-INFO: [Synth 8-6155] done synthesizing module 'PLLE2_BASE' (0#1) [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:111430]
-INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:450]
+WARNING: [Synth 8-6901] identifier 'rptr_gray' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:89]
+WARNING: [Synth 8-6901] identifier 'preloaded' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:117]
+WARNING: [Synth 8-6901] identifier 'fifo_rd_req_d1' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:117]
+INFO: [Synth 8-6157] synthesizing module 'top' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-402957-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-402957-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:412]
 INFO: [Synth 8-6157] synthesizing module 'ad71143_ctrl' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_ctrl.v:17]
 	Parameter ACLK_PULSES bound to: 9 - type: integer 
 	Parameter LINE_CYCLES bound to: 6000 - type: integer 
@@ -96,38 +74,11 @@ INFO: [Synth 8-6157] synthesizing module 'nt39565d_gate_ctrl' [/home/furiosa/Pro
 	Parameter PER_LINE_TRIG bound to: 1 - type: integer 
 INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:134]
 INFO: [Synth 8-6155] done synthesizing module 'nt39565d_gate_ctrl' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:18]
-INFO: [Synth 8-6157] synthesizing module 'rgmii_bridge' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:9]
-	Parameter BURST_WIDTH bound to: 256 - type: integer 
-	Parameter BURST_BYTES bound to: 32 - type: integer 
-	Parameter FRAME_SIZE bound to: 32 - type: integer 
-INFO: [Synth 8-6157] synthesizing module 'MMCME2_BASE' [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:82294]
-	Parameter BANDWIDTH bound to: OPTIMIZED - type: string 
-	Parameter CLKFBOUT_MULT_F bound to: 25.000000 - type: double 
-	Parameter CLKFBOUT_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKIN1_PERIOD bound to: 20.000000 - type: double 
-	Parameter CLKOUT0_DIVIDE_F bound to: 10.000000 - type: double 
-	Parameter CLKOUT0_DUTY_CYCLE bound to: 0.500000 - type: double 
-	Parameter CLKOUT0_PHASE bound to: 0.000000 - type: double 
-	Parameter CLKOUT1_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT2_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT3_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT4_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT5_DIVIDE bound to: 1 - type: integer 
-	Parameter CLKOUT6_DIVIDE bound to: 1 - type: integer 
-	Parameter DIVCLK_DIVIDE bound to: 1 - type: integer 
-	Parameter REF_JITTER1 bound to: 0.010000 - type: double 
-	Parameter STARTUP_WAIT bound to: FALSE - type: string 
-INFO: [Synth 8-6155] done synthesizing module 'MMCME2_BASE' (0#1) [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:82294]
-WARNING: [Synth 8-7071] port 'CLKFBOUTB' of module 'MMCME2_BASE' is unconnected for instance 'mmcm_inst' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
-WARNING: [Synth 8-7071] port 'CLKOUT0B' of module 'MMCME2_BASE' is unconnected for instance 'mmcm_inst' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
-WARNING: [Synth 8-7071] port 'CLKOUT1B' of module 'MMCME2_BASE' is unconnected for instance 'mmcm_inst' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
-WARNING: [Synth 8-7071] port 'CLKOUT2B' of module 'MMCME2_BASE' is unconnected for instance 'mmcm_inst' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
-WARNING: [Synth 8-7071] port 'CLKOUT3B' of module 'MMCME2_BASE' is unconnected for instance 'mmcm_inst' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
-WARNING: [Synth 8-7023] instance 'mmcm_inst' of module 'MMCME2_BASE' has 18 connections declared, but only 13 given [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:55]
+INFO: [Synth 8-6157] synthesizing module 'rgmii_bridge' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:15]
 INFO: [Synth 8-6157] synthesizing module 'RGMII_tx' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v:2]
-	Parameter FRAME_SIZE bound to: 32 - type: integer 
+	Parameter FRAME_SIZE bound to: 74 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'RGMII_tx' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v:2]
-INFO: [Synth 8-6155] done synthesizing module 'rgmii_bridge' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:9]
+INFO: [Synth 8-6155] done synthesizing module 'rgmii_bridge' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:15]
 INFO: [Synth 8-6157] synthesizing module 'RGMII_rx' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v:2]
 	Parameter FRAME_SIZE bound to: 64 - type: integer 
 INFO: [Synth 8-6157] synthesizing module 'IDDR' [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:75605]
@@ -137,9 +88,14 @@ INFO: [Synth 8-6157] synthesizing module 'IDDR' [/home/furiosa/tool/software/viv
 	Parameter SRTYPE bound to: SYNC - type: string 
 INFO: [Synth 8-6155] done synthesizing module 'IDDR' (0#1) [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/scripts/rt/data/unisim_comp.v:75605]
 INFO: [Synth 8-6155] done synthesizing module 'RGMII_rx' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v:2]
-INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:13]
+INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
 WARNING: [Synth 8-6014] Unused sequential element xao_cnt_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:189]
 WARNING: [Synth 8-7137] Register xao_reg in module nt39565d_gate_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:220]
+WARNING: [Synth 8-7137] Register fifo_mem_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code 
+WARNING: [Synth 8-4767] Trying to implement RAM 'fifo_mem_reg' in registers. Block RAM or DRAM implementation is not possible; see log for reasons.
+Reason is one or more of the following :
+	1: RAM is sensitive to asynchronous reset signal. this RTL style is not supported. 
+RAM "fifo_mem_reg" dissolved into registers
 WARNING: [Synth 8-6014] Unused sequential element state_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v:43]
 WARNING: [Synth 8-6014] Unused sequential element RXD_IDDR_r_d_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v:54]
 WARNING: [Synth 8-6014] Unused sequential element RX_DV_d_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_rx.v:55]
@@ -153,55 +109,58 @@ WARNING: [Synth 8-7129] Port MDC in module RGMII_rx is either unconnected or has
 WARNING: [Synth 8-7129] Port MDIO in module RGMII_rx is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rst_n in module RGMII_rx is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2148.570 ; gain = 490.684 ; free physical = 571 ; free virtual = 44743
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2161.977 ; gain = 494.652 ; free physical = 1474 ; free virtual = 51014
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2166.383 ; gain = 508.496 ; free physical = 567 ; free virtual = 44739
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2176.820 ; gain = 509.496 ; free physical = 1475 ; free virtual = 51014
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2166.383 ; gain = 508.496 ; free physical = 567 ; free virtual = 44739
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2176.820 ; gain = 509.496 ; free physical = 1475 ; free virtual = 51014
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2172.320 ; gain = 0.000 ; free physical = 559 ; free virtual = 44731
-INFO: [Netlist 29-17] Analyzing 20 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2182.758 ; gain = 0.000 ; free physical = 1475 ; free virtual = 51015
+INFO: [Netlist 29-17] Analyzing 18 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
+Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_mmcm'
+Finished Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_mmcm'
 Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc]
 Finished Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/top_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc]
+WARNING: [Constraints 18-619] A clock with name 'sys_clk' already exists, overwriting the previous clock with the same name. [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc:5]
 Finished Parsing XDC File [/home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc]
-INFO: [Timing 38-2] Deriving generated clocks
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2322.133 ; gain = 0.000 ; free physical = 537 ; free virtual = 44707
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2323.570 ; gain = 0.000 ; free physical = 1466 ; free virtual = 51005
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 2 instances were transformed.
-  MMCME2_BASE => MMCME2_ADV: 1 instance 
-  PLLE2_BASE => PLLE2_ADV: 1 instance 
+No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2322.168 ; gain = 0.000 ; free physical = 534 ; free virtual = 44704
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2323.605 ; gain = 0.000 ; free physical = 1465 ; free virtual = 51005
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 573 ; free virtual = 44731
+Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1502 ; free virtual = 51042
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 573 ; free virtual = 44731
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1502 ; free virtual = 51042
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
+Applied set_property IO_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 5).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 6).
+Applied set_property KEEP_HIERARCHY = SOFT for u_mmcm. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 571 ; free virtual = 44730
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1502 ; free virtual = 51042
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_ctrl'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_spi'
@@ -288,7 +247,7 @@ INFO: [Synth 8-3354] encoded FSM with state register 'cfg_state_reg' using encod
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'top_state_reg' using encoding 'one-hot' in module 'top'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 547 ; free virtual = 44716
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:06 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1497 ; free virtual = 51038
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -298,29 +257,30 @@ Detailed RTL Component Info :
 	   2 Input   32 Bit       Adders := 1     
 	   2 Input   16 Bit       Adders := 3     
 	   2 Input   10 Bit       Adders := 1     
-	   2 Input    8 Bit       Adders := 3     
-	   2 Input    7 Bit       Adders := 5     
+	   2 Input    8 Bit       Adders := 2     
+	   2 Input    7 Bit       Adders := 6     
 	   2 Input    6 Bit       Adders := 4     
 	   2 Input    4 Bit       Adders := 3     
-	   2 Input    3 Bit       Adders := 1     
+	   2 Input    3 Bit       Adders := 3     
 	   2 Input    2 Bit       Adders := 2     
 +---XORs : 
-	   2 Input      1 Bit         XORs := 9     
+	   2 Input      3 Bit         XORs := 2     
+	   2 Input      1 Bit         XORs := 8     
 +---Registers : 
-	              256 Bit    Registers := 3     
+	              256 Bit    Registers := 6     
 	              128 Bit    Registers := 4     
 	               64 Bit    Registers := 4     
 	               32 Bit    Registers := 2     
 	               16 Bit    Registers := 10    
 	               10 Bit    Registers := 7     
-	                8 Bit    Registers := 9     
-	                7 Bit    Registers := 7     
+	                8 Bit    Registers := 56    
+	                7 Bit    Registers := 8     
 	                4 Bit    Registers := 4     
-	                3 Bit    Registers := 3     
+	                3 Bit    Registers := 11    
 	                2 Bit    Registers := 4     
-	                1 Bit    Registers := 96    
+	                1 Bit    Registers := 93    
 +---Muxes : 
-	   2 Input  256 Bit        Muxes := 2     
+	   4 Input  256 Bit        Muxes := 1     
 	   2 Input   64 Bit        Muxes := 4     
 	   2 Input   32 Bit        Muxes := 1     
 	   7 Input   32 Bit        Muxes := 1     
@@ -331,10 +291,10 @@ Detailed RTL Component Info :
 	   5 Input   10 Bit        Muxes := 2     
 	   4 Input   10 Bit        Muxes := 1     
 	   2 Input   10 Bit        Muxes := 2     
-	   2 Input    8 Bit        Muxes := 9     
+	   2 Input    8 Bit        Muxes := 7     
 	   4 Input    8 Bit        Muxes := 1     
 	   6 Input    8 Bit        Muxes := 1     
-	   2 Input    7 Bit        Muxes := 7     
+	   2 Input    7 Bit        Muxes := 9     
 	   5 Input    7 Bit        Muxes := 4     
 	   7 Input    7 Bit        Muxes := 1     
 	   3 Input    7 Bit        Muxes := 1     
@@ -350,9 +310,9 @@ Detailed RTL Component Info :
 	   3 Input    3 Bit        Muxes := 2     
 	   5 Input    3 Bit        Muxes := 4     
 	   2 Input    2 Bit        Muxes := 15    
-	   4 Input    2 Bit        Muxes := 5     
+	   4 Input    2 Bit        Muxes := 6     
 	   7 Input    1 Bit        Muxes := 8     
-	   2 Input    1 Bit        Muxes := 51    
+	   2 Input    1 Bit        Muxes := 52    
 	   4 Input    1 Bit        Muxes := 11    
 	   5 Input    1 Bit        Muxes := 20    
 	  11 Input    1 Bit        Muxes := 20    
@@ -377,25 +337,26 @@ WARNING: [Synth 8-7129] Port rgmii_mdio in module top is either unconnected or h
 WARNING: [Synth 8-7129] Port spi_sdo_p0 in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port spi_sdo_p1 in module top is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 524 ; free virtual = 44707
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1480 ; free virtual = 51028
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
+WARNING: [Synth 8-565] redefining clock 'sys_clk'
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 481 ; free virtual = 44679
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1482 ; free virtual = 51030
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 483 ; free virtual = 44681
+Finished Timing Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1478 ; free virtual = 51025
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 493 ; free virtual = 44681
+Finished Technology Mapping : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1477 ; free virtual = 51025
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -413,99 +374,99 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 487 ; free virtual = 44669
+Finished IO Insertion : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 487 ; free virtual = 44669
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 486 ; free virtual = 44669
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51018
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 486 ; free virtual = 44669
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51018
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 474 ; free virtual = 44667
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 472 ; free virtual = 44667
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
 ---------------------------------------------------------------------------------
 
 Report BlackBoxes: 
-+-+--------------+----------+
-| |BlackBox name |Instances |
-+-+--------------+----------+
-+-+--------------+----------+
++------+--------------+----------+
+|      |BlackBox name |Instances |
++------+--------------+----------+
+|1     |clk_wiz_0     |         1|
++------+--------------+----------+
 
 Report Cell Usage: 
-+------+------------+------+
-|      |Cell        |Count |
-+------+------------+------+
-|1     |BUFG        |     4|
-|2     |CARRY4      |    22|
-|3     |IDDR        |     5|
-|4     |LUT1        |     2|
-|5     |LUT2        |   353|
-|6     |LUT3        |    50|
-|7     |LUT4        |   356|
-|8     |LUT5        |   103|
-|9     |LUT6        |   132|
-|10    |MMCME2_BASE |     1|
-|11    |ODDR        |     7|
-|12    |PLLE2_BASE  |     1|
-|13    |FDCE        |  1793|
-|14    |FDPE        |     9|
-|15    |FDRE        |    46|
-|16    |IBUF        |     8|
-|17    |IBUFDS      |     4|
-|18    |OBUF        |    49|
-|19    |OBUFDS      |     2|
-|20    |OBUFT       |     1|
-+------+------------+------+
++------+--------+------+
+|      |Cell    |Count |
++------+--------+------+
+|1     |clk_wiz |     1|
+|2     |BUFG    |     1|
+|3     |CARRY4  |    22|
+|4     |IDDR    |     5|
+|5     |LUT1    |     6|
+|6     |LUT2    |   352|
+|7     |LUT3    |    65|
+|8     |LUT4    |    94|
+|9     |LUT5    |   113|
+|10    |LUT6    |   510|
+|11    |MUXF7   |     9|
+|12    |MUXF8   |     1|
+|13    |ODDR    |     7|
+|14    |FDCE    |  1801|
+|15    |FDPE    |     9|
+|16    |FDRE    |  1082|
+|17    |IBUF    |     7|
+|18    |IBUFDS  |     4|
+|19    |OBUF    |    49|
+|20    |OBUFDS  |     2|
+|21    |OBUFT   |     1|
++------+--------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 472 ; free virtual = 44667
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 5 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 2322.168 ; gain = 508.496 ; free physical = 472 ; free virtual = 44668
-Synthesis Optimization Complete : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2322.168 ; gain = 664.281 ; free physical = 472 ; free virtual = 44668
+Synthesis finished with 0 errors, 0 critical warnings and 6 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:12 ; elapsed = 00:00:12 . Memory (MB): peak = 2323.605 ; gain = 509.496 ; free physical = 1471 ; free virtual = 51019
+Synthesis Optimization Complete : Time (s): cpu = 00:00:13 ; elapsed = 00:00:13 . Memory (MB): peak = 2323.605 ; gain = 656.281 ; free physical = 1471 ; free virtual = 51019
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2322.168 ; gain = 0.000 ; free physical = 753 ; free virtual = 44948
-INFO: [Netlist 29-17] Analyzing 42 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2323.605 ; gain = 0.000 ; free physical = 1752 ; free virtual = 51300
+INFO: [Netlist 29-17] Analyzing 50 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2322.168 ; gain = 0.000 ; free physical = 750 ; free virtual = 44946
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2323.605 ; gain = 0.000 ; free physical = 1749 ; free virtual = 51297
 INFO: [Project 1-111] Unisim Transformation Summary:
-  A total of 2 instances were transformed.
-  MMCME2_BASE => MMCME2_ADV: 1 instance 
-  PLLE2_BASE => PLLE2_ADV: 1 instance 
+No Unisim elements were transformed.
 
-Synth Design complete | Checksum: b9b814d8
+Synth Design complete | Checksum: fde41c79
 INFO: [Common 17-83] Releasing license: Synthesis
-65 Infos, 25 Warnings, 0 Critical Warnings and 0 Errors encountered.
+62 Infos, 26 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:15 ; elapsed = 00:00:14 . Memory (MB): peak = 2322.168 ; gain = 1047.969 ; free physical = 765 ; free virtual = 44946
-INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 1890.001; main = 1561.492; forked = 377.065
-INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3283.367; main = 2322.137; forked = 993.246
-Write ShapeDB Complete: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2346.145 ; gain = 0.000 ; free physical = 761 ; free virtual = 44942
+synth_design: Time (s): cpu = 00:00:16 ; elapsed = 00:00:15 . Memory (MB): peak = 2323.605 ; gain = 1033.969 ; free physical = 1749 ; free virtual = 51296
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 1897.452; main = 1572.419; forked = 383.126
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3284.809; main = 2323.574; forked = 993.250
+Write ShapeDB Complete: Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2347.582 ; gain = 0.000 ; free physical = 1748 ; free virtual = 51296
 INFO: [Common 17-1381] The checkpoint '/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Wed Jul  1 17:38:08 2026...
+INFO: [Common 17-206] Exiting Vivado at Fri Jul  3 14:33:46 2026...
