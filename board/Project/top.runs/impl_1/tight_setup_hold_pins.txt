@@ -26,8 +26,8 @@
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[126]/D |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[4]/D   |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[175]/D |
-| clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[75]/D  |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[139]/D |
+| clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[75]/D  |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[53]/D  |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[217]/D |
 | clk_out2_clk_wiz_0 | clk_out2_clk_wiz_0 | u_rgmii_bridge/burst_hold_reg[21]/D  |
