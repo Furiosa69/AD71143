@@ -1,6 +1,5 @@
-`timescale 1ns / 1ps
 // RGMII 桥接模块 (带 UDP/IP/MAC 协议栈)
-//   100MHz 域接收 burst → 异步 FIFO (Gray CDC) → 125MHz 域封装帧 → RGMII_tx 发送
+//   100MHz 域接收 burst → Xilinx FIFO IP (异步 CDC) → 125MHz 域封装帧 → RGMII_tx 发送
 //
 //   帧格式 (大端序):
 //     MAC 头  14B:  DMAC(6) + SMAC(6) + EtherType=0x0800(2)
@@ -43,94 +42,57 @@ module rgmii_bridge #(
     localparam HDR_BYTES   = HDR_MAC + HDR_IP + HDR_UDP;  // 42
     localparam FRAME_BYTES = HDR_BYTES + BURST_BYTES;      // 74
 
+
     // =====================================================================
-    // 异步 FIFO: 100MHz (写) → 125MHz (读)
-    //
-    // 使用 Gray 码指针跨时钟域同步, 消除多 bit 总线 CDC 的亚稳态风险.
-    // 深度 4, 足以覆盖 burst 到达速率 (每 ~1.7us) 与帧发送速率 (每 592ns) 的差异.
+    // Xilinx FIFO IP: 100MHz (写) → 125MHz (读)
     // =====================================================================
-    localparam FIFO_DEPTH = 4;
-    localparam FIFO_AW    = 2;            // log2(FIFO_DEPTH)
+    wire                fifo_full;
+    wire                fifo_empty;
+    wire [BURST_WIDTH-1:0] fifo_dout;
+    reg                 fifo_rd_en;
+    reg                 fifo_data_ready;     // 读数据就绪脉冲 (125MHz 域)
 
-    // FIFO 存储器 (distributed RAM)
-    reg [BURST_WIDTH-1:0] fifo_mem [0:FIFO_DEPTH-1];
-
-    // ---- 写域 (100MHz) ----
-    reg  [FIFO_AW:0] wptr_bin;           // 写指针 (二进制, 多 1bit 区分满/空)
-    reg  [FIFO_AW:0] wptr_gray;          // 写指针 (Gray 码, 输出给读域)
-    reg  [FIFO_AW:0] rptr_sync_w1;       // 读指针同步到写域 (2-FF stage 1)
-    reg  [FIFO_AW:0] rptr_sync_w2;       // 读指针同步到写域 (2-FF stage 2)
-
-    wire             fifo_full;
-    wire             fifo_wr_en;
+    // 写侧 (100MHz 域): data_valid 且 FIFO 未满时写入
+    wire fifo_wr_en;
     assign fifo_wr_en = data_valid && !fifo_full;
 
-    // 写指针 Gray 码转换函数
-    function [FIFO_AW:0] bin2gray;
-        input [FIFO_AW:0] bin;
-        begin
-            bin2gray = bin ^ (bin >> 1);
-        end
-    endfunction
+    fifo_generator_0 fifo_generator_0_inst (
+        .wr_clk   (clk_100m),
+        .rd_clk   (clk_125m),
+        .din      (data_in),
+        .wr_en    (fifo_wr_en),
+        .rd_en    (fifo_rd_en),
+        .dout     (fifo_dout),
+        .full     (fifo_full),
+        .empty    (fifo_empty)
+    );
 
-    always @(posedge clk_100m or negedge rst_n) begin
-        if (!rst_n) begin
-            wptr_bin  <= 0;
-            wptr_gray <= 0;
-        end else if (fifo_wr_en) begin
-            fifo_mem[wptr_bin[FIFO_AW-1:0]] <= data_in;
-            wptr_bin  <= wptr_bin + 1'b1;
-            wptr_gray <= bin2gray(wptr_bin + 1'b1);
-        end
-    end
-
-    // 读指针 (Gray) 同步到写域: 2-FF
-    always @(posedge clk_100m) begin
-        rptr_sync_w1 <= rptr_gray;
-        rptr_sync_w2 <= rptr_sync_w1;
-    end
-
-    // FIFO 满判断:
-    //   写指针 Gray 码与同步后读指针 Gray 码: MSB 和 MSB-1 相反, 其余位相同
-    assign fifo_full = (wptr_gray[FIFO_AW]   != rptr_sync_w2[FIFO_AW])   &&
-                       (wptr_gray[FIFO_AW-1] != rptr_sync_w2[FIFO_AW-1]) &&
-                       (wptr_gray[FIFO_AW-2:0] == rptr_sync_w2[FIFO_AW-2:0]);
-
-    // ---- 读域 (125MHz) ----
-    reg  [FIFO_AW:0] rptr_bin;           // 读指针 (二进制)
-    reg  [FIFO_AW:0] rptr_gray;          // 读指针 (Gray 码, 输出给写域)
-    reg  [FIFO_AW:0] wptr_sync_r1;       // 写指针同步到读域 (2-FF stage 1)
-    reg  [FIFO_AW:0] wptr_sync_r2;       // 写指针同步到读域 (2-FF stage 2)
-
-    wire             fifo_empty;
-    wire [BURST_WIDTH-1:0] fifo_rdata;   // FIFO 读出数据 (组合逻辑)
-    assign fifo_rdata = fifo_mem[rptr_bin[FIFO_AW-1:0]];
-
-    // FIFO 读出后寄存器打一拍 (125MHz 域), 切断组合逻辑长路径
+    // ---- 读侧 (125MHz 域) ----
+    // IP 默认非 FWFT 模式: rd_en 有效后下一拍 dout 数据有效
     reg [BURST_WIDTH-1:0] burst_hold;
 
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
-            rptr_bin    <= 0;
-            rptr_gray   <= 0;
-            burst_hold  <= {BURST_WIDTH{1'b0}};
-        end else if (!fifo_empty && !preloaded && !fifo_rd_req_d1) begin
-            // 125MHz 域空闲且 FIFO 非空时读出, 同时寄存数据
-            // fifo_rd_req_d1 门控防止流水线未排空时重复读取
-            burst_hold <= fifo_rdata;
-            rptr_bin   <= rptr_bin + 1'b1;
-            rptr_gray  <= bin2gray(rptr_bin + 1'b1);
+            fifo_rd_en      <= 1'b0;
+            fifo_data_ready <= 1'b0;
+            burst_hold      <= {BURST_WIDTH{1'b0}};
+        end else begin
+            fifo_data_ready <= 1'b0;  // 默认: 脉冲信号
+
+            // FIFO 有数据 且 空闲 且 未等待读取结果 → 发起读
+            if (!fifo_empty && !preloaded && !fifo_rd_en) begin
+                fifo_rd_en <= 1'b1;
+            end else begin
+                fifo_rd_en <= 1'b0;
+            end
+
+            // 读使能后下一拍: dout 数据有效, 寄存并置位就绪标志
+            if (fifo_rd_en) begin
+                burst_hold      <= fifo_dout;
+                fifo_data_ready <= 1'b1;
+            end
         end
     end
-
-    // 写指针 (Gray) 同步到读域: 2-FF
-    always @(posedge clk_125m) begin
-        wptr_sync_r1 <= wptr_gray;
-        wptr_sync_r2 <= wptr_sync_r1;
-    end
-
-    // FIFO 空判断: 同步后写指针与读指针 Gray 码完全相同
-    assign fifo_empty = (wptr_sync_r2 == rptr_gray);
 
     // =====================================================================
     // 125MHz 域: 帧封装 + RGMII_tx 控制
@@ -172,20 +134,9 @@ module rgmii_bridge #(
     // UDP Length = UDP头(8) + Payload(BURST_BYTES) = 8 + 32 = 40
     localparam [15:0] UDP_LENGTH = 8 + BURST_BYTES;  // 40
 
-    // 从 FIFO 读取新 burst 的条件: FIFO 非空 且 上一帧发送已完成
-    wire fifo_rd_req;
-    assign fifo_rd_req = !fifo_empty && !preloaded;
-
-    // fifo_rd_req 延迟 1 拍, 对齐 burst_hold (同一周期写入, 下一周期可用)
-    reg fifo_rd_req_d1;
-
-    always @(posedge clk_125m or negedge rst_n) begin
-        if (!rst_n)
-            fifo_rd_req_d1 <= 1'b0;
-        else
-            fifo_rd_req_d1 <= fifo_rd_req;
-    end
-
+    // =====================================================================
+    // 帧封装 + RGMII_tx 发送控制 (125MHz 域)
+    // =====================================================================
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
             tx_data    <= 8'd0;
@@ -198,7 +149,7 @@ module rgmii_bridge #(
             tx_start <= 1'b0;
 
             // ---- burst_hold 就绪: 组装帧 + 发送 ----
-            if (fifo_rd_req_d1) begin
+            if (fifo_data_ready) begin
                 // MAC 头 (14 bytes)
                 frame_buf[0]  <= 8'hFF;    // DMAC[0]  broadcast
                 frame_buf[1]  <= 8'hFF;    // DMAC[1]

@@ -7,7 +7,6 @@
 //
 // 输出拼接: merged_burst[255:0] = {panel1_burst[127:0], panel0_burst[127:0]}
 // =============================================================================
-`timescale 1ns / 1ps
 
 module ad71143_data_rx_dual #(
     parameter integer MUTE_MIN = 113   // 100MHz: 177cyc - 64 = 113

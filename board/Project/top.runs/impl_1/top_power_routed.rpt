@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Fri Jul  3 14:59:12 2026
+| Date             : Mon Jul  6 14:29:37 2026
 | Host             : Furiosa running 64-bit Arch Linux
 | Command          : report_power -file top_power_routed.rpt -pb top_power_summary_routed.pb -rpx top_power_routed.rpx
 | Design           : top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.420        |
+| Total On-Chip Power (W)  | 0.425        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.268        |
+| Dynamic (W)              | 0.273        |
 | Device Static (W)        | 0.152        |
 | Effective TJA (C/W)      | 2.5          |
 | Max Ambient (C)          | 84.0         |
@@ -52,18 +52,19 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.012 |        7 |       --- |             --- |
-| Slice Logic    |     0.002 |     4093 |       --- |             --- |
-|   LUT as Logic |     0.002 |      873 |    133800 |            0.65 |
-|   Register     |    <0.001 |     2902 |    269200 |            1.08 |
+| Clocks         |     0.010 |        7 |       --- |             --- |
+| Slice Logic    |     0.002 |     2872 |       --- |             --- |
+|   LUT as Logic |     0.002 |      620 |    133800 |            0.46 |
+|   Register     |    <0.001 |     1910 |    269200 |            0.71 |
 |   CARRY4       |    <0.001 |       22 |     33450 |            0.07 |
-|   F7/F8 Muxes  |    <0.001 |       10 |    133800 |           <0.01 |
-|   Others       |     0.000 |       19 |       --- |             --- |
-| Signals        |     0.003 |     3351 |       --- |             --- |
+|   F7/F8 Muxes  |    <0.001 |       18 |    133800 |            0.01 |
+|   Others       |     0.000 |       36 |       --- |             --- |
+| Signals        |     0.003 |     2599 |       --- |             --- |
+| Block RAM      |     0.002 |        4 |       365 |            1.10 |
 | MMCM           |     0.106 |        1 |        10 |           10.00 |
-| I/O            |     0.145 |       64 |       285 |           22.46 |
+| I/O            |     0.150 |       64 |       285 |           22.46 |
 | Static Power   |     0.152 |          |           |                 |
-| Total          |     0.420 |          |           |                 |
+| Total          |     0.425 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,7 +76,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Vccint    |       1.000 |     0.051 |       0.020 |      0.031 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.095 |       0.064 |      0.031 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.018 |       0.013 |      0.005 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.019 |       0.014 |      0.005 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.042 |       0.037 |      0.005 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -143,17 +144,20 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+------------------+-----------+
-| Name             | Power (W) |
-+------------------+-----------+
-| top              |     0.268 |
-|   u_data_rx_dual |     0.103 |
-|     u_panel0     |     0.051 |
-|     u_panel1     |     0.050 |
-|   u_mmcm         |     0.107 |
-|     inst         |     0.107 |
-|   u_rgmii_bridge |     0.010 |
-|     u_rgmii_tx   |     0.001 |
-+------------------+-----------+
++---------------------------+-----------+
+| Name                      | Power (W) |
++---------------------------+-----------+
+| top                       |     0.273 |
+|   u_ad71143_ctrl          |     0.001 |
+|   u_data_rx_dual          |     0.105 |
+|     u_panel0              |     0.051 |
+|     u_panel1              |     0.051 |
+|   u_mmcm                  |     0.107 |
+|     inst                  |     0.107 |
+|   u_rgmii_bridge          |     0.008 |
+|     fifo_generator_0_inst |     0.002 |
+|       U0                  |     0.002 |
+|     u_rgmii_tx            |     0.001 |
++---------------------------+-----------+
 
 

@@ -12,8 +12,6 @@
 //   line_start → SYNC↓ → (20ns) → ACLK0↑ → ACLK1~8 → SYNC↑ → 行间隔 → 下一行
 // =============================================================================
 
-`timescale 1ns / 1ps
-
 module ad71143_ctrl #(
     parameter integer ACLK_PULSES      = 9,
     parameter integer LINE_CYCLES      = 6000,     // 60μs @ 100MHz
