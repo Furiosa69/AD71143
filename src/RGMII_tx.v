@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 module RGMII_tx (
     input  wire         rst_n,      //异步复位，低有效
     input  wire         TXC,        //125MHz

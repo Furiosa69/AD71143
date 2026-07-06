@@ -94,10 +94,7 @@ module top #(
     input  wire         rgmii_rxd0,
     input  wire         rgmii_rxd1,
     input  wire         rgmii_rxd2,
-    input  wire         rgmii_rxd3,
-    // MDIO (共用)
-    output wire         rgmii_mdc,
-    inout  wire         rgmii_mdio
+    input  wire         rgmii_rxd3
 );
 
     // ---- 内部调试信号 (不引�?) ----
@@ -698,23 +695,6 @@ nt39565d_gate_ctrl #(
         .TXD1       (rgmii_txd1),
         .TXD2       (rgmii_txd2),
         .TXD3       (rgmii_txd3)
-    );
-
-    // =========================================================================
-    // RGMII 接收: PHY �? FPGA
-    // =========================================================================
-    RGMII_rx #(
-        .FRAME_SIZE(64)
-    ) u_rgmii_rx (
-        .rst_n      (rst_n),
-        .RXC        (rgmii_rxc),
-        .RX_CTL     (rgmii_rx_ctl),
-        .RXD0       (rgmii_rxd0),
-        .RXD1       (rgmii_rxd1),
-        .RXD2       (rgmii_rxd2),
-        .RXD3       (rgmii_rxd3),
-        .MDC        (rgmii_mdc),
-        .MDIO       (rgmii_mdio)
     );
 
 endmodule

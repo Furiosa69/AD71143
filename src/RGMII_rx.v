@@ -5,10 +5,7 @@ module RGMII_rx (
     input  wire         RXD0,
     input  wire         RXD1,
     input  wire         RXD2,
-    input  wire         RXD3,
-
-    output wire         MDC,    //管理数据时钟
-    inout  wire         MDIO   //管理数据输入输出
+    input  wire         RXD3
 
 );
 
@@ -195,12 +192,6 @@ IDDR #(
    );
 
 assign RX_ER = RX_DV_xor_ER ^ RX_DV;
-
-
-
-
-
-
 
 endmodule
 

@@ -55,7 +55,7 @@ module ad71143_data_rx_dual #(
     // =========================================================================
     output wire         line_done,          // 两 Panel 均完成一行
     output wire         header_ok,          // 两 Panel Header 均 0x0A
-    output reg          merged_valid,       // 合并数据有效 (单周期脉冲)
+    output reg          merged_valid = 1'b0, // 合并数据有效 (单周期脉冲)
     output reg  [255:0] merged_burst,       // {Panel1[127:0], Panel0[127:0]}
     output reg  [6:0]   merged_burst_index, // Burst 编号
 
@@ -180,7 +180,6 @@ module ad71143_data_rx_dual #(
             panel1_hold        <= 128'd0;
             p0_captured        <= 1'b0;
             p1_captured        <= 1'b0;
-            merged_valid       <= 1'b0;
             merged_burst       <= 256'd0;
             merged_burst_index <= 7'd0;
         end else begin

@@ -11,6 +11,7 @@ vmap xil_defaultlib modelsim_lib/msim/xil_defaultlib
 
 vlog -work xpm -64 -incr -mfcu  -sv \
 "/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv" \
+"/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/data/ip/xpm/xpm_memory/hdl/xpm_memory.sv" \
 
 vcom -work xpm -64 -93  \
 "/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/data/ip/xpm/xpm_VCOMP.vhd" \
@@ -26,7 +27,6 @@ vlog -work fifo_generator_v13_2_9 -64 -incr -mfcu  \
 
 vlog -work xil_defaultlib -64 -incr -mfcu  \
 "../../../../top.gen/sources_1/ip/fifo_generator_0/sim/fifo_generator_0.v" \
-
 
 vlog -work xil_defaultlib \
 "glbl.v"

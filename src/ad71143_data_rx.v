@@ -34,7 +34,7 @@ module ad71143_data_rx (
     output reg          header_cds_id,
     output reg  [15:0]  header_temp,
     output reg  [15:0]  header_vt,
-    output reg          merged_valid,
+    output reg          merged_valid = 1'b0,
     output reg  [127:0] merged_burst,
     output reg  [7:0]   merged_first_channel,
     output reg  [7:0]   merged_last_channel,
@@ -165,7 +165,6 @@ module ad71143_data_rx (
             header_cds_id         <= 1'b0;
             header_temp           <= 16'd0;
             header_vt             <= 16'd0;
-            merged_valid          <= 1'b0;
             merged_burst          <= 128'd0;
             merged_first_channel  <= 8'd0;
             merged_last_channel   <= 8'd0;

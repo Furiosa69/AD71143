@@ -86,14 +86,12 @@ module nt39565d_gate_ctrl #(
     reg [3:0]  state;
     reg [15:0] cnt;
     reg [15:0] shift_cnt;
-    reg [15:0] xao_cnt;
     reg [1:0]  mode_latched;
     reg [1:0]  stv_delay_latched;
     reg        scan_dir_latched;
     reg        oe_mask_latched;
     reg [15:0] target_lines;
     reg        frame_pending;
-
     reg        cfg_dual_stv;
     reg        cfg_long_stv;
     reg        cfg_stv2_delay_1cpv;
@@ -186,7 +184,6 @@ module nt39565d_gate_ctrl #(
             state             <= IDLE;
             cnt               <= 16'd0;
             shift_cnt         <= 16'd0;
-            xao_cnt           <= 16'd0;
             mode_latched      <= DEFAULT_MODE_SEL[1:0];
             stv_delay_latched <= 2'b00;
             scan_dir_latched  <= SCAN_DIRECTION;
@@ -228,7 +225,6 @@ module nt39565d_gate_ctrl #(
                 IDLE: begin
                     cnt        <= 16'd0;
                     shift_cnt  <= 16'd0;
-                    xao_cnt    <= 16'd0;
                     busy       <= 1'b0;
                     cpv        <= 1'b0;
                     stv1       <= 1'b0;
@@ -418,12 +414,7 @@ module nt39565d_gate_ctrl #(
                     oe2  <= oe_inactive_level;
                     busy <= 1'b0;
 
-                    if (xao_cnt < XAO_DELAY_CNT - 1) begin
-                        xao_cnt <= xao_cnt + 1'b1;
-                    end
-
                     if (!xao_emergency) begin
-                        xao_cnt <= 16'd0;
                         xao <= 0;
                         cnt <= 16'd0;
                         shift_cnt <= 16'd0;

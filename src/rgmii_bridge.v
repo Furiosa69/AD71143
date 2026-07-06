@@ -43,14 +43,19 @@ module rgmii_bridge #(
     localparam FRAME_BYTES = HDR_BYTES + BURST_BYTES;      // 74
 
 
+    reg [7:0]   frame_buf [0:FRAME_BYTES-1];  // 帧缓冲区 (74 bytes)
+    reg [6:0]   frame_idx;                     // 当前输出字节索引
+    reg         tx_start;
+    reg [7:0]   tx_data;
+    reg         preloaded;                      // 首字节已预装 / 帧发送中标志
+    
     // =====================================================================
     // Xilinx FIFO IP: 100MHz (写) → 125MHz (读)
     // =====================================================================
     wire                fifo_full;
     wire                fifo_empty;
     wire [BURST_WIDTH-1:0] fifo_dout;
-    reg                 fifo_rd_en;
-    reg                 fifo_data_ready;     // 读数据就绪脉冲 (125MHz 域)
+    reg                 fifo_rd_en = 1'b0;
 
     // 写侧 (100MHz 域): data_valid 且 FIFO 未满时写入
     wire fifo_wr_en;
@@ -67,55 +72,20 @@ module rgmii_bridge #(
         .empty    (fifo_empty)
     );
 
-    // ---- 读侧 (125MHz 域) ----
-    // IP 默认非 FWFT 模式: rd_en 有效后下一拍 dout 数据有效
-    reg [BURST_WIDTH-1:0] burst_hold;
-
-    always @(posedge clk_125m or negedge rst_n) begin
-        if (!rst_n) begin
-            fifo_rd_en      <= 1'b0;
-            fifo_data_ready <= 1'b0;
-            burst_hold      <= {BURST_WIDTH{1'b0}};
-        end else begin
-            fifo_data_ready <= 1'b0;  // 默认: 脉冲信号
-
-            // FIFO 有数据 且 空闲 且 未等待读取结果 → 发起读
-            if (!fifo_empty && !preloaded && !fifo_rd_en) begin
-                fifo_rd_en <= 1'b1;
-            end else begin
-                fifo_rd_en <= 1'b0;
-            end
-
-            // 读使能后下一拍: dout 数据有效, 寄存并置位就绪标志
-            if (fifo_rd_en) begin
-                burst_hold      <= fifo_dout;
-                fifo_data_ready <= 1'b1;
-            end
-        end
-    end
-
-    // =====================================================================
-    // 125MHz 域: 帧封装 + RGMII_tx 控制
-    // =====================================================================
-    //
-    // 原理:
-    //   tx_req = (next_state == DATA), 在 RGMII_tx 即将进入 DATA 状态时
-    //   提前一拍拉高。bridge 预装帧首字节，在 tx_req 每拍推进一字节。
+    // ---- 读侧 (125MHz 域) + 帧封装 + RGMII_tx 控制 ----
+    // IP 非 FWFT + Embedded Register: rd_en 有效后 2 拍 dout 数据有效.
+    // fifo_rd_en_d1 直接触发帧组装, fifo_dout 直接参与 payload 组帧.
     //
     // 时序:
-    //   Cycle 0: tx_start=1, 预装 frame_buf[0] → tx_data
-    //   Cycle 1-7: preamble (7×0x55), tx_data 保持 frame_buf[0]
-    //   Cycle 8: tx_req=1, tx_byte ← frame_buf[0], 同时加载 frame_buf[1]
-    //   Cycle 9: tx_req=1, tx_byte ← frame_buf[1], 加载 frame_buf[2]
+    //   Cycle 0: rd_en = 1 (发起读)
+    //   Cycle 1: rd_en_d1 = 1 → 组装帧, 预装首字节, tx_start=1
+    //   Cycle 2-8: preamble (7×0x55), tx_data 保持首字节
+    //   Cycle 9: tx_req=1, tx_byte ← frame_buf[0], 加载 frame_buf[1]
     //   ...
-    //   Cycle 8+N-1: tx_req=0, tx_byte ← 最后字节, 帧结束
+    //   Cycle 9+N-1: tx_req=0, 最后一字节, preloaded=0
     //
+    reg fifo_rd_en_d1 = 1'b0;  // rd_en 延迟 1 拍, 对齐 dout (Embedded Register)
 
-    reg [7:0]   frame_buf [0:FRAME_BYTES-1];  // 帧缓冲区 (74 bytes)
-    reg [6:0]   frame_idx;                     // 当前输出字节索引
-    reg         tx_start;
-    reg [7:0]   tx_data;
-    reg         preloaded;                      // 首字节已预装 / 帧发送中标志
     integer     i;
 
     wire        tx_req;
@@ -134,22 +104,28 @@ module rgmii_bridge #(
     // UDP Length = UDP头(8) + Payload(BURST_BYTES) = 8 + 32 = 40
     localparam [15:0] UDP_LENGTH = 8 + BURST_BYTES;  // 40
 
-    // =====================================================================
-    // 帧封装 + RGMII_tx 发送控制 (125MHz 域)
-    // =====================================================================
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
-            tx_data    <= 8'd0;
-            tx_start   <= 1'b0;
-            frame_idx  <= 7'd0;
-            preloaded  <= 1'b0;
+            fifo_rd_en_d1   <= 1'b0;
+            tx_data          <= 8'd0;
+            tx_start         <= 1'b0;
+            frame_idx        <= 7'd0;
+            preloaded        <= 1'b0;
             for (i = 0; i < FRAME_BYTES; i = i + 1)
                 frame_buf[i] <= 8'd0;
         end else begin
-            tx_start <= 1'b0;
+            tx_start       <= 1'b0;
+            fifo_rd_en_d1  <= fifo_rd_en;
 
-            // ---- burst_hold 就绪: 组装帧 + 发送 ----
-            if (fifo_data_ready) begin
+            // ---- FIFO 读控制: 空闲且 FIFO 非空 → 发起读 ----
+            if (!fifo_empty && !preloaded && !fifo_rd_en) begin
+                fifo_rd_en <= 1'b1;
+            end else begin
+                fifo_rd_en <= 1'b0;
+            end
+
+            // ---- rd_en 后 2 拍, dout 有效: 组装帧 + 发送 ----
+            if (fifo_rd_en_d1) begin
                 // MAC 头 (14 bytes)
                 frame_buf[0]  <= 8'hFF;    // DMAC[0]  broadcast
                 frame_buf[1]  <= 8'hFF;    // DMAC[1]
@@ -157,7 +133,7 @@ module rgmii_bridge #(
                 frame_buf[3]  <= 8'hFF;    // DMAC[3]
                 frame_buf[4]  <= 8'hFF;    // DMAC[4]
                 frame_buf[5]  <= 8'hFF;    // DMAC[5]
-                frame_buf[6]  <= 8'h02;    // SMAC[0]  02:00:00:00:00:01
+                frame_buf[6]  <= 8'h02;    // SMAC[0]
                 frame_buf[7]  <= 8'h00;    // SMAC[1]
                 frame_buf[8]  <= 8'h00;    // SMAC[2]
                 frame_buf[9]  <= 8'h00;    // SMAC[3]
@@ -169,16 +145,16 @@ module rgmii_bridge #(
                 // IP 头 (20 bytes)
                 frame_buf[14] <= 8'h45;                     // Ver=4, IHL=5
                 frame_buf[15] <= 8'h00;                     // DSCP/ECN
-                frame_buf[16] <= IP_TOTAL_LEN[15:8];        // Total Length hi
-                frame_buf[17] <= IP_TOTAL_LEN[7:0];         // Total Length lo
+                frame_buf[16] <= IP_TOTAL_LEN[15:8];
+                frame_buf[17] <= IP_TOTAL_LEN[7:0];
                 frame_buf[18] <= 8'h00;                     // ID
                 frame_buf[19] <= 8'h00;
                 frame_buf[20] <= 8'h00;                     // Flags/Frag
                 frame_buf[21] <= 8'h00;
                 frame_buf[22] <= 8'h40;                     // TTL = 64
                 frame_buf[23] <= 8'h11;                     // Protocol = UDP
-                frame_buf[24] <= IP_CHECKSUM[15:8];         // Header Checksum hi
-                frame_buf[25] <= IP_CHECKSUM[7:0];          // Header Checksum lo
+                frame_buf[24] <= IP_CHECKSUM[15:8];
+                frame_buf[25] <= IP_CHECKSUM[7:0];
                 frame_buf[26] <= 8'hC0;                     // Src IP = 192.168.1.2
                 frame_buf[27] <= 8'hA8;
                 frame_buf[28] <= 8'h01;
@@ -193,19 +169,19 @@ module rgmii_bridge #(
                 frame_buf[35] <= 8'hD2;
                 frame_buf[36] <= 8'h04;                     // Dst Port = 1234
                 frame_buf[37] <= 8'hD2;
-                frame_buf[38] <= UDP_LENGTH[15:8];          // UDP Length hi
-                frame_buf[39] <= UDP_LENGTH[7:0];           // UDP Length lo
+                frame_buf[38] <= UDP_LENGTH[15:8];
+                frame_buf[39] <= UDP_LENGTH[7:0];
                 frame_buf[40] <= 8'h00;                     // Checksum = 0
                 frame_buf[41] <= 8'h00;
 
-                // Payload: 来自 burst_hold (FIFO 读出后已寄存) (MSB first)
+                // Payload: 直接取自 fifo_dout (Embedded Register 已寄存, MSB first)
                 for (i = 0; i < BURST_BYTES; i = i + 1) begin
                     frame_buf[HDR_BYTES + i] <=
-                        burst_hold[(BURST_BYTES - 1 - i) * 8 +: 8];
+                        fifo_dout[(BURST_BYTES - 1 - i) * 8 +: 8];
                 end
 
                 // 预装首字节, 触发发送
-                tx_data    <= burst_hold[BURST_WIDTH-1 -: 8];
+                tx_data    <= fifo_dout[BURST_WIDTH-1 -: 8];
                 tx_start   <= 1'b1;
                 frame_idx  <= 7'd1;
                 preloaded  <= 1'b1;

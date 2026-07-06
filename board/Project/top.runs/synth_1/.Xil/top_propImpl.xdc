@@ -141,7 +141,3 @@ set_property src_info {type:XDC file:1 line:93 export:INPUT save:INPUT read:READ
 set_property PACKAGE_PIN V2  [get_ports rgmii_rxd2]
 set_property src_info {type:XDC file:1 line:94 export:INPUT save:INPUT read:READ} [current_design]
 set_property PACKAGE_PIN U2  [get_ports rgmii_rxd3]
-set_property src_info {type:XDC file:1 line:95 export:INPUT save:INPUT read:READ} [current_design]
-set_property PACKAGE_PIN AA1 [get_ports rgmii_mdc]
-set_property src_info {type:XDC file:1 line:96 export:INPUT save:INPUT read:READ} [current_design]
-set_property PACKAGE_PIN AB1 [get_ports rgmii_mdio]

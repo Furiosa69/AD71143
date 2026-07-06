@@ -92,9 +92,6 @@ set_property PACKAGE_PIN U5  [get_ports rgmii_rxd0]
 set_property PACKAGE_PIN T5  [get_ports rgmii_rxd1]
 set_property PACKAGE_PIN V2  [get_ports rgmii_rxd2]
 set_property PACKAGE_PIN U2  [get_ports rgmii_rxd3]
-set_property PACKAGE_PIN AA1 [get_ports rgmii_mdc]
-set_property PACKAGE_PIN AB1 [get_ports rgmii_mdio]
-
 #################################################################################################
 ## IOSTANDARD
 #################################################################################################
@@ -188,8 +185,9 @@ set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rxd0]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rxd1]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rxd2]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rxd3]
-set_property IOSTANDARD LVCMOS33 [get_ports rgmii_mdc]
-set_property IOSTANDARD LVCMOS33 [get_ports rgmii_mdio]
+
+set_property CFGBVS VCCO [current_design]
+set_property CONFIG_VOLTAGE 3.3 [current_design]
 
 #################################################################################################
 ## BITSTREAM
