@@ -53,11 +53,11 @@ module ad71143_data_rx_dual #(
     // =========================================================================
     // 合并输出 (clk_sys 域)
     // =========================================================================
-    output wire         line_done,          // 两 Panel 均完成一行
-    output wire         header_ok,          // 两 Panel Header 均 0x0A
+    output wire         line_done,           // 两 Panel 均完成一行
+    output wire         header_ok,           // 两 Panel Header 均 0x0A
     output reg          merged_valid = 1'b0, // 合并数据有效 (单周期脉冲)
-    output reg  [255:0] merged_burst,       // {Panel1[127:0], Panel0[127:0]}
-    output reg  [6:0]   merged_burst_index, // Burst 编号
+    output reg  [255:0] merged_burst,        // {Panel1[127:0], Panel0[127:0]}
+    output reg  [6:0]   merged_burst_index,  // Burst 编号
 
     // =========================================================================
     // 调试
@@ -90,9 +90,9 @@ module ad71143_data_rx_dual #(
     ad71143_data_rx #(
         .MUTE_MIN(MUTE_MIN)
     ) u_panel0 (
-        .clk_sys              (clk_sys),
-        .rst_n                (rst_n),
-        .sync_in              (sync_in),
+        .clk_sys              (clk_sys  ),
+        .rst_n                (rst_n    ),
+        .sync_in              (sync_in  ),
         .aclk_done            (aclk_done),
 
         .dclk_p_A             (dclk_p_A0),
@@ -129,9 +129,9 @@ module ad71143_data_rx_dual #(
     ad71143_data_rx #(
         .MUTE_MIN(MUTE_MIN)
     ) u_panel1 (
-        .clk_sys              (clk_sys),
-        .rst_n                (rst_n),
-        .sync_in              (sync_in),
+        .clk_sys              (clk_sys  ),
+        .rst_n                (rst_n    ),
+        .sync_in              (sync_in  ),
         .aclk_done            (aclk_done),
 
         .dclk_p_A             (dclk_p_A1),

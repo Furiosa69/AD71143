@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Tue Jul  7 10:40:19 2026
+| Date         : Tue Jul  7 14:28:43 2026
 | Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
 | Design       : top
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |    34 |
-|    Minimum number of control sets                        |    34 |
+| Total control sets                                       |    36 |
+|    Minimum number of control sets                        |    36 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |    85 |
+| Unused register locations in slices containing registers |    97 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,8 +39,8 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |    34 |
-| >= 0 to < 4        |     2 |
+| Total control sets |    36 |
+| >= 0 to < 4        |     4 |
 | >= 4 to < 6        |     2 |
 | >= 6 to < 8        |     7 |
 | >= 8 to < 10       |     2 |
@@ -58,55 +58,57 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |              41 |           19 |
-| No           | No                    | Yes                    |              94 |           49 |
+| No           | No                    | No                     |              41 |           14 |
+| No           | No                    | Yes                    |              98 |           52 |
 | No           | Yes                   | No                     |              14 |            5 |
 | Yes          | No                    | No                     |              20 |            5 |
-| Yes          | No                    | Yes                    |            1450 |          404 |
-| Yes          | Yes                   | No                     |              32 |            8 |
+| Yes          | No                    | Yes                    |            1450 |          391 |
+| Yes          | Yes                   | No                     |              32 |            9 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
 4. Detailed Control Set Information
 -----------------------------------
 
-+-----------------------+-------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+----------------+--------------+
-|      Clock Signal     |                                                   Enable Signal                                                   |       Set/Reset Signal      | Slice Load Count | Bel Load Count | Bels / Slice |
-+-----------------------+-------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+----------------+--------------+
-|  u_mmcm/inst/clk_out2 | u_spi_p1/spi_sdi_i_1__0_n_0                                                                                       | u_data_rx_dual/u_panel0/key |                1 |              1 |         1.00 |
-|  u_mmcm/inst/clk_out2 | u_spi_p0/spi_sdi                                                                                                  | u_data_rx_dual/u_panel0/key |                1 |              1 |         1.00 |
-|  u_mmcm/inst/clk_out2 | cfg_reg_idx[3]_i_1_n_0                                                                                            | u_data_rx_dual/u_panel0/key |                2 |              4 |         2.00 |
-|  u_mmcm/inst/clk_out1 | u_nt39565d/FSM_sequential_state[3]_i_1_n_0                                                                        | u_data_rx_dual/u_panel0/key |                3 |              4 |         1.33 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/burst_cnt[5]_i_1_n_0                                                                      | u_data_rx_dual/u_panel0/key |                2 |              6 |         3.00 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/burst_cnt[5]_i_1__0_n_0                                                                   | u_data_rx_dual/u_panel0/key |                2 |              6 |         3.00 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/mute_cnt[6]_i_1__0_n_0                                                                    | u_data_rx_dual/u_panel0/key |                2 |              7 |         3.50 |
-|  u_mmcm/inst/clk_out1 | FSM_onehot_top_state[6]_i_1_n_0                                                                                   | u_data_rx_dual/u_panel0/key |                2 |              7 |         3.50 |
-|  u_mmcm/inst/clk_out1 | gap_cnt0                                                                                                          | u_data_rx_dual/u_panel0/key |                2 |              7 |         3.50 |
-|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/E[0]                                                                                    | u_data_rx_dual/u_panel0/key |                3 |              7 |         2.33 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/mute_cnt[6]_i_1_n_0                                                                       | u_data_rx_dual/u_panel0/key |                2 |              7 |         3.50 |
-|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gras.rsts/E[0] |                             |                3 |              8 |         2.67 |
-|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/fifo_rd_en_d1_reg_0[0]                                                                  | u_data_rx_dual/u_panel0/key |                3 |              8 |         2.67 |
-|  u_mmcm/inst/clk_out2 | u_ad71143_ctrl/line_cnt_next                                                                                      | u_data_rx_dual/u_panel0/key |                4 |             10 |         2.50 |
-|  u_mmcm/inst/clk_out1 | u_nt39565d/cpv_i_1_n_0                                                                                            | u_data_rx_dual/u_panel0/key |                6 |             10 |         1.67 |
-|  u_mmcm/inst/clk_out2 | u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/E[0] |                             |                2 |             12 |         6.00 |
-|  u_mmcm/inst/clk_out1 |                                                                                                                   | u_data_rx_dual/u_panel0/key |                6 |             13 |         2.17 |
-|  u_mmcm/inst/clk_out1 | u_nt39565d/shift_cnt[15]_i_1_n_0                                                                                  | u_data_rx_dual/u_panel0/key |                3 |             16 |         5.33 |
-|  u_mmcm/inst/clk_out1 | u_nt39565d/cnt[15]_i_1_n_0                                                                                        | u_data_rx_dual/u_panel0/key |                4 |             16 |         4.00 |
-|  u_mmcm/inst/clk_out3 |                                                                                                                   | u_data_rx_dual/u_panel0/key |                8 |             17 |         2.12 |
-|  u_mmcm/inst/clk_out2 | u_spi_p0/sel                                                                                                      | u_data_rx_dual/u_panel0/key |                5 |             20 |         4.00 |
-|  u_mmcm/inst/clk_out2 | u_spi_p1/shift_reg[15]_i_1__0_n_0                                                                                 | u_data_rx_dual/u_panel0/key |                5 |             20 |         4.00 |
-|  u_mmcm/inst/clk_out3 |                                                                                                                   |                             |                7 |             20 |         2.86 |
-|  u_mmcm/inst/clk_out2 |                                                                                                                   |                             |               12 |             21 |         1.75 |
-|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/Byte_cnt                                                                                | u_data_rx_dual/u_panel0/key |                8 |             32 |         4.00 |
-|  u_mmcm/inst/clk_out2 |                                                                                                                   | u_data_rx_dual/u_panel0/key |               40 |             78 |         1.95 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/E[0]                                                                                      | u_data_rx_dual/u_panel0/key |               43 |            128 |         2.98 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/E[0]                                                                                      | u_data_rx_dual/u_panel0/key |               41 |            128 |         3.12 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/merged_burst[127]_i_1__0_n_0                                                              | u_data_rx_dual/u_panel0/key |               34 |            128 |         3.76 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/merged_burst[127]_i_1_n_0                                                                 | u_data_rx_dual/u_panel0/key |               42 |            128 |         3.05 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/lane_b_shift                                                                              | u_data_rx_dual/u_panel0/key |               31 |            134 |         4.32 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/lane_b_shift_0                                                                            | u_data_rx_dual/u_panel0/key |               28 |            134 |         4.79 |
-|  u_mmcm/inst/clk_out2 | u_data_rx_dual/p0_captured1                                                                                       | u_data_rx_dual/u_panel0/key |               75 |            256 |         3.41 |
-|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/fifo_rd_en_d1                                                                                      | u_data_rx_dual/u_panel0/key |               58 |            257 |         4.43 |
-+-----------------------+-------------------------------------------------------------------------------------------------------------------+-----------------------------+------------------+----------------+--------------+
++-----------------------+-------------------------------------------------------------------------------------------------------------------+--------------------------------------------+------------------+----------------+--------------+
+|      Clock Signal     |                                                   Enable Signal                                                   |              Set/Reset Signal              | Slice Load Count | Bel Load Count | Bels / Slice |
++-----------------------+-------------------------------------------------------------------------------------------------------------------+--------------------------------------------+------------------+----------------+--------------+
+|  u_mmcm/inst/clk_out2 | u_spi_p1/spi_sdi_i_1__0_n_0                                                                                       | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                1 |              1 |         1.00 |
+|  u_mmcm/inst/clk_out2 | u_spi_p0/spi_sdi                                                                                                  | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                1 |              1 |         1.00 |
+|  u_mmcm/inst/clk_out2 |                                                                                                                   | u_rgmii_bridge/u_rgmii_tx/key              |                1 |              2 |         2.00 |
+|  u_mmcm/inst/clk_out1 |                                                                                                                   | u_rgmii_bridge/u_rgmii_tx/key              |                1 |              2 |         2.00 |
+|  u_mmcm/inst/clk_out1 | u_nt39565d/FSM_sequential_state[3]_i_1_n_0                                                                        | u_nt39565d/rst_sync2_50m_reg               |                4 |              4 |         1.00 |
+|  u_mmcm/inst/clk_out2 | cfg_reg_idx[3]_i_1_n_0                                                                                            | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                1 |              4 |         4.00 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/burst_cnt[5]_i_1__0_n_0                                                                   | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                2 |              6 |         3.00 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/burst_cnt[5]_i_1_n_0                                                                      | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                3 |              6 |         2.00 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/mute_cnt[6]_i_1__0_n_0                                                                    | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                2 |              7 |         3.50 |
+|  u_mmcm/inst/clk_out1 | gap_cnt0                                                                                                          | u_nt39565d/rst_sync2_50m_reg               |                2 |              7 |         3.50 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/mute_cnt[6]_i_1_n_0                                                                       | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                2 |              7 |         3.50 |
+|  u_mmcm/inst/clk_out1 | FSM_onehot_top_state[6]_i_1_n_0                                                                                   | u_nt39565d/rst_sync2_50m_reg               |                1 |              7 |         7.00 |
+|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/E[0]                                                                                    | u_rgmii_bridge/u_rgmii_tx/key              |                4 |              7 |         1.75 |
+|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.rd/gras.rsts/E[0] |                                            |                2 |              8 |         4.00 |
+|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/fifo_rd_en_d1_reg_0[0]                                                                  | u_rgmii_bridge/u_rgmii_tx/key              |                3 |              8 |         2.67 |
+|  u_mmcm/inst/clk_out2 | u_ad71143_ctrl/line_cnt_next                                                                                      | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                3 |             10 |         3.33 |
+|  u_mmcm/inst/clk_out1 | u_nt39565d/cpv_i_1_n_0                                                                                            | u_nt39565d/rst_sync2_50m_reg               |                4 |             10 |         2.50 |
+|  u_mmcm/inst/clk_out2 | u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/gconvfifo.rf/grf.rf/gntv_or_sync_fifo.gl0.wr/gwas.wsts/E[0] |                                            |                3 |             12 |         4.00 |
+|  u_mmcm/inst/clk_out1 |                                                                                                                   | u_nt39565d/rst_sync2_50m_reg               |                7 |             13 |         1.86 |
+|  u_mmcm/inst/clk_out1 | u_nt39565d/cnt[15]_i_1_n_0                                                                                        | u_nt39565d/rst_sync2_50m_reg               |                4 |             16 |         4.00 |
+|  u_mmcm/inst/clk_out1 | u_nt39565d/shift_cnt[15]_i_1_n_0                                                                                  | u_nt39565d/rst_sync2_50m_reg               |                2 |             16 |         8.00 |
+|  u_mmcm/inst/clk_out3 |                                                                                                                   | u_rgmii_bridge/u_rgmii_tx/key              |                8 |             17 |         2.12 |
+|  u_mmcm/inst/clk_out2 | u_spi_p0/sel                                                                                                      | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                5 |             20 |         4.00 |
+|  u_mmcm/inst/clk_out3 |                                                                                                                   |                                            |                7 |             20 |         2.86 |
+|  u_mmcm/inst/clk_out2 | u_spi_p1/shift_reg[15]_i_1__0_n_0                                                                                 | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |                5 |             20 |         4.00 |
+|  u_mmcm/inst/clk_out2 |                                                                                                                   |                                            |                7 |             21 |         3.00 |
+|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/u_rgmii_tx/Byte_cnt                                                                                | u_rgmii_bridge/u_rgmii_tx/key              |                9 |             32 |         3.56 |
+|  u_mmcm/inst/clk_out2 |                                                                                                                   | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               40 |             78 |         1.95 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/merged_burst[127]_i_1__0_n_0                                                              | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               44 |            128 |         2.91 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/merged_burst[127]_i_1_n_0                                                                 | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               35 |            128 |         3.66 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/E[0]                                                                                      | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               34 |            128 |         3.76 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/E[0]                                                                                      | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               44 |            128 |         2.91 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel0/lane_b_shift_0                                                                            | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               31 |            134 |         4.32 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/u_panel1/lane_b_shift                                                                              | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               28 |            134 |         4.79 |
+|  u_mmcm/inst/clk_out2 | u_data_rx_dual/p0_captured1                                                                                       | u_data_rx_dual/u_panel0/rst_sync2_100m_reg |               70 |            256 |         3.66 |
+|  u_mmcm/inst/clk_out3 | u_rgmii_bridge/fifo_rd_en_d1                                                                                      | u_rgmii_bridge/u_rgmii_tx/key              |               56 |            257 |         4.59 |
++-----------------------+-------------------------------------------------------------------------------------------------------------------+--------------------------------------------+------------------+----------------+--------------+
 
 

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Tue Jul  7 10:40:37 2026
+| Date         : Tue Jul  7 14:29:01 2026
 | Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
 | Design       : top
@@ -35,16 +35,14 @@ Table of Contents
 -----------------
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell u_data_rx_dual/u_panel0/FSM_sequential_state[2]_i_2__0, with 2 or more inputs, drives asynchronous preset/clear pin(s) gap_cnt_reg[5]/CLR, gap_cnt_reg[6]/CLR, init_done_sync1_reg/CLR,
-init_done_sync2_reg/CLR, line_start_sync1_reg/CLR,
-line_start_sync2_reg/CLR, line_start_sync3_reg/CLR,
-u_ad71143_ctrl/roic_reset_reg_reg_lopt_replica/CLR,
-u_ad71143_ctrl/sync_reg_reg_lopt_replica/PRE,
-u_ad71143_ctrl/sync_reg_reg_lopt_replica_2/PRE,
-u_nt39565d/oe1_reg_lopt_replica/PRE, u_nt39565d/oe1_reg_lopt_replica_2/PRE,
-u_nt39565d/oe1_reg_lopt_replica_3/PRE,
-u_nt39565d/stv1_reg_lopt_replica/CLR, u_nt39565d/stv2_reg_lopt_replica/CLR
- (the first 15 of 1544 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell u_rgmii_bridge/u_rgmii_tx/FSM_sequential_state[1]_i_1__3, with 2 or more inputs, drives asynchronous preset/clear pin(s) rst_sync1_100m_reg/CLR, rst_sync1_50m_reg/CLR, rst_sync2_100m_reg/CLR,
+rst_sync2_50m_reg/CLR, u_rgmii_bridge/frame_idx_reg[6]/CLR,
+u_rgmii_bridge/preloaded_reg/CLR, u_rgmii_bridge/tx_data_reg[0]/CLR,
+u_rgmii_bridge/tx_data_reg[1]/CLR, u_rgmii_bridge/tx_data_reg[2]/CLR,
+u_rgmii_bridge/tx_data_reg[3]/CLR, u_rgmii_bridge/tx_data_reg[4]/CLR,
+u_rgmii_bridge/tx_data_reg[5]/CLR, u_rgmii_bridge/tx_data_reg[6]/CLR,
+u_rgmii_bridge/tx_data_reg[7]/CLR, u_rgmii_bridge/tx_start_reg/CLR
+ (the first 15 of 279 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 TIMING-18#1 Warning
