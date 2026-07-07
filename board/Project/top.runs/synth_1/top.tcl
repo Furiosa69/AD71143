@@ -97,15 +97,14 @@ read_verilog -library xil_defaultlib {
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v
 }
+read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
+set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/fifo_generator_0.xdc]
+set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_clocks.xdc]
+
 read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xci
 set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0_board.xdc]
 set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xdc]
 set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0_ooc.xdc]
-
-read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
-set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/fifo_generator_0.xdc]
-set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_clocks.xdc]
-set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -122,6 +121,8 @@ set_property used_in_implementation false [get_files /home/furiosa/Projects/shit
 read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc
 set_property used_in_implementation false [get_files /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc]
 
+read_xdc dont_touch.xdc
+set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]
 

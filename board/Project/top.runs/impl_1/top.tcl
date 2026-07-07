@@ -138,8 +138,8 @@ OPTRACE "set parameters" START { }
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp
-  read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xci
   read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
+  read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc
@@ -301,52 +301,4 @@ OPTRACE "route_design write_checkpoint" END { }
 
 OPTRACE "route_design misc" END { }
 OPTRACE "Phase: Route Design" END { }
-OPTRACE "Phase: Write Bitstream" START { ROLLUP_AUTO }
-OPTRACE "write_bitstream setup" START { }
-start_step write_bitstream
-set ACTIVE_STEP write_bitstream
-set rc [catch {
-  create_msg_db write_bitstream.pb
-OPTRACE "read constraints: write_bitstream" START { }
-OPTRACE "read constraints: write_bitstream" END { }
-  set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
-  catch { write_mem_info -force -no_partial_mmi top.mmi }
-OPTRACE "write_bitstream setup" END { }
-OPTRACE "write_bitstream" START { }
-  write_bitstream -force top.bit 
-OPTRACE "write_bitstream" END { }
-OPTRACE "write_bitstream misc" START { }
-OPTRACE "read constraints: write_bitstream_post" START { }
-OPTRACE "read constraints: write_bitstream_post" END { }
-  catch {write_debug_probes -quiet -force top}
-  catch {file copy -force top.ltx debug_nets.ltx}
-OPTRACE "Write Bitstream: post hook" START { }
-  set src_rc [catch { 
-    puts "source /home/furiosa/Projects/shitatechnology/work/ctrl/board/TCL/write_cfgmem.tcl"
-    source /home/furiosa/Projects/shitatechnology/work/ctrl/board/TCL/write_cfgmem.tcl
-  } _RESULT] 
-  if {$src_rc} { 
-    set tool_flow [get_property -quiet TOOL_FLOW [current_project -quiet]]
-    if { $tool_flow eq {SDx} } { 
-      send_gid_msg -id 2 -ssname VPL_TCL -severity ERROR $_RESULT
-      send_gid_msg -id 3 -ssname VPL_TCL -severity ERROR "sourcing script /home/furiosa/Projects/shitatechnology/work/ctrl/board/TCL/write_cfgmem.tcl failed"
-    } else {
-      send_msg_id runtcl-1 status "$_RESULT"
-      send_msg_id runtcl-2 status "sourcing script /home/furiosa/Projects/shitatechnology/work/ctrl/board/TCL/write_cfgmem.tcl failed"
-    }
-    return -code error
-  }
-OPTRACE "Write Bitstream: post hook" END { }
-  close_msg_db -file write_bitstream.pb
-} RESULT]
-if {$rc} {
-  step_failed write_bitstream
-  return -code error $RESULT
-} else {
-  end_step write_bitstream
-  unset ACTIVE_STEP 
-}
-
-OPTRACE "write_bitstream misc" END { }
-OPTRACE "Phase: Write Bitstream" END { }
 OPTRACE "impl_1" END { }

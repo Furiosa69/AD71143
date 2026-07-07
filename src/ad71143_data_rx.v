@@ -59,7 +59,7 @@ module ad71143_data_rx (
     localparam integer TOTAL_BURSTS = 34;  // header + 32 data + config bursts
     parameter  integer MUTE_MIN    = 113;  // tBURST=1765ns: 177cyc-64=113 @ 100MHz
 
-    reg  [2:0] state;
+   (* MAX_FANOUT = "300" *) reg  [2:0] state;
     reg  [2:0] state_next;
     reg        sync_d1;
     reg  [9:0] mute_cnt;
