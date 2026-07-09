@@ -17,9 +17,7 @@
 //   KEY (T3) = 复位 (按下=低电平复位, 松开=运行)
 // =============================================================================
 
-`timescale 1ns / 1ps
-
-module spi_test_top (
+module top (
     input  wire         sys_clk_50m,    // 板载 50MHz 晶振 → FPGA pin R4
     input  wire         key_n,          // 按键, 低有效, FPGA pin T3 (10K 上拉)
     output wire         spi_cs,         // SPI 片选 → J1 pin 9  (M22)
@@ -37,56 +35,15 @@ module spi_test_top (
     wire        pll_locked;     // PLL 锁定指示
     wire        rst_n;          // 内部复位 (PLL 锁定 + 按键)
 
+
+
     // 复位: PLL 锁定后, 按键释放 = 运行
     assign rst_n = pll_locked && key_n;
-
-    // =========================================================================
-    // PLLE2_BASE: 50MHz → 100MHz
-    //   CLKIN1 = 50MHz (周期 20ns)
-    //   VCO = 50 * 20 / 1 = 1000MHz (在 Artix-7 -2 允许范围 800~1600MHz 内)
-    //   CLKOUT0 = 1000 / 10 = 100MHz
-    // =========================================================================
-    wire clk_fb;
-
-    PLLE2_BASE #(
-        .BANDWIDTH          ("OPTIMIZED"),
-        .CLKFBOUT_MULT      (20),           // VCO = 50 * 20 / 1 = 1000 MHz
-        .CLKFBOUT_PHASE     (0.0),
-        .CLKIN1_PERIOD      (20.0),         // 50 MHz 输入
-        .CLKOUT0_DIVIDE     (10),           // 1000 / 10 = 100 MHz
-        .CLKOUT0_DUTY_CYCLE (0.5),
-        .CLKOUT0_PHASE      (0.0),
-        .CLKOUT1_DIVIDE     (1),
-        .CLKOUT1_DUTY_CYCLE (0.5),
-        .CLKOUT1_PHASE      (0.0),
-        .CLKOUT2_DIVIDE     (1),
-        .CLKOUT2_DUTY_CYCLE (0.5),
-        .CLKOUT2_PHASE      (0.0),
-        .CLKOUT3_DIVIDE     (1),
-        .CLKOUT3_DUTY_CYCLE (0.5),
-        .CLKOUT3_PHASE      (0.0),
-        .CLKOUT4_DIVIDE     (1),
-        .CLKOUT4_DUTY_CYCLE (0.5),
-        .CLKOUT4_PHASE      (0.0),
-        .CLKOUT5_DIVIDE     (1),
-        .CLKOUT5_DUTY_CYCLE (0.5),
-        .CLKOUT5_PHASE      (0.0),
-        .DIVCLK_DIVIDE      (1),
-        .REF_JITTER1        (0.010),
-        .STARTUP_WAIT       ("FALSE")
-    ) pll_inst (
-        .CLKIN1             (sys_clk_50m),
-        .CLKOUT0            (clk_100m),
-        .CLKOUT1            (),
-        .CLKOUT2            (),
-        .CLKOUT3            (),
-        .CLKOUT4            (),
-        .CLKOUT5            (),
-        .CLKFBOUT           (clk_fb),
-        .CLKFBIN            (clk_fb),
-        .LOCKED             (pll_locked),
-        .PWRDWN             (1'b0),
-        .RST                (1'b0)
+    
+    clk_wiz_0   u_mmcm(
+        .clk_in1    (sys_clk_50m),
+        .clk_out1   (clk_100m),
+        .locked     (pll_locked)
     );
 
     // =========================================================================
@@ -124,27 +81,28 @@ module spi_test_top (
     wire [3:0]  cfg_addr_lut;
     wire [9:0]  cfg_data_lut;
 
-    assign cfg_addr_lut =
-        (reg_index == 3'd0) ? 4'd3  :
-        (reg_index == 3'd1) ? 4'd0  :
-        (reg_index == 3'd2) ? 4'd1  :
-        (reg_index == 3'd3) ? 4'd2  :
-        (reg_index == 3'd4) ? 4'd4  :
-        (reg_index == 3'd5) ? 4'd5  :
-        (reg_index == 3'd6) ? 4'd6  :
-        (reg_index == 3'd7) ? 4'd7  :
-        4'd0;
+  assign cfg_addr_lut =
+      (reg_index == 3'd0)  ? 4'd3  :   // Reg3: REFDAC
+      (reg_index == 3'd1)  ? 4'd0  :   // Reg0: PWR + IFS
+      (reg_index == 3'd2)  ? 4'd1  :   // Reg1: LPF + options
+      (reg_index == 3'd3)  ? 4'd2  :   // Reg2: Mode control
+      (reg_index == 3'd4)  ? 4'd4  :   // Reg4: INTRST timing
+      (reg_index == 3'd5)  ? 4'd5  :   // Reg5: CDS1 timing
+      (reg_index == 3'd6)  ? 4'd6  :   // Reg6: CDS2 timing
+      (reg_index == 3'd7)  ? 4'd7  :   // Reg7: FA timing
+      4'd0;
+  
+  assign cfg_data_lut =
+      (reg_index == 3'd0)  ? 10'h086 :  // Reg3:  AZEN=0, REFDAC=134, ~2.6V
+      (reg_index == 3'd1)  ? 10'h014 :  // Reg0:  PWR=Normal(000), IFS=20
+      (reg_index == 3'd2)  ? 10'h0A0 :  // Reg1:  LPF=3.9μs(01), CDS2_RESETEN=1
+      (reg_index == 3'd3)  ? 10'h027 :  // Reg2:  RNDOMIZE=1, DOUTMODE=1, ECHOCLK=1, Pipeline=1
+      (reg_index == 3'd4)  ? 10'h082 :  // Reg4:  INTRST_C=8(ACLK8), INTRST_O=2(ACLK2)
+      (reg_index == 3'd5)  ? 10'h013 :  // Reg5:  CDS1_C=1(ACLK1), CDS1_O=3(ACLK3)
+      (reg_index == 3'd6)  ? 10'h046 :  // Reg6:  CDS2_C=4(ACLK4), CDS2_O=6(ACLK6)
+      (reg_index == 3'd7)  ? 10'h025 :  // Reg7:  FA_CDS1=2(ACLK2), FA_CDS2=5(ACLK5)
+      10'h000;
 
-    assign cfg_data_lut =
-        (reg_index == 3'd0) ? 10'h040 :  // REFDAC=64 → ~1.5V
-        (reg_index == 3'd1) ? 10'h014 :  // PWR=Normal, IFS=20
-        (reg_index == 3'd2) ? 10'h230 :  // LPF=3.9μs, CDS2_RESETEN
-        (reg_index == 3'd3) ? 10'h003 :  // Pipeline=1, ECHOCLK=1
-        (reg_index == 3'd4) ? 10'h070 :  // INTRST
-        (reg_index == 3'd5) ? 10'h001 :  // CDS1
-        (reg_index == 3'd6) ? 10'h005 :  // CDS2
-        (reg_index == 3'd7) ? 10'h002 :  // FA
-        10'h000;
 
     // =========================================================================
     // 测试状态定义
@@ -330,5 +288,13 @@ module spi_test_top (
 
     assign led0 = led0_reg;
     assign led1 = led1_reg;
+    
+    ila_0 u_ila (
+      .clk    (clk_100m),
+      .probe0 ({spi_cs, spi_sck, spi_sdi, spi_sdo}),                         // [3:0] SPI 总线
+      .probe1 (spi_rdback),                                                    // [9:0] 读回数据
+      .probe2 ({test_state[3:0], reg_index[2:0], spi_done, pll_locked, rst_n}) // [9:0] 状态
+    );
 
+    
 endmodule

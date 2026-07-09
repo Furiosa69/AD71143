@@ -140,6 +140,7 @@ OPTRACE "add files" START { }
   add_files -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp
   read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
   read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xci
+  read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/ila_0_1/ila_0.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/pin.xdc
   read_xdc /home/furiosa/Projects/shitatechnology/work/ctrl/board/XDC/timing.xdc

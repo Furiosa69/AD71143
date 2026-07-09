@@ -106,6 +106,12 @@ set_property used_in_implementation false [get_files -all /home/furiosa/Projects
 set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0.xdc]
 set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0_ooc.xdc]
 
+read_ip -quiet /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.srcs/sources_1/ip/ila_0_1/ila_0.xci
+set_property used_in_synthesis false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/ila_0_1/ila_v6_2/constraints/ila_impl.xdc]
+set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/ila_0_1/ila_v6_2/constraints/ila_impl.xdc]
+set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/ila_0_1/ila_v6_2/constraints/ila.xdc]
+set_property used_in_implementation false [get_files -all /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/ila_0_1/ila_0_ooc.xdc]
+
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the

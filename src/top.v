@@ -88,6 +88,8 @@ module top #(
     output wire         rgmii_txd1,
     output wire         rgmii_txd2,
     output wire         rgmii_txd3
+
+    // Test Pins
 );
 
     // ---- 内部调试信号 (不引�?) ----
@@ -104,6 +106,7 @@ module top #(
     wire pll_locked;
     wire clk_100m;
     wire clk_125m;
+    wire gate_clk;
 
     wire cpv;
     wire xao;
@@ -120,7 +123,6 @@ module top #(
     wire chip_sel1;
     wire chip_sel2;
     wire oepsn;
-    wire gate_clk;
     
     // ------- FPV 排线需要 ---------
     assign cpv_r = cpv;
@@ -240,8 +242,8 @@ module top #(
   wire aclk_int;
   assign roic_reset_p0 = roic_reset_int;
   assign roic_reset_p1 = roic_reset_int;
-  assign sync_p0       = sync_int;
-  assign sync_p1       = sync_int;
+  assign sync_p0       = spi_cfg_done ? sync_int : 1'b0;
+  assign sync_p1       = spi_cfg_done ? sync_int : 1'b0;
   assign aclk_p0       = aclk_int;
   assign aclk_p1       = aclk_int;
   
@@ -396,11 +398,14 @@ module top #(
   localparam CFG_ISSUE = 2'd1;
   localparam CFG_WAIT  = 2'd2;
   localparam CFG_DONE  = 2'd3;
-  
+  localparam CFG_DELAY = 28'd100_000_000;  // 1s @ 100MHz
+
   reg [1:0]  cfg_state, cfg_state_next;
   reg [3:0]  cfg_reg_idx;
   reg        cfg_spi_start;
   reg        cfg_all_done;
+  reg [27:0] cfg_delay_cnt;
+  wire       cfg_delay_done;
   
   // SPI 配置寄存�? LUT �? 按推荐上电顺序排�?
   wire [3:0] cfg_addr_lut;
@@ -426,7 +431,7 @@ module top #(
       4'd0;
   
   assign cfg_data_lut =
-      (cfg_reg_idx == 4'd0)  ? 10'h040 :  // Reg3:  AZEN=0, REFDAC=64 �? 1.5V
+      (cfg_reg_idx == 4'd0)  ? 10'h020 :  // Reg3:  AZEN=0, REFDAC=32, ~1.0V
       (cfg_reg_idx == 4'd1)  ? 10'h014 :  // Reg0:  PWR=Normal(000), IFS=20
       (cfg_reg_idx == 4'd2)  ? 10'h0A0 :  // Reg1:  LPF=3.9μs(01), CDS2_RESETEN=1
       (cfg_reg_idx == 4'd3)  ? 10'h027 :  // Reg2:  RNDOMIZE=1, DOUTMODE=1, ECHOCLK=1, Pipeline=1
@@ -443,6 +448,8 @@ module top #(
       (cfg_reg_idx == 4'd14) ? 10'h000 :  // Reg14: Reserved
       (cfg_reg_idx == 4'd15) ? 10'h000 :  // Reg15: Reserved
       10'h000;
+  assign cfg_delay_done = (cfg_delay_cnt == CFG_DELAY - 1);
+
   
   always @(posedge clk_100m or negedge rst_n_100m) begin
       if (!rst_n_100m)
@@ -450,12 +457,12 @@ module top #(
       else
           cfg_state <= cfg_state_next;
   end
-  
+
   always @(*) begin
       cfg_state_next = cfg_state;
       case (cfg_state)
           CFG_IDLE: begin
-              if (ctrl_init_done)
+              if (ctrl_init_done && cfg_delay_done)
                   cfg_state_next = CFG_ISSUE;
           end
           CFG_ISSUE: cfg_state_next = CFG_WAIT;
@@ -468,19 +475,22 @@ module top #(
           default: cfg_state_next = CFG_IDLE;
       endcase
   end
-  
+
   always @(posedge clk_100m or negedge rst_n_100m) begin
       if (!rst_n_100m) begin
-          cfg_spi_start <= 1'b0;
-          cfg_reg_idx   <= 4'd0;
-          cfg_all_done  <= 1'b0;
+          cfg_spi_start  <= 1'b0;
+          cfg_reg_idx    <= 4'd0;
+          cfg_all_done   <= 1'b0;
+          cfg_delay_cnt  <= 28'd0;
       end else begin
           cfg_spi_start <= 1'b0;
-  
+
           case (cfg_state)
               CFG_IDLE: begin
                   cfg_reg_idx  <= 4'd0;
                   cfg_all_done <= 1'b0;
+                  if (ctrl_init_done && !cfg_delay_done)
+                      cfg_delay_cnt <= cfg_delay_cnt + 28'd1;
               end
               CFG_ISSUE: begin
                   cfg_spi_start <= 1'b1;
@@ -508,8 +518,10 @@ module top #(
   // SPI 配置完成后强�? CS=0, 否则使用 SPI 模块�? CS 输出
   wire spi_cs_raw_p0;
   wire spi_cs_raw_p1;
-  assign spi_cs_p0 = spi_cfg_done ? 1'b0 : spi_cs_raw_p0;
-  assign spi_cs_p1 = spi_cfg_done ? 1'b0 : spi_cs_raw_p1;
+  // AD71143 SPEC: CS=low during conversion, CS=high pulse during write
+  // SPI module outputs standard active-low CS, invert to active-high
+  assign spi_cs_p0 = spi_cfg_done ? 1'b0 : ~spi_cs_raw_p0;
+  assign spi_cs_p1 = spi_cfg_done ? 1'b0 : ~spi_cs_raw_p1;
   
   // =========================================================================
   // Top FSM (50MHz �?)
@@ -538,7 +550,7 @@ module top #(
           gap_cnt     <= 32'd0;
       end else begin
           frame_start <= 1'b0;
-  
+
           case (top_state)
               TOP_POWERUP: begin
                   top_state <= TOP_WAIT_INIT;
@@ -597,8 +609,8 @@ module top #(
   ad71143_ctrl #(
       .ACLK_PULSES      (9),
       .LINE_CYCLES      (6000),
-      .RESET_CYCLES     (1000),
-      .INIT_WAIT_CYCLES (10000),
+      .RESET_CYCLES     (10),     // 10μs
+      .INIT_WAIT_CYCLES (100),    // 100μs
       .FRAME_LINES      (FRAME_LINES)
   ) u_ad71143_ctrl (
       .clk          (clk_100m),
@@ -742,6 +754,21 @@ module top #(
       .TXD1       (rgmii_txd1  ),
       .TXD2       (rgmii_txd2  ),
       .TXD3       (rgmii_txd3  )
+  );
+
+  // =========================================================================
+  // ILA 调试探针
+  // probe0 [3:0]:  SPI 总线
+  // probe1 [10:0]: CFG FSM 链
+  // probe2 [7:0]:  复位/初始化/主状态机
+  // probe3 [2:0]:  AFE 控制输出
+  // =========================================================================
+  ila_0 u_ila (
+      .clk    (clk_100m),
+      .probe0 ({spi_cs_p1, spi_sck_p1, spi_sdi_p1, spi_sdo_p1}),
+      .probe1 ({cfg_state[1:0], cfg_spi_start, cfg_reg_idx[3:0], spi_done_p0, spi_done_p1, spi_cfg_done}),
+      .probe2 ({pll_locked, rst_n_async, rst_n_100m, ctrl_init_done, top_state[2:0], rst_n_50m}),
+      .probe3 ({roic_reset_p1, sync_p1, aclk_p1})
   );
 
 endmodule
