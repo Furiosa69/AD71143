@@ -3,13 +3,13 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Fri Jul 10 11:19:32 2026
-# Process ID: 246178
+# Start of session at: Fri Jul 10 18:42:41 2026
+# Process ID: 1233023
 # Current directory: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1
 # Command line: vivado -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
 # Log file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.vds
 # Journal file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/vivado.jou
-# Running On: Furiosa, OS: Linux, CPU Frequency: 3212.886 MHz, CPU Physical cores: 24, Host memory: 33036 MB
+# Running On: Furiosa, OS: Linux, CPU Frequency: 2203.081 MHz, CPU Physical cores: 24, Host memory: 33036 MB
 #-----------------------------------------------------------
 source top.tcl -notrace
 Command: synth_design -top top -part xc7a200tfbg484-2
@@ -19,16 +19,25 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200
 INFO: [Device 21-403] Loading part xc7a200tfbg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 246203
+INFO: [Synth 8-7075] Helper process launched with PID 1233044
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2099.465 ; gain = 410.684 ; free physical = 9652 ; free virtual = 54874
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2091.504 ; gain = 403.715 ; free physical = 2258 ; free virtual = 51149
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:245]
-WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:246]
+INFO: [Synth 8-11241] undeclared symbol 'clk_100m', assumed default net type 'wire' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:121]
+INFO: [Synth 8-11241] undeclared symbol 'pll_locked', assumed default net type 'wire' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:122]
+WARNING: [Synth 8-8895] 'pll_locked' is already implicitly declared on line 122 [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:147]
+WARNING: [Synth 8-8895] 'clk_100m' is already implicitly declared on line 121 [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:148]
+WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:306]
+WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:307]
 INFO: [Synth 8-6157] synthesizing module 'top' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
-INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:467]
+INFO: [Synth 8-6157] synthesizing module 'mdio_ctrl' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:5]
+WARNING: [Synth 8-151] case item 3'b111 is unreachable [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:134]
+WARNING: [Synth 8-151] case item 3'b111 is unreachable [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:134]
+INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:134]
+INFO: [Synth 8-6155] done synthesizing module 'mdio_ctrl' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:5]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-1233023-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-1233023-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:528]
 INFO: [Synth 8-6157] synthesizing module 'ad71143_ctrl' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_ctrl.v:15]
 	Parameter ACLK_PULSES bound to: 9 - type: integer 
 	Parameter LINE_CYCLES bound to: 6000 - type: integer 
@@ -282,27 +291,25 @@ INFO: [Synth 8-6157] synthesizing module 'xpm_cdc_gray' [/home/furiosa/tool/soft
 INFO: [Synth 8-6155] done synthesizing module 'xpm_cdc_gray' (0#1) [/home/furiosa/tool/software/vivado_2023.2_image/Vivado/2023.2/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv:283]
 INFO: [Synth 8-256] done synthesizing module 'fifo_generator_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/fifo_generator_0/synth/fifo_generator_0.vhd:72]
 INFO: [Synth 8-6157] synthesizing module 'RGMII_tx' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v:1]
-	Parameter FRAME_SIZE bound to: 74 - type: integer 
+	Parameter FRAME_SIZE bound to: 78 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'RGMII_tx' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v:1]
 INFO: [Synth 8-6155] done synthesizing module 'rgmii_bridge' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:14]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:776]
-INFO: [Synth 8-6157] synthesizing module 'ila_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/ila_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'ila_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/ila_0_stub.v:6]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:848]
+INFO: [Synth 8-6157] synthesizing module 'ila_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-1233023-Furiosa/realtime/ila_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'ila_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-1233023-Furiosa/realtime/ila_0_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
+WARNING: [Synth 8-7137] Register rxerr_val_reg in module mdio_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:147]
+WARNING: [Synth 8-3848] Net bmsr_val in module/entity mdio_ctrl does not have driver. [/home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v:16]
 WARNING: [Synth 8-7137] Register merged_valid_reg in module ad71143_data_rx has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx.v:175]
 WARNING: [Synth 8-7137] Register merged_valid_reg in module ad71143_data_rx_dual has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx_dual.v:186]
 WARNING: [Synth 8-7137] Register xao_reg in module nt39565d_gate_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:217]
-WARNING: [Synth 8-7137] Register fifo_rd_en_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:80]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:776]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p1'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:659]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p0'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:643]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_mmcm'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:160]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_rgmii_bridge'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:755]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_data_rx_dual'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:677]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ad71143_ctrl'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:625]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_nt39565d'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:721]
-WARNING: [Synth 8-6014] Unused sequential element rst_sync1_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:214]
-WARNING: [Synth 8-6014] Unused sequential element rst_sync2_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:215]
+WARNING: [Synth 8-7137] Register fifo_rd_en_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:89]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_mmcm'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:202]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:848]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_rgmii_bridge'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:822]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_mdio'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:120]
+WARNING: [Synth 8-6014] Unused sequential element rst_sync1_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:257]
+WARNING: [Synth 8-6014] Unused sequential element rst_sync2_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:258]
 WARNING: [Synth 8-7129] Port ALMOST_FULL_I in module output_blk is either unconnected or has no load
 WARNING: [Synth 8-7129] Port PROG_FULL_I in module output_blk is either unconnected or has no load
 WARNING: [Synth 8-7129] Port ALMOST_EMPTY_I in module output_blk is either unconnected or has no load
@@ -405,19 +412,19 @@ WARNING: [Synth 8-7129] Port DOUTA_I[247] in module blk_mem_output_block is eith
 WARNING: [Synth 8-7129] Port DOUTA_I[246] in module blk_mem_output_block is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9365 ; free virtual = 54589
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.949 ; gain = 698.160 ; free physical = 1958 ; free virtual = 50853
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9363 ; free virtual = 54587
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.949 ; gain = 698.160 ; free physical = 1958 ; free virtual = 50853
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9363 ; free virtual = 54587
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.949 ; gain = 698.160 ; free physical = 1958 ; free virtual = 50853
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2385.910 ; gain = 0.000 ; free physical = 9364 ; free virtual = 54588
-INFO: [Netlist 29-17] Analyzing 17 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.03 . Memory (MB): peak = 2385.949 ; gain = 0.000 ; free physical = 1962 ; free virtual = 50855
+INFO: [Netlist 29-17] Analyzing 18 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
@@ -446,26 +453,26 @@ Resolution: To avoid this warning, move constraints listed in [.Xil/top_propImpl
 INFO: [Project 1-1714] 2 XPM XDC files have been applied to the design.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.941 ; gain = 0.000 ; free physical = 9370 ; free virtual = 54596
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.980 ; gain = 0.000 ; free physical = 1960 ; free virtual = 50853
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9369 ; free virtual = 54595
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2450.016 ; gain = 0.000 ; free physical = 1959 ; free virtual = 50851
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1967 ; free virtual = 50861
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1967 ; free virtual = 50861
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
-Applied set_property IO_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 5).
-Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 6).
+Applied set_property IO_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 6).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clk. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.gen/sources_1/ip/clk_wiz_0_2/clk_wiz_0/clk_wiz_0_in_context.xdc, line 7).
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst/U0. (constraint file  /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/dont_touch.xdc, line 12).
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for u_mmcm. (constraint file  auto generated constraint).
@@ -473,8 +480,10 @@ Applied set_property KEEP_HIERARCHY = SOFT for u_ila. (constraint file  auto gen
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/\gconvfifo.rf /\grf.rf /\gntv_or_sync_fifo.gcx.clkx /rd_pntr_cdc_inst. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/\gconvfifo.rf /\grf.rf /\gntv_or_sync_fifo.gcx.clkx /wr_pntr_cdc_inst. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1967 ; free virtual = 50861
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'i_state_reg' in module 'mdio_ctrl'
+INFO: [Synth 8-802] inferred FSM for state register 'f_state_reg' in module 'mdio_ctrl'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_ctrl'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_spi'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_data_rx'
@@ -482,6 +491,27 @@ INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'nt395
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'RGMII_tx'
 INFO: [Synth 8-802] inferred FSM for state register 'cfg_state_reg' in module 'top'
 INFO: [Synth 8-802] inferred FSM for state register 'top_state_reg' in module 'top'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  I_IDLE |                              000 |                              000
+                  I_WAIT |                              001 |                              001
+              I_WR_EXTAD |                              010 |                              010
+              I_WR_TXDLY |                              011 |                              011
+               I_RD_BACK |                              100 |                              100
+               I_RD_BMSR |                              101 |                              101
+                  I_POLL |                              110 |                              110
+                 I_POLL2 |                              111 |                              111
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'i_state_reg' using encoding 'sequential' in module 'mdio_ctrl'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  F_IDLE |                              001 |                              000
+                   F_PRE |                              100 |                              001
+                  F_BODY |                              010 |                              010
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'f_state_reg' using encoding 'one-hot' in module 'mdio_ctrl'
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -539,7 +569,6 @@ INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 
                     DATA |                               11 |                              011
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'RGMII_tx'
-INFO: [Synth 8-6159] Found Keep on FSM register 'cfg_state_reg' in module 'top', re-encoding will not be performed
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -548,21 +577,21 @@ INFO: [Synth 8-6159] Found Keep on FSM register 'cfg_state_reg' in module 'top',
                 CFG_WAIT |                               10 |                               10
                 CFG_DONE |                               11 |                               11
 ---------------------------------------------------------------------------------------------------
-INFO: [Synth 8-6159] Found Keep on FSM register 'top_state_reg' in module 'top', re-encoding will not be performed
+INFO: [Synth 8-3354] encoded FSM with state register 'cfg_state_reg' using encoding 'sequential' in module 'top'
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
-*
-             TOP_POWERUP |                              000 |                              000
-           TOP_WAIT_INIT |                              001 |                              001
-            TOP_WAIT_CFG |                              010 |                              010
-                TOP_IDLE |                              011 |                              011
-               TOP_START |                              100 |                              100
-          TOP_WAIT_FRAME |                              101 |                              101
-           TOP_FRAME_GAP |                              110 |                              110
+             TOP_POWERUP |                          0000001 |                              000
+           TOP_WAIT_INIT |                          0000010 |                              001
+            TOP_WAIT_CFG |                          0000100 |                              010
+                TOP_IDLE |                          0001000 |                              011
+               TOP_START |                          0010000 |                              100
+          TOP_WAIT_FRAME |                          0100000 |                              101
+           TOP_FRAME_GAP |                          1000000 |                              110
 ---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'top_state_reg' using encoding 'one-hot' in module 'top'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9387 ; free virtual = 54604
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:11 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1966 ; free virtual = 50860
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -573,62 +602,73 @@ Detailed RTL Component Info :
 	   2 Input   16 Bit       Adders := 3     
 	   2 Input   10 Bit       Adders := 1     
 	   2 Input    8 Bit       Adders := 2     
-	   2 Input    7 Bit       Adders := 7     
-	   2 Input    6 Bit       Adders := 4     
+	   2 Input    7 Bit       Adders := 8     
+	   2 Input    6 Bit       Adders := 5     
+	   2 Input    5 Bit       Adders := 1     
 	   2 Input    4 Bit       Adders := 5     
 	   2 Input    3 Bit       Adders := 1     
 	   2 Input    2 Bit       Adders := 2     
 +---XORs : 
+	   2 Input     32 Bit         XORs := 9     
 	   2 Input      4 Bit         XORs := 2     
 	   2 Input      1 Bit         XORs := 30    
 +---Registers : 
 	              256 Bit    Registers := 1     
 	              128 Bit    Registers := 4     
 	               64 Bit    Registers := 4     
-	               32 Bit    Registers := 2     
-	               16 Bit    Registers := 10    
+	               32 Bit    Registers := 3     
+	               16 Bit    Registers := 16    
 	               10 Bit    Registers := 7     
 	                8 Bit    Registers := 56    
-	                7 Bit    Registers := 9     
+	                7 Bit    Registers := 10    
+	                6 Bit    Registers := 1     
+	                5 Bit    Registers := 3     
 	                4 Bit    Registers := 17    
-	                3 Bit    Registers := 3     
+	                3 Bit    Registers := 4     
 	                2 Bit    Registers := 4     
-	                1 Bit    Registers := 106   
+	                1 Bit    Registers := 115   
 +---Muxes : 
 	   2 Input   64 Bit        Muxes := 4     
-	   2 Input   32 Bit        Muxes := 1     
-	   8 Input   32 Bit        Muxes := 1     
-	   2 Input   16 Bit        Muxes := 13    
+	   2 Input   32 Bit        Muxes := 10    
+	   7 Input   32 Bit        Muxes := 1     
+	   8 Input   16 Bit        Muxes := 1     
+	   2 Input   16 Bit        Muxes := 17    
 	   7 Input   16 Bit        Muxes := 1     
 	  11 Input   16 Bit        Muxes := 2     
 	   7 Input   10 Bit        Muxes := 1     
 	   6 Input   10 Bit        Muxes := 2     
 	   4 Input   10 Bit        Muxes := 1     
 	   2 Input   10 Bit        Muxes := 2     
-	   2 Input    8 Bit        Muxes := 39    
+	   2 Input    8 Bit        Muxes := 40    
 	   4 Input    8 Bit        Muxes := 1     
 	   6 Input    8 Bit        Muxes := 1     
-	   2 Input    7 Bit        Muxes := 10    
+	   2 Input    7 Bit        Muxes := 11    
 	   6 Input    7 Bit        Muxes := 4     
+	   7 Input    7 Bit        Muxes := 1     
 	   3 Input    7 Bit        Muxes := 1     
-	   2 Input    6 Bit        Muxes := 1     
+	   2 Input    6 Bit        Muxes := 2     
+	   3 Input    6 Bit        Muxes := 1     
+	   3 Input    5 Bit        Muxes := 1     
+	   8 Input    5 Bit        Muxes := 1     
 	   2 Input    4 Bit        Muxes := 25    
 	   7 Input    4 Bit        Muxes := 3     
 	  11 Input    4 Bit        Muxes := 1     
 	   4 Input    4 Bit        Muxes := 1     
+	   8 Input    3 Bit        Muxes := 1     
+	   2 Input    3 Bit        Muxes := 27    
 	   7 Input    3 Bit        Muxes := 1     
-	   2 Input    3 Bit        Muxes := 30    
 	   6 Input    3 Bit        Muxes := 2     
 	   3 Input    3 Bit        Muxes := 2     
-	   8 Input    3 Bit        Muxes := 1     
-	   2 Input    2 Bit        Muxes := 17    
-	   4 Input    2 Bit        Muxes := 6     
-	   7 Input    1 Bit        Muxes := 6     
-	   2 Input    1 Bit        Muxes := 50    
-	   4 Input    1 Bit        Muxes := 12    
+	   2 Input    2 Bit        Muxes := 16    
+	   4 Input    2 Bit        Muxes := 7     
+	   3 Input    1 Bit        Muxes := 5     
+	   2 Input    1 Bit        Muxes := 72    
+	   8 Input    1 Bit        Muxes := 8     
+	  16 Input    1 Bit        Muxes := 1     
+	   7 Input    1 Bit        Muxes := 8     
+	   4 Input    1 Bit        Muxes := 14    
 	   6 Input    1 Bit        Muxes := 22    
 	  11 Input    1 Bit        Muxes := 20    
-	   8 Input    1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -645,26 +685,122 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][7]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][6]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][5]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][4]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][3]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][2]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][1]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[74][0]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][7]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][6]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][5]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][4]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][3]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][2]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][1]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[75][0]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][7]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][6]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][5]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][4]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][3]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][2]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][1]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[76][0]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][7]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][6]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][5]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][4]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][3]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][2]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][1]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 1st driver pin 'u_rgmii_bridge/frame_buf_reg[77][0]/Q' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6859] multi-driven net on pin Q with 2nd driver pin 'GND' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
+CRITICAL WARNING: [Synth 8-6858] multi-driven net Q is connected to at least one constant driver which has been preserved, other driver is ignored [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:193]
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9374 ; free virtual = 54603
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1947 ; free virtual = 50853
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9390 ; free virtual = 54619
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1908 ; free virtual = 50857
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9388 ; free virtual = 54617
+Finished Timing Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1908 ; free virtual = 50857
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9391 ; free virtual = 54620
+Finished Technology Mapping : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1949 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -682,37 +818,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished IO Insertion : Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1951 ; free virtual = 50858
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -732,31 +868,32 @@ Report Cell Usage:
 +------+---------+------+
 |1     |clk_wiz  |     1|
 |2     |ila      |     1|
-|3     |CARRY4   |    48|
-|4     |LUT1     |    16|
-|5     |LUT2     |   612|
-|6     |LUT3     |    99|
-|7     |LUT4     |   117|
-|8     |LUT5     |   113|
-|9     |LUT6     |   232|
-|10    |MUXF7    |    11|
-|11    |MUXF8    |     2|
-|12    |ODDR     |     7|
+|3     |CARRY4   |    60|
+|4     |LUT1     |    17|
+|5     |LUT2     |   618|
+|6     |LUT3     |    90|
+|7     |LUT4     |   146|
+|8     |LUT5     |   141|
+|9     |LUT6     |   273|
+|10    |MUXF7    |    20|
+|11    |MUXF8    |     3|
+|12    |ODDR     |     8|
 |13    |RAMB36E1 |     4|
-|14    |FDCE     |  1640|
-|15    |FDPE     |     6|
-|16    |FDRE     |   107|
-|17    |IBUF     |     2|
+|14    |FDCE     |  1762|
+|15    |FDPE     |     8|
+|16    |FDRE     |   148|
+|17    |IBUF     |     1|
 |18    |IBUFDS   |     4|
-|19    |OBUF     |    49|
-|20    |OBUFDS   |     2|
+|19    |IOBUF    |     1|
+|20    |OBUF     |    50|
+|21    |OBUFDS   |     2|
 +------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1950 ; free virtual = 50857
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 440 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 697.129 ; free physical = 9386 ; free virtual = 54617
-Synthesis Optimization Complete : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
+Synthesis finished with 0 errors, 96 critical warnings and 463 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2450.016 ; gain = 698.160 ; free physical = 1950 ; free virtual = 50857
+Synthesis Optimization Complete : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 2450.016 ; gain = 762.227 ; free physical = 1950 ; free virtual = 50857
 INFO: [Project 1-571] Translating synthesized netlist
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[2]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
@@ -770,23 +907,25 @@ WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'stat
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[0]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
-Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9671 ; free virtual = 54902
-INFO: [Netlist 29-17] Analyzing 78 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2450.016 ; gain = 0.000 ; free physical = 2240 ; free virtual = 51147
+INFO: [Netlist 29-17] Analyzing 102 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9668 ; free virtual = 54899
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2450.016 ; gain = 0.000 ; free physical = 2245 ; free virtual = 51152
 INFO: [Project 1-111] Unisim Transformation Summary:
-No Unisim elements were transformed.
+  A total of 1 instances were transformed.
+  IOBUF => IOBUF (IBUF, OBUFT): 1 instance 
 
-Synth Design complete | Checksum: d14c6bc
+Synth Design complete | Checksum: 10a458c5
 INFO: [Common 17-83] Releasing license: Synthesis
-77 Infos, 116 Warnings, 0 Critical Warnings and 0 Errors encountered.
+82 Infos, 122 Warnings, 96 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 2449.977 ; gain = 1119.945 ; free physical = 9667 ; free virtual = 54898
-INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2073.324; main = 1746.203; forked = 382.319
-INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3411.176; main = 2449.945; forked = 993.246
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2473.953 ; gain = 0.000 ; free physical = 9667 ; free virtual = 54898
+synth_design: Time (s): cpu = 00:00:20 ; elapsed = 00:00:19 . Memory (MB): peak = 2450.016 ; gain = 1119.977 ; free physical = 2244 ; free virtual = 51151
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2066.377; main = 1741.274; forked = 381.781
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3411.359; main = 2449.984; forked = 993.391
+INFO: [runtcl-6] Synthesis results are not added to the cache due to CRITICAL_WARNING
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2473.992 ; gain = 0.000 ; free physical = 2244 ; free virtual = 51151
 INFO: [Common 17-1381] The checkpoint '/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Fri Jul 10 11:19:54 2026...
+INFO: [Common 17-206] Exiting Vivado at Fri Jul 10 18:43:04 2026...

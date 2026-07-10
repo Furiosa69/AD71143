@@ -70,6 +70,7 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param chipscope.maxJobs 3
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a200tfbg484-2
 
@@ -92,6 +93,7 @@ read_verilog -library xil_defaultlib {
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx_dual.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_spi.v
+  /home/furiosa/Projects/shitatechnology/work/ctrl/src/mdio_ctrl.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v
   /home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v

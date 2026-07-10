@@ -20,7 +20,8 @@ module rgmii_bridge #(
     input  wire         rst_n,           // 异步复位，低有效
 
     input  wire         clk_100m,        // 100MHz: data 输入域
-    input  wire         clk_125m,        // 125MHz: RGMII TXC 域
+    input  wire         clk_125m,        // 125MHz: 内部逻辑 + TXD ODDR
+    input  wire         clk_125m_ph90,   // 125MHz 90°相移: TXC ODDR
 
     // ---- (来自 ad71143_data_rx_dual) ----
     input  wire [BURST_WIDTH-1:0] data_in,  // merged_burst
@@ -32,7 +33,13 @@ module rgmii_bridge #(
     output wire         TXD0,
     output wire         TXD1,
     output wire         TXD2,
-    output wire         TXD3
+    output wire         TXD3,
+
+    // ---- Debug 输出 ----
+    output wire         dbg_startup_done,
+    output wire         dbg_phy_ready,
+    output wire         dbg_tx_sending,
+    output wire [3:0]   dbg_state
 );
 
     // =====================================================================
@@ -42,10 +49,12 @@ module rgmii_bridge #(
     localparam HDR_IP      = 20;          // IP 头
     localparam HDR_UDP     = 8;           // UDP 头
     localparam HDR_BYTES   = HDR_MAC + HDR_IP + HDR_UDP;  // 42
-    localparam FRAME_BYTES = HDR_BYTES + BURST_BYTES;      // 74
+    localparam FCS_BYTES   = 4;
+    localparam FRAME_BYTES = HDR_BYTES + BURST_BYTES + FCS_BYTES;  // 78
+    localparam FCS_OFFSET  = HDR_BYTES + BURST_BYTES;              // 74
 
 
-    reg [7:0]   frame_buf [0:FRAME_BYTES-1];  // 帧缓冲区 (74 bytes)
+    reg [7:0]   frame_buf [0:FRAME_BYTES-1];  // 帧缓冲区 (78 bytes)
     reg [6:0]   frame_idx;                     // 当前输出字节索引
     reg         tx_start;
     reg [7:0]   tx_data;
@@ -116,6 +125,56 @@ module rgmii_bridge #(
     localparam [15:0] UDP_LENGTH = 8 + BURST_BYTES;  // 40
 
     reg  test_trig_d1;   // test_trig 延迟 1 拍, 对齐帧组装时序
+
+    // =====================================================================
+    // CRC-32 (Ethernet FCS)
+    // =====================================================================
+    reg [31:0] crc_reg;
+    reg [6:0]  crc_idx;
+    reg        crc_busy;
+    wire       crc_done = (crc_idx == 7'd73) && crc_busy;  // 组合逻辑脉冲
+
+    // CRC-32 next: polynomial 0xEDB88320 (reversed, for LSB-first)
+    function [31:0] crc32_byte;
+        input [31:0] crc;
+        input [7:0]  data;
+        integer j;
+        reg [31:0] tmp;
+        begin
+            tmp = crc ^ {24'd0, data};
+            for (j = 0; j < 8; j = j + 1)
+                tmp = (tmp[0]) ? (tmp >> 1) ^ 32'hEDB88320 : (tmp >> 1);
+            crc32_byte = tmp;
+        end
+    endfunction
+
+    always @(posedge clk_125m or negedge rst_n) begin
+        if (!rst_n) begin
+            crc_reg  <= 32'd0;
+            crc_idx  <= 7'd0;
+            crc_busy <= 1'b0;
+        end else begin
+            if (fifo_rd_en_d1 || test_trig_d1) begin
+                crc_reg  <= 32'hFFFFFFFF;
+                crc_idx  <= 7'd0;
+                crc_busy <= 1'b1;
+            end
+
+            if (crc_busy) begin
+                crc_reg <= crc32_byte(crc_reg, frame_buf[crc_idx]);
+                if (crc_idx == 7'd73) begin
+                    crc_busy <= 1'b0;
+                    // 存储 FCS
+                    frame_buf[FCS_OFFSET + 0] <= ~crc_reg[7:0];
+                    frame_buf[FCS_OFFSET + 1] <= ~crc_reg[15:8];
+                    frame_buf[FCS_OFFSET + 2] <= ~crc_reg[23:16];
+                    frame_buf[FCS_OFFSET + 3] <= ~crc_reg[31:24];
+                end else begin
+                    crc_idx <= crc_idx + 7'd1;
+                end
+            end
+        end
+    end
 
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
@@ -240,9 +299,16 @@ module rgmii_bridge #(
                     end
                 end
 
-                tx_start   <= 1'b1;
-                frame_idx  <= 7'd1;
-                preloaded  <= 1'b1;
+                // tx_start 延迟到 CRC 计算完成后
+                // frame_ready 会在 74 拍后自动变高
+            end
+
+            // ---- CRC 完成后触发实际发送 (crc_done 是 1 拍脉冲) ----
+            if (crc_done) begin
+                tx_data   <= frame_buf[0];   // DMAC[0] = 0xFF
+                tx_start  <= 1'b1;
+                frame_idx <= 7'd1;
+                preloaded <= 1'b1;
             end
 
             // ---- DATA 阶段: tx_req 每拍推进一字节 ----
@@ -274,6 +340,27 @@ module rgmii_bridge #(
         .TXD3     (TXD3)
     );
 
-    assign TXC = clk_125m;
+    // TXC 时钟 90°相移 (RGMII spec: 2ns delay), 与 TXD 用不同相位
+    ODDR #(
+        .DDR_CLK_EDGE("OPPOSITE_EDGE"),
+        .INIT(1'b0),
+        .SRTYPE("SYNC")
+    ) ODDR_txc (
+        .Q  (TXC),
+        .C  (clk_125m_ph90),
+        .CE (1'b1),
+        .D1 (1'b1),
+        .D2 (1'b0),
+        .R  (1'b0),
+        .S  (1'b0)
+    );
+
+    // =====================================================================
+    // Debug 输出
+    // =====================================================================
+    assign dbg_startup_done = startup_done;
+    assign dbg_phy_ready    = interval_cnt[16];       // 每 524ms 翻转, 表示定时器运行
+    assign dbg_tx_sending   = preloaded;              // 正在发送帧
+    assign dbg_state        = {test_trig, test_trig_d1, fifo_empty, fifo_rd_en};
 
 endmodule

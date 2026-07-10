@@ -87,10 +87,51 @@ module top #(
     output wire         rgmii_txd0,
     output wire         rgmii_txd1,
     output wire         rgmii_txd2,
-    output wire         rgmii_txd3
+    output wire         rgmii_txd3,
+    // RX
+    input  wire         rgmii_rxc,
+    input  wire         rgmii_rx_ctl,
+    input  wire         rgmii_rxd0,
+    input  wire         rgmii_rxd1,
+    input  wire         rgmii_rxd2,
+    input  wire         rgmii_rxd3,
+    // MDIO
+    output wire         rgmii_mdc,
+    inout  wire         rgmii_mdio
 
     // Test Pins
 );
+
+    // ---- MDIO 控制器 ----
+    wire        mdio_oe;
+    wire        mdio_out;
+    wire        mdio_in;
+    wire        mdio_cfg_done;
+    wire        mdio_link_up;
+    wire [15:0] mdio_bmsr;
+    wire [15:0] mdio_rgmii2;
+    wire [15:0] mdio_rxerr;
+    wire [2:0]  mdio_init_state;
+    wire [3:0]  mdio_f_state;
+
+    assign rgmii_mdio = mdio_oe ? mdio_out : 1'bz;
+    assign mdio_in    = rgmii_mdio;
+
+    mdio_ctrl u_mdio (
+        .clk             (clk_100m),
+        .rst_n           (pll_locked),
+        .MDC             (rgmii_mdc),
+        .MDIO_oe         (mdio_oe),
+        .MDIO_out        (mdio_out),
+        .MDIO_in         (mdio_in),
+        .cfg_done        (mdio_cfg_done),
+        .link_up         (mdio_link_up),
+        .bmsr_val        (mdio_bmsr),
+        .rgmii2_val      (mdio_rgmii2),
+        .rxerr_val       (mdio_rxerr),
+        .dbg_init_state  (mdio_init_state),
+        .dbg_f_state     (mdio_f_state)
+    );
 
     // ---- 内部调试信号 (不引�?) ----
     wire [255:0] merged_burst;
@@ -123,6 +164,7 @@ module top #(
     wire chip_sel1;
     wire chip_sel2;
     wire oepsn;
+    wire clk_125m_ph90;
     
     // ------- FPV 排线需要 ---------
     assign cpv_r = cpv;
@@ -162,6 +204,7 @@ module top #(
         .clk_out1   (gate_clk),
         .clk_out2   (clk_100m),
         .clk_out3   (clk_125m),
+        .clk_out4   (clk_125m_ph90),
         .locked     (pll_locked)
     );
    
@@ -221,8 +264,26 @@ module top #(
 
   assign rst_n_125m = rst_sync2_125m;
 
-  // RGMII PHY 异步复位 (暂时永久拉高, 排除复位问题)
-  assign rgmii_rst_n = 1'b1;
+  // =========================================================================
+  // RGMII PHY 复位生成 (YT8531C: 上电后需拉低 >=10ms)
+  // =========================================================================
+  // PLL 锁定后拉低 ~100ms, 然后释放, 满足 YT8531C 的上电复位时序要求
+  reg [23:0] phy_rst_cnt;
+  reg        phy_rst_n_reg;
+
+  always @(posedge clk_125m) begin
+      if (!pll_locked) begin
+          phy_rst_cnt   <= 24'd0;
+          phy_rst_n_reg <= 1'b0;
+      end else if (phy_rst_cnt < 24'd12_500_000) begin  // 100ms @ 125MHz
+          phy_rst_cnt   <= phy_rst_cnt + 24'd1;
+          phy_rst_n_reg <= 1'b0;
+      end else begin
+          phy_rst_n_reg <= 1'b1;
+      end
+  end
+
+  assign rgmii_rst_n = phy_rst_n_reg;
   
   // =========================================================================
   // 内部信号
@@ -752,10 +813,17 @@ module top #(
   // =========================================================================
   // RGMII 桥接: merged_burst �? 字节 �? RGMII_tx
   // =========================================================================
+  // RGMII debug
+  wire        rgmii_dbg_startup;
+  wire        rgmii_dbg_phy_rdy;
+  wire        rgmii_dbg_tx_send;
+  wire [3:0]  rgmii_dbg_state;
+
   rgmii_bridge u_rgmii_bridge (
       .rst_n      (pll_locked  ),
       .clk_100m   (clk_100m    ),
       .clk_125m   (clk_125m    ),
+      .clk_125m_ph90 (clk_125m_ph90),
       .data_in    (merged_burst),
       .data_valid (merged_valid),
       .TXC        (rgmii_txc   ),
@@ -763,22 +831,26 @@ module top #(
       .TXD0       (rgmii_txd0  ),
       .TXD1       (rgmii_txd1  ),
       .TXD2       (rgmii_txd2  ),
-      .TXD3       (rgmii_txd3  )
+      .TXD3       (rgmii_txd3  ),
+      .dbg_startup_done (rgmii_dbg_startup),
+      .dbg_phy_ready    (rgmii_dbg_phy_rdy),
+      .dbg_tx_sending   (rgmii_dbg_tx_send),
+      .dbg_state        (rgmii_dbg_state)
   );
 
   // =========================================================================
-  // ILA 调试探针
-  // probe0 [3:0]:  SPI 总线
-  // probe1 [10:0]: CFG FSM 链
-  // probe2 [7:0]:  复位/初始化/主状态机
-  // probe3 [2:0]:  AFE 控制输出
+  // ILA 调试探针 (网口测试专用)
+  // probe0 [3:0]:  {PLL锁定, PHY复位释放, MDIO配置完成, 链路建立}
+  // probe1 [10:0]: BMSR[10:0] (Link/Autoneg-Complete 等状态位)
+  // probe2 [7:0]:  {init_state[2:0], f_state[3:0], 未用}
+  // probe3 [2:0]:  BMSR[15:13]
   // =========================================================================
   ila_0 u_ila (
       .clk    (clk_100m),
-      .probe0 ({spi_cs_p1, spi_sck_p1, spi_sdi_p1, spi_sdo_p1}),
-      .probe1 ({cfg_state[1:0], cfg_spi_start, cfg_reg_idx[3:0], spi_done_p0, spi_done_p1, spi_cfg_done}),
-      .probe2 ({pll_locked, rst_n_async, rst_n_100m, ctrl_init_done, top_state[2:0], rst_n_50m}),
-      .probe3 ({roic_reset_p1, sync_p1, aclk_p1})
+      .probe0 ({pll_locked, phy_rst_n_reg, mdio_cfg_done, mdio_link_up}),
+      .probe1 (mdio_rxerr[10:0]),
+      .probe2 ({mdio_init_state, mdio_f_state, 1'b0}),
+      .probe3 ({mdio_rgmii2[12], mdio_rgmii2[15], mdio_rgmii2[14]})
   );
 
 endmodule
