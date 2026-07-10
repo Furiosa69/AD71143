@@ -3,13 +3,13 @@
 # SW Build 4029153 on Fri Oct 13 20:13:54 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Thu Jul  9 17:54:33 2026
-# Process ID: 2283149
+# Start of session at: Fri Jul 10 11:19:32 2026
+# Process ID: 246178
 # Current directory: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1
 # Command line: vivado -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
 # Log file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.vds
 # Journal file: /home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/vivado.jou
-# Running On: Furiosa, OS: Linux, CPU Frequency: 1954.966 MHz, CPU Physical cores: 24, Host memory: 33036 MB
+# Running On: Furiosa, OS: Linux, CPU Frequency: 3212.886 MHz, CPU Physical cores: 24, Host memory: 33036 MB
 #-----------------------------------------------------------
 source top.tcl -notrace
 Command: synth_design -top top -part xc7a200tfbg484-2
@@ -19,16 +19,16 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200
 INFO: [Device 21-403] Loading part xc7a200tfbg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 4 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 2283183
+INFO: [Synth 8-7075] Helper process launched with PID 246203
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2091.836 ; gain = 403.684 ; free physical = 2895 ; free virtual = 51943
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:02 . Memory (MB): peak = 2099.465 ; gain = 410.684 ; free physical = 9652 ; free virtual = 54874
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:245]
 WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:246]
 INFO: [Synth 8-6157] synthesizing module 'top' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
-INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-2283149-Furiosa/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-2283149-Furiosa/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:463]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-226] default block is never used [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:467]
 INFO: [Synth 8-6157] synthesizing module 'ad71143_ctrl' [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_ctrl.v:15]
 	Parameter ACLK_PULSES bound to: 9 - type: integer 
 	Parameter LINE_CYCLES bound to: 6000 - type: integer 
@@ -285,22 +285,22 @@ INFO: [Synth 8-6157] synthesizing module 'RGMII_tx' [/home/furiosa/Projects/shit
 	Parameter FRAME_SIZE bound to: 74 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'RGMII_tx' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/RGMII_tx.v:1]
 INFO: [Synth 8-6155] done synthesizing module 'rgmii_bridge' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:14]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:766]
-INFO: [Synth 8-6157] synthesizing module 'ila_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-2283149-Furiosa/realtime/ila_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'ila_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-2283149-Furiosa/realtime/ila_0_stub.v:6]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:776]
+INFO: [Synth 8-6157] synthesizing module 'ila_0' [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/ila_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'ila_0' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/.Xil/Vivado-246178-Furiosa/realtime/ila_0_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:7]
 WARNING: [Synth 8-7137] Register merged_valid_reg in module ad71143_data_rx has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx.v:175]
 WARNING: [Synth 8-7137] Register merged_valid_reg in module ad71143_data_rx_dual has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/ad71143_data_rx_dual.v:186]
 WARNING: [Synth 8-7137] Register xao_reg in module nt39565d_gate_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/nt39565d_ctrl.v:217]
-WARNING: [Synth 8-7137] Register fifo_rd_en_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:69]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:766]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p1'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:649]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p0'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:633]
+WARNING: [Synth 8-7137] Register fifo_rd_en_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/rgmii_bridge.v:80]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:776]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p1'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:659]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p0'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:643]
 INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_mmcm'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:160]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_rgmii_bridge'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:745]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_data_rx_dual'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:667]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ad71143_ctrl'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:615]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_nt39565d'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:711]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_rgmii_bridge'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:755]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_data_rx_dual'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:677]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ad71143_ctrl'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:625]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_nt39565d'. This will prevent further optimization [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:721]
 WARNING: [Synth 8-6014] Unused sequential element rst_sync1_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:214]
 WARNING: [Synth 8-6014] Unused sequential element rst_sync2_125m_reg was removed.  [/home/furiosa/Projects/shitatechnology/work/ctrl/src/top.v:215]
 WARNING: [Synth 8-7129] Port ALMOST_FULL_I in module output_blk is either unconnected or has no load
@@ -405,18 +405,18 @@ WARNING: [Synth 8-7129] Port DOUTA_I[247] in module blk_mem_output_block is eith
 WARNING: [Synth 8-7129] Port DOUTA_I[246] in module blk_mem_output_block is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2386.312 ; gain = 698.160 ; free physical = 2587 ; free virtual = 51637
+Finished RTL Elaboration : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9365 ; free virtual = 54589
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2386.312 ; gain = 698.160 ; free physical = 2590 ; free virtual = 51639
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9363 ; free virtual = 54587
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2386.312 ; gain = 698.160 ; free physical = 2590 ; free virtual = 51639
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:07 . Memory (MB): peak = 2385.910 ; gain = 697.129 ; free physical = 9363 ; free virtual = 54587
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00.03 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2386.312 ; gain = 0.000 ; free physical = 2591 ; free virtual = 51640
+Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2385.910 ; gain = 0.000 ; free physical = 9364 ; free virtual = 54588
 INFO: [Netlist 29-17] Analyzing 17 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -446,20 +446,20 @@ Resolution: To avoid this warning, move constraints listed in [.Xil/top_propImpl
 INFO: [Project 1-1714] 2 XPM XDC files have been applied to the design.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2450.344 ; gain = 0.000 ; free physical = 2589 ; free virtual = 51644
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.941 ; gain = 0.000 ; free physical = 9370 ; free virtual = 54596
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2450.379 ; gain = 0.000 ; free physical = 2589 ; free virtual = 51644
+Constraint Validation Runtime : Time (s): cpu = 00:00:00.01 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9369 ; free virtual = 54595
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2598 ; free virtual = 51648
+Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2598 ; free virtual = 51648
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -473,7 +473,7 @@ Applied set_property KEEP_HIERARCHY = SOFT for u_ila. (constraint file  auto gen
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/\gconvfifo.rf /\grf.rf /\gntv_or_sync_fifo.gcx.clkx /rd_pntr_cdc_inst. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst/U0/inst_fifo_gen/\gconvfifo.rf /\grf.rf /\gntv_or_sync_fifo.gcx.clkx /wr_pntr_cdc_inst. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:10 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2598 ; free virtual = 51648
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9378 ; free virtual = 54602
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_ctrl'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'ad71143_spi'
@@ -562,7 +562,7 @@ INFO: [Synth 8-6159] Found Keep on FSM register 'top_state_reg' in module 'top',
            TOP_FRAME_GAP |                              110 |                              110
 ---------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2596 ; free virtual = 51647
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9387 ; free virtual = 54604
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -573,7 +573,7 @@ Detailed RTL Component Info :
 	   2 Input   16 Bit       Adders := 3     
 	   2 Input   10 Bit       Adders := 1     
 	   2 Input    8 Bit       Adders := 2     
-	   2 Input    7 Bit       Adders := 6     
+	   2 Input    7 Bit       Adders := 7     
 	   2 Input    6 Bit       Adders := 4     
 	   2 Input    4 Bit       Adders := 5     
 	   2 Input    3 Bit       Adders := 1     
@@ -589,11 +589,11 @@ Detailed RTL Component Info :
 	               16 Bit    Registers := 10    
 	               10 Bit    Registers := 7     
 	                8 Bit    Registers := 56    
-	                7 Bit    Registers := 8     
+	                7 Bit    Registers := 9     
 	                4 Bit    Registers := 17    
 	                3 Bit    Registers := 3     
 	                2 Bit    Registers := 4     
-	                1 Bit    Registers := 103   
+	                1 Bit    Registers := 106   
 +---Muxes : 
 	   2 Input   64 Bit        Muxes := 4     
 	   2 Input   32 Bit        Muxes := 1     
@@ -605,10 +605,10 @@ Detailed RTL Component Info :
 	   6 Input   10 Bit        Muxes := 2     
 	   4 Input   10 Bit        Muxes := 1     
 	   2 Input   10 Bit        Muxes := 2     
-	   2 Input    8 Bit        Muxes := 7     
+	   2 Input    8 Bit        Muxes := 39    
 	   4 Input    8 Bit        Muxes := 1     
 	   6 Input    8 Bit        Muxes := 1     
-	   2 Input    7 Bit        Muxes := 9     
+	   2 Input    7 Bit        Muxes := 10    
 	   6 Input    7 Bit        Muxes := 4     
 	   3 Input    7 Bit        Muxes := 1     
 	   2 Input    6 Bit        Muxes := 1     
@@ -624,11 +624,10 @@ Detailed RTL Component Info :
 	   2 Input    2 Bit        Muxes := 17    
 	   4 Input    2 Bit        Muxes := 6     
 	   7 Input    1 Bit        Muxes := 6     
-	   2 Input    1 Bit        Muxes := 46    
-	   4 Input    1 Bit        Muxes := 9     
+	   2 Input    1 Bit        Muxes := 50    
+	   4 Input    1 Bit        Muxes := 12    
 	   6 Input    1 Bit        Muxes := 22    
 	  11 Input    1 Bit        Muxes := 20    
-	   5 Input    1 Bit        Muxes := 1     
 	   8 Input    1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
@@ -647,25 +646,25 @@ Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2583 ; free virtual = 51645
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9374 ; free virtual = 54603
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2558 ; free virtual = 51620
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9390 ; free virtual = 54619
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2561 ; free virtual = 51623
+Finished Timing Optimization : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9388 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2561 ; free virtual = 51624
+Finished Technology Mapping : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9391 ; free virtual = 54620
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -683,37 +682,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51615
+Finished IO Insertion : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51615
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -733,18 +732,18 @@ Report Cell Usage:
 +------+---------+------+
 |1     |clk_wiz  |     1|
 |2     |ila      |     1|
-|3     |CARRY4   |    29|
-|4     |LUT1     |    14|
-|5     |LUT2     |   365|
-|6     |LUT3     |    65|
-|7     |LUT4     |   105|
-|8     |LUT5     |   109|
-|9     |LUT6     |   218|
-|10    |MUXF7    |    16|
-|11    |MUXF8    |     3|
+|3     |CARRY4   |    48|
+|4     |LUT1     |    16|
+|5     |LUT2     |   612|
+|6     |LUT3     |    99|
+|7     |LUT4     |   117|
+|8     |LUT5     |   113|
+|9     |LUT6     |   232|
+|10    |MUXF7    |    11|
+|11    |MUXF8    |     2|
 |12    |ODDR     |     7|
 |13    |RAMB36E1 |     4|
-|14    |FDCE     |  1556|
+|14    |FDCE     |  1640|
 |15    |FDPE     |     6|
 |16    |FDRE     |   107|
 |17    |IBUF     |     2|
@@ -753,11 +752,11 @@ Report Cell Usage:
 |20    |OBUFDS   |     2|
 +------+---------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 440 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 2450.379 ; gain = 698.160 ; free physical = 2552 ; free virtual = 51614
-Synthesis Optimization Complete : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 2450.379 ; gain = 762.227 ; free physical = 2552 ; free virtual = 51614
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:15 ; elapsed = 00:00:15 . Memory (MB): peak = 2449.977 ; gain = 697.129 ; free physical = 9386 ; free virtual = 54617
+Synthesis Optimization Complete : Time (s): cpu = 00:00:16 ; elapsed = 00:00:16 . Memory (MB): peak = 2449.977 ; gain = 761.195 ; free physical = 9386 ; free virtual = 54617
 INFO: [Project 1-571] Translating synthesized netlist
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[2]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
@@ -771,23 +770,23 @@ WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'stat
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[0]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
-Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2450.379 ; gain = 0.000 ; free physical = 2838 ; free virtual = 51901
-INFO: [Netlist 29-17] Analyzing 65 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00.02 ; elapsed = 00:00:00.02 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9671 ; free virtual = 54902
+INFO: [Netlist 29-17] Analyzing 78 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2450.379 ; gain = 0.000 ; free physical = 2839 ; free virtual = 51901
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2449.977 ; gain = 0.000 ; free physical = 9668 ; free virtual = 54899
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: bda7be71
+Synth Design complete | Checksum: d14c6bc
 INFO: [Common 17-83] Releasing license: Synthesis
 77 Infos, 116 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:20 ; elapsed = 00:00:19 . Memory (MB): peak = 2450.379 ; gain = 1119.945 ; free physical = 2839 ; free virtual = 51901
-INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2101.232; main = 1756.271; forked = 406.215
-INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3412.098; main = 2450.348; forked = 993.766
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2474.355 ; gain = 0.000 ; free physical = 2839 ; free virtual = 51901
+synth_design: Time (s): cpu = 00:00:19 ; elapsed = 00:00:18 . Memory (MB): peak = 2449.977 ; gain = 1119.945 ; free physical = 9667 ; free virtual = 54898
+INFO: [Common 17-2834] synth_design peak Physical Memory [PSS] (MB): overall = 2073.324; main = 1746.203; forked = 382.319
+INFO: [Common 17-2834] synth_design peak Virtual Memory [VSS] (MB): overall = 3411.176; main = 2449.945; forked = 993.246
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.01 . Memory (MB): peak = 2473.953 ; gain = 0.000 ; free physical = 9667 ; free virtual = 54898
 INFO: [Common 17-1381] The checkpoint '/home/furiosa/Projects/shitatechnology/work/ctrl/board/Project/top.runs/synth_1/top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Jul  9 17:54:55 2026...
+INFO: [Common 17-206] Exiting Vivado at Fri Jul 10 11:19:54 2026...

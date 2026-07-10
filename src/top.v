@@ -221,8 +221,8 @@ module top #(
 
   assign rst_n_125m = rst_sync2_125m;
 
-  // RGMII PHY 异步复位 (使用原始异步复位, PHY 需要即时响应)
-  assign rgmii_rst_n = rst_n_async;
+  // RGMII PHY 异步复位 (暂时永久拉高, 排除复位问题)
+  assign rgmii_rst_n = 1'b1;
   
   // =========================================================================
   // 内部信号
@@ -397,15 +397,18 @@ module top #(
   localparam CFG_IDLE  = 2'd0;
   localparam CFG_ISSUE = 2'd1;
   localparam CFG_WAIT  = 2'd2;
-  localparam CFG_DONE  = 2'd3;
-  localparam CFG_DELAY = 28'd100_000_000;  // 1s @ 100MHz
+  localparam CFG_DONE    = 2'd3;
+  localparam CFG_DELAY   = 28'd100_000_000;  // 1s @ 100MHz
+  localparam CFG_GAP     = 7'd100;           // 1μs between writes
 
   reg [1:0]  cfg_state, cfg_state_next;
   reg [3:0]  cfg_reg_idx;
   reg        cfg_spi_start;
   reg        cfg_all_done;
   reg [27:0] cfg_delay_cnt;
+  reg [6:0]  cfg_gap_cnt;
   wire       cfg_delay_done;
+  wire       cfg_gap_done;
   
   // SPI 配置寄存�? LUT �? 按推荐上电顺序排�?
   wire [3:0] cfg_addr_lut;
@@ -449,6 +452,7 @@ module top #(
       (cfg_reg_idx == 4'd15) ? 10'h000 :  // Reg15: Reserved
       10'h000;
   assign cfg_delay_done = (cfg_delay_cnt == CFG_DELAY - 1);
+  assign cfg_gap_done   = (cfg_gap_cnt  == CFG_GAP - 1);
 
   
   always @(posedge clk_100m or negedge rst_n_100m) begin
@@ -468,7 +472,7 @@ module top #(
           CFG_ISSUE: cfg_state_next = CFG_WAIT;
           CFG_WAIT:  if (spi_done) cfg_state_next = CFG_DONE;
           CFG_DONE: begin
-              if (cfg_reg_idx != 4'd15)
+              if (cfg_reg_idx != 4'd15 && cfg_gap_done)
                   cfg_state_next = CFG_ISSUE;
               // else stay in CFG_DONE permanently (all 16 regs written)
           end
@@ -482,6 +486,7 @@ module top #(
           cfg_reg_idx    <= 4'd0;
           cfg_all_done   <= 1'b0;
           cfg_delay_cnt  <= 28'd0;
+          cfg_gap_cnt    <= 7'd0;
       end else begin
           cfg_spi_start <= 1'b0;
 
@@ -499,10 +504,15 @@ module top #(
                   // wait for spi_done
               end
               CFG_DONE: begin
-                  if (cfg_reg_idx == 4'd15)
-                      cfg_all_done <= 1'b1;
-                  else
-                      cfg_reg_idx <= cfg_reg_idx + 4'd1;
+                  if (cfg_gap_done) begin
+                      cfg_gap_cnt <= 7'd0;
+                      if (cfg_reg_idx == 4'd15)
+                          cfg_all_done <= 1'b1;
+                      else
+                          cfg_reg_idx <= cfg_reg_idx + 4'd1;
+                  end else begin
+                      cfg_gap_cnt <= cfg_gap_cnt + 7'd1;
+                  end
               end
           endcase
       end
@@ -743,7 +753,7 @@ module top #(
   // RGMII 桥接: merged_burst �? 字节 �? RGMII_tx
   // =========================================================================
   rgmii_bridge u_rgmii_bridge (
-      .rst_n      (rst_n_async ),
+      .rst_n      (pll_locked  ),
       .clk_100m   (clk_100m    ),
       .clk_125m   (clk_125m    ),
       .data_in    (merged_burst),

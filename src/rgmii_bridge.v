@@ -13,7 +13,9 @@
 //
 module rgmii_bridge #(
     parameter BURST_WIDTH = 256,         // 输入 burst 位宽
-    parameter BURST_BYTES = 32           // burst 字节数 = 256/8
+    parameter BURST_BYTES = 32,          // burst 字节数 = 256/8
+    parameter TEST_MODE   = 1,           // 测试模式: 1=使能测试数据生成
+    parameter TEST_INTERVAL = 125000     // 测试发包间隔 (125000 = 1ms @ 125MHz)
 ) (
     input  wire         rst_n,           // 异步复位，低有效
 
@@ -48,7 +50,16 @@ module rgmii_bridge #(
     reg         tx_start;
     reg [7:0]   tx_data;
     reg         preloaded;                      // 首字节已预装 / 帧发送中标志
-    
+
+    // =====================================================================
+    // 测试模式: 无 AFE 数据时自动产生递增测试数据
+    // =====================================================================
+    reg [31:0]  test_seq_num;                // 测试包序号 (每包递增)
+    reg [16:0]  interval_cnt;                // 发包间隔计数器
+    reg         test_trig;                   // 测试触发 (同 fifo_rd_en_d1 语义)
+    reg [23:0]  startup_cnt;                 // 上电启动延迟 (~134ms @ 125MHz)
+    reg         startup_done;                // 启动延迟完成标志
+
     // =====================================================================
     // Xilinx FIFO IP: 100MHz (写) → 125MHz (读)
     // =====================================================================
@@ -104,28 +115,62 @@ module rgmii_bridge #(
     // UDP Length = UDP头(8) + Payload(BURST_BYTES) = 8 + 32 = 40
     localparam [15:0] UDP_LENGTH = 8 + BURST_BYTES;  // 40
 
+    reg  test_trig_d1;   // test_trig 延迟 1 拍, 对齐帧组装时序
+
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
             fifo_rd_en_d1   <= 1'b0;
+            test_trig       <= 1'b0;
+            test_trig_d1    <= 1'b0;
             tx_data          <= 8'd0;
             tx_start         <= 1'b0;
             frame_idx        <= 7'd0;
             preloaded        <= 1'b0;
+            test_seq_num    <= 32'd0;
+            interval_cnt    <= 17'd0;
+            startup_cnt     <= 24'd0;
+            startup_done    <= 1'b0;
             for (i = 0; i < FRAME_BYTES; i = i + 1)
                 frame_buf[i] <= 8'd0;
         end else begin
             tx_start       <= 1'b0;
             fifo_rd_en_d1  <= fifo_rd_en;
+            test_trig_d1   <= test_trig;
+            if (test_trig) test_trig <= 1'b0;  // 脉冲信号, 自动清除
 
             // ---- FIFO 读控制: 空闲且 FIFO 非空 → 发起读 ----
-            if (!fifo_empty && !preloaded && !fifo_rd_en) begin
+            if (!fifo_empty && !preloaded && !fifo_rd_en && !test_trig) begin
                 fifo_rd_en <= 1'b1;
             end else begin
                 fifo_rd_en <= 1'b0;
             end
 
-            // ---- rd_en 后 2 拍, dout 有效: 组装帧 + 发送 ----
-            if (fifo_rd_en_d1) begin
+            // ---- 上电启动延迟: 等待 PHY 完成自协商 (IDELAYCTRL 也需要 ----
+            if (!startup_done) begin
+                // 计数到约 134ms (2^24 / 125MHz), 超过 1000BASE-T 自协商时间
+                if (startup_cnt >= 24'hFFFFFF) begin
+                    startup_done <= 1'b1;
+                end else begin
+                    startup_cnt <= startup_cnt + 24'd1;
+                end
+            end
+
+            // ---- 测试模式间隔计数器 (启动延迟完成后才运行) ----
+            if (TEST_MODE && startup_done) begin
+                if (interval_cnt >= TEST_INTERVAL - 1) begin
+                    interval_cnt <= 17'd0;
+                    // FIFO 为空且当前空闲时, 产生测试触发
+                    if (fifo_empty && !preloaded && !fifo_rd_en && !test_trig) begin
+                        test_trig    <= 1'b1;
+                        test_seq_num <= test_seq_num + 32'd1;
+                    end
+                end else begin
+                    interval_cnt <= interval_cnt + 17'd1;
+                end
+            end
+
+            // ---- 帧组装触发 (FIFO 数据 或 测试触发) ----
+            if (fifo_rd_en_d1 || test_trig_d1) begin
                 // MAC 头 (14 bytes)
                 frame_buf[0]  <= 8'hFF;    // DMAC[0]  broadcast
                 frame_buf[1]  <= 8'hFF;    // DMAC[1]
@@ -174,14 +219,27 @@ module rgmii_bridge #(
                 frame_buf[40] <= 8'h00;                     // Checksum = 0
                 frame_buf[41] <= 8'h00;
 
-                // Payload: 直接取自 fifo_dout (Embedded Register 已寄存, MSB first)
-                for (i = 0; i < BURST_BYTES; i = i + 1) begin
-                    frame_buf[HDR_BYTES + i] <=
-                        fifo_dout[(BURST_BYTES - 1 - i) * 8 +: 8];
+                // 首字节必须是 DMAC[0] = 0xFF (广播 MAC 第一字节)
+                tx_data  <= 8'hFF;
+
+                // Payload: test_trig 用测试数据, 否则用 FIFO 数据
+                if (test_trig_d1) begin
+                    // 测试模式: Payload[0:3] = 32bit 序号, Payload[4:31] = 递增字节
+                    frame_buf[HDR_BYTES + 0] <= test_seq_num[31:24];
+                    frame_buf[HDR_BYTES + 1] <= test_seq_num[23:16];
+                    frame_buf[HDR_BYTES + 2] <= test_seq_num[15: 8];
+                    frame_buf[HDR_BYTES + 3] <= test_seq_num[ 7: 0];
+                    for (i = 4; i < BURST_BYTES; i = i + 1) begin
+                        frame_buf[HDR_BYTES + i] <= i[7:0];
+                    end
+                end else begin
+                    // 真实数据: 直接取自 fifo_dout (MSB first)
+                    for (i = 0; i < BURST_BYTES; i = i + 1) begin
+                        frame_buf[HDR_BYTES + i] <=
+                            fifo_dout[(BURST_BYTES - 1 - i) * 8 +: 8];
+                    end
                 end
 
-                // 预装首字节, 触发发送
-                tx_data    <= fifo_dout[BURST_WIDTH-1 -: 8];
                 tx_start   <= 1'b1;
                 frame_idx  <= 7'd1;
                 preloaded  <= 1'b1;
