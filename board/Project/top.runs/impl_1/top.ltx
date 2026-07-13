@@ -105,14 +105,14 @@
                                 "portIndex": 1,
                                 "nets": [
                                     {
-                                        "name": "mdio_rxerr",
+                                        "name": "mdio_rxerr_1",
                                         "isBus": true,
                                         "subnets": [
                                             {
-                                                "name": "mdio_rxerr[1]"
+                                                "name": "mdio_rxerr_1[1]"
                                             },
                                             {
-                                                "name": "mdio_rxerr[0]"
+                                                "name": "mdio_rxerr_1[0]"
                                             }
                                         ]
                                     }
@@ -125,34 +125,26 @@
                                 "direction": "IN",
                                 "isVector": true,
                                 "leftIndex": 2,
-                                "rightIndex": 2,
+                                "rightIndex": 3,
                                 "portIndex": 1,
                                 "nets": [
                                     {
-                                        "name": "rgmii_dbg_phy_rdy",
-                                        "isBus": false
+                                        "name": "mdio_rxerr",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "mdio_rxerr[3]"
+                                            },
+                                            {
+                                                "name": "mdio_rxerr[2]"
+                                            }
+                                        ]
                                     }
                                 ]
                             },
                             {
                                 "name": "probe1",
                                 "id": 6,
-                                "type": "DATA_TRIGGER",
-                                "direction": "IN",
-                                "isVector": true,
-                                "leftIndex": 3,
-                                "rightIndex": 3,
-                                "portIndex": 1,
-                                "nets": [
-                                    {
-                                        "name": "rgmii_dbg_tx_start_d",
-                                        "isBus": false
-                                    }
-                                ]
-                            },
-                            {
-                                "name": "probe1",
-                                "id": 7,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -168,7 +160,7 @@
                             },
                             {
                                 "name": "probe1",
-                                "id": 8,
+                                "id": 7,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -184,12 +176,10 @@
                                                 "name": "rgmii_dbg_tx_fsm_1[2]"
                                             },
                                             {
-                                                "name": "rgmii_dbg_tx_fsm_1[1]",
-                                                "parentNetId": 9
+                                                "name": "rgmii_dbg_tx_fsm_1[1]"
                                             },
                                             {
-                                                "name": "rgmii_dbg_tx_fsm_1[0]",
-                                                "parentNetId": 10
+                                                "name": "rgmii_dbg_tx_fsm_1[0]"
                                             }
                                         ]
                                     }
@@ -197,7 +187,7 @@
                             },
                             {
                                 "name": "probe1",
-                                "id": 9,
+                                "id": 8,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -224,7 +214,7 @@
                             },
                             {
                                 "name": "probe2",
-                                "id": 10,
+                                "id": 9,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -254,7 +244,7 @@
                             },
                             {
                                 "name": "probe2",
-                                "id": 11,
+                                "id": 10,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -270,7 +260,7 @@
                             },
                             {
                                 "name": "probe2",
-                                "id": 12,
+                                "id": 11,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -286,7 +276,7 @@
                             },
                             {
                                 "name": "probe2",
-                                "id": 13,
+                                "id": 12,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -302,7 +292,7 @@
                             },
                             {
                                 "name": "probe2",
-                                "id": 14,
+                                "id": 13,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -318,7 +308,7 @@
                             },
                             {
                                 "name": "probe3",
-                                "id": 15,
+                                "id": 14,
                                 "type": "DATA_TRIGGER",
                                 "direction": "IN",
                                 "isVector": true,
@@ -334,70 +324,12 @@
                                                 "name": "rgmii_dbg_tx_fsm[2]"
                                             },
                                             {
-                                                "name": "rgmii_dbg_tx_fsm[1]",
-                                                "parentNetId": 9
+                                                "name": "rgmii_dbg_tx_fsm[1]"
                                             },
                                             {
-                                                "name": "rgmii_dbg_tx_fsm[0]",
-                                                "parentNetId": 10
+                                                "name": "rgmii_dbg_tx_fsm[0]"
                                             }
                                         ]
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ],
-                "parent_nets": [
-                    {
-                        "id": 9,
-                        "name": "u_rgmii_bridge/u_rgmii_tx/Q[1]",
-                        "state_reg": [
-                            {
-                                "name": "u_rgmii_bridge/u_rgmii_tx/FSM_sequential_state_reg[1]",
-                                "states": [
-                                    {
-                                        "name": "PREAMBLE",
-                                        "val": "01"
-                                    },
-                                    {
-                                        "name": "SFD_STATE",
-                                        "val": "10"
-                                    },
-                                    {
-                                        "name": "DATA",
-                                        "val": "11"
-                                    },
-                                    {
-                                        "name": "IDLE",
-                                        "val": "00"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "id": 10,
-                        "name": "u_rgmii_bridge/u_rgmii_tx/Q[0]",
-                        "state_reg": [
-                            {
-                                "name": "u_rgmii_bridge/u_rgmii_tx/FSM_sequential_state_reg[0]",
-                                "states": [
-                                    {
-                                        "name": "PREAMBLE",
-                                        "val": "01"
-                                    },
-                                    {
-                                        "name": "SFD_STATE",
-                                        "val": "10"
-                                    },
-                                    {
-                                        "name": "DATA",
-                                        "val": "11"
-                                    },
-                                    {
-                                        "name": "IDLE",
-                                        "val": "00"
                                     }
                                 ]
                             }

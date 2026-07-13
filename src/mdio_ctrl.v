@@ -52,16 +52,14 @@ module mdio_ctrl (
     localparam REG_EXTAD   = 5'h1E;
     localparam REG_EXTDT   = 5'h1F;
     localparam REG_BMSR    = 5'h01;
-    localparam REG_PKGTX   = 5'h1E;     // ext reg pointer port
-    localparam REG_RGMII2  = 5'h04;     // 0xA004 via ext -> RGMII_Config2
-    localparam EXTAD_CHIPCFG = 16'hA001;  // Chip_Config
-    localparam EXTAD_CFG1    = 16'hA003;  // RGMII_Config1
-    localparam EXTAD_CFG2    = 16'hA004;  // RGMII_Config2
-    localparam EXTAD_PKGTX   = 16'h00AD;  // Pkg Tx Valid counter (low)
-    // Chip_Config (0xA001) = 0x0040: 清 bit8 Rxc_dly_en, 保留 bit6 En_ldo=1
-    localparam DATA_CHIPCFG  = 16'h0040;
-    // RGMII_Config1 (0xA003) = 0x0000: FPGA 90°相移提供 2ns, PHY 不加延迟
-    localparam DATA_TXDLY    = 16'h0000;
+    localparam REG_BCR     = 5'h00;   // Basic Control Register
+    localparam EXTAD_CHIP  = 16'hA001;  // Chip_Config
+    localparam EXTAD_RGMII = 16'hA003;  // RGMII_Config1
+    localparam EXTAD_PKGTX = 16'h00AD;
+    // Chip_Config: bit15=1(no reset) bit8=0(Rxc_dly_en=0) bit6=1(En_ldo=1) bit5:4=00(3.3V)
+    localparam VAL_CHIPCFG  = 16'h8040;
+    // RGMII_Config1: all delays off (FPGA 90° TXC provides 2ns)
+    localparam VAL_RGMII1   = 16'h0000;
 
     // =====================================================================
     // 帧 FSM 状态
@@ -79,14 +77,15 @@ module mdio_ctrl (
     // =====================================================================
     localparam I_IDLE       = 3'd0;
     localparam I_WAIT       = 3'd1;
-    localparam I_SET_CHIP   = 3'd2;   // 写 ext addr = 0xA001 (Chip_Config)
-    localparam I_WR_CHIP    = 3'd3;   // 写 Chip_Config = 0x0040 (关 Rxc_dly_en)
-    localparam I_SET_RGMII  = 3'd4;   // 写 ext addr = 0xA003 (RGMII_Config1)
-    localparam I_WR_RGMII   = 3'd5;   // 写 RGMII_Config1 = 0x0000
-    localparam I_CLR_EXTAD  = 3'd6;   // 清除 ext addr
-    localparam I_POLL_BMSR  = 3'd7;   // 轮询 BMSR
+    localparam I_SET_CHIP   = 3'd2;   // ext addr = 0xA001
+    localparam I_WR_CHIP    = 3'd3;   // write Chip_Config
+    localparam I_SET_RGMII  = 3'd4;   // ext addr = 0xA003
+    localparam I_WR_RGMII   = 3'd5;   // write RGMII_Config1
+    localparam I_RD_BCR     = 3'd6;   // read BCR → rgmii2_val
+    localparam I_POLL       = 3'd7;   // BMSR ↔ PkgTx 交替
 
     reg [2:0]   i_state;
+    reg [1:0]   poll_cnt;       // 0:BMSR→1:wrPKGTX→2:rdPKGTX→3:clrEXT
     reg [23:0]  init_delay;
     reg         req_start;
     reg         req_rw;
@@ -126,6 +125,7 @@ module mdio_ctrl (
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             i_state     <= I_IDLE;
+            poll_cnt    <= 2'd0;
             req_start   <= 1'b0;
             rgmii2_val  <= 16'd0;
             req_rw    <= 1'b0;
@@ -137,23 +137,33 @@ module mdio_ctrl (
 
             case (i_state)
                 I_IDLE:     if (init_ready)  i_state <= I_WAIT;
-                I_WAIT:     if (init_wait)   begin i_state <= I_SET_CHIP; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CHIPCFG; end
-                // Step 1: 写 Chip_Config = 0x0040 (关 Rxc_dly_en, 保留 En_ldo=1)
-                I_SET_CHIP: if (req_done_rise) begin i_state <= I_WR_CHIP;  req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTDT; req_wdata <= DATA_CHIPCFG; end
-                // Step 2: 写 RGMII_Config1 = 0x0000
-                I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_RGMII;req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CFG1; end
-                I_SET_RGMII:if (req_done_rise) begin i_state <= I_WR_RGMII; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTDT; req_wdata <= DATA_TXDLY; end
-                // Step 3: 清除 ext addr, 开始轮询 BMSR
-                I_WR_RGMII: if (req_done_rise) begin i_state <= I_CLR_EXTAD;req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= 16'h0000; end
-                I_CLR_EXTAD:if (req_done_rise) begin i_state <= I_POLL_BMSR; req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
-                // 轮询 BMSR
-                I_POLL_BMSR:if (req_done_rise) begin bmsr_val <= rdata_shift;  req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
+                I_WAIT:     if (init_wait)   begin i_state <= I_SET_CHIP; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_CHIP; end
+                // Step 1: Chip_Config = 0x8040 (Rxc_dly_en=0, Cfg_ldo=3.3V)
+                I_SET_CHIP: if (req_done_rise) begin i_state <= I_WR_CHIP;  req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_CHIPCFG; end
+                // Step 2: ext addr = 0xA003 (RGMII_Config1)
+                I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_RGMII;req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_RGMII; end
+                // Step 3: RGMII_Config1 = 0x0000 (精细延迟全关)
+                I_SET_RGMII:if (req_done_rise) begin i_state <= I_WR_RGMII; req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_RGMII1; end
+                // Step 4: 清 ext addr, 读 BCR (检查 isolate/power-down)
+                I_WR_RGMII: if (req_done_rise) begin i_state <= I_RD_BCR;   req_start<=1; req_rw<=1; req_regad<=REG_BCR; end
+                I_RD_BCR:   if (req_done_rise) begin rgmii2_val<=rdata_shift; i_state<=I_POLL; poll_cnt<=0; req_start<=1; req_rw<=1; req_regad<=REG_BMSR; end
+                // 轮询: 0=save BMSR→1=wrPKGTX→2=save PkgTx→3=clrExt
+                I_POLL: begin
+                    if (req_done_rise) begin
+                        case (poll_cnt)
+                            2'd0: begin bmsr_val<=rdata_shift; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_PKGTX; poll_cnt<=1; end
+                            2'd1: begin                           req_start<=1; req_rw<=1; req_regad<=REG_EXTDT;                            poll_cnt<=2; end
+                            2'd2: begin rxerr_val<=rdata_shift;  req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=16'h0000;     poll_cnt<=3; end
+                            2'd3: begin                           req_start<=1; req_rw<=1; req_regad<=REG_BMSR;                             poll_cnt<=0; end
+                        endcase
+                    end
+                end
                 default: i_state <= I_IDLE;
             endcase
         end
     end
 
-    assign cfg_done = (i_state >= I_POLL_BMSR);
+    assign cfg_done = (i_state >= I_POLL);
     assign link_up  = (bmsr_val[2] == 1'b1);
 
     // =====================================================================

@@ -15,7 +15,7 @@ module rgmii_bridge #(
     parameter BURST_WIDTH = 256,         // 输入 burst 位宽
     parameter BURST_BYTES = 32,          // burst 字节数 = 256/8
     parameter TEST_MODE   = 1,           // 测试模式: 1=使能测试数据生成
-    parameter TEST_INTERVAL = 125000     // 测试发包间隔 (125000 = 1ms @ 125MHz)
+    parameter TEST_INTERVAL = 1000      // 测试发包间隔 (1000 = 8μs @ 125MHz)
 ) (
     input  wire         rst_n,           // 异步复位，低有效
 
@@ -139,6 +139,7 @@ module rgmii_bridge #(
     reg [31:0] crc_reg;
     reg [6:0]  crc_idx;
     reg        crc_busy;
+    reg        crc_done_r;         // crc_done 延迟 1 拍 (等待 crc_reg 更新)
     wire       crc_done = (crc_idx == 7'd73) && crc_busy;  // 组合逻辑脉冲
 
     // CRC-32 next: polynomial 0xEDB88320 (reversed, for LSB-first)
@@ -157,9 +158,10 @@ module rgmii_bridge #(
 
     always @(posedge clk_125m or negedge rst_n) begin
         if (!rst_n) begin
-            crc_reg  <= 32'd0;
-            crc_idx  <= 7'd0;
-            crc_busy <= 1'b0;
+            crc_reg    <= 32'd0;
+            crc_idx    <= 7'd0;
+            crc_busy   <= 1'b0;
+            crc_done_r <= 1'b0;
         end else begin
             if (fifo_rd_en_d1 || test_trig_d1) begin
                 crc_reg  <= 32'hFFFFFFFF;
@@ -171,11 +173,7 @@ module rgmii_bridge #(
                 crc_reg <= crc32_byte(crc_reg, frame_buf[crc_idx]);
                 if (crc_idx == 7'd73) begin
                     crc_busy <= 1'b0;
-                    // 存储 FCS
-                    frame_buf[FCS_OFFSET + 0] <= ~crc_reg[7:0];
-                    frame_buf[FCS_OFFSET + 1] <= ~crc_reg[15:8];
-                    frame_buf[FCS_OFFSET + 2] <= ~crc_reg[23:16];
-                    frame_buf[FCS_OFFSET + 3] <= ~crc_reg[31:24];
+                    // FCS 写入延迟到 crc_done_r 周期, 等待 crc_reg 更新为最终值
                 end else begin
                     crc_idx <= crc_idx + 7'd1;
                 end
@@ -213,7 +211,16 @@ module rgmii_bridge #(
                 fifo_rd_en <= 1'b0;
             end
 
-            // ---- 上电启动延迟: 等待 PHY 完成自协商 (IDELAYCTRL 也需要 ----
+            // ---- 上电启动延迟: 等待 PHY 完成自协商 (IDELAYCTRL 也需要) ----
+`ifdef SIM_FAST
+            if (!startup_done) begin
+                if (startup_cnt >= 24'd500) begin
+                    startup_done <= 1'b1;
+                end else begin
+                    startup_cnt <= startup_cnt + 24'd1;
+                end
+            end
+`else
             if (!startup_done) begin
                 // 计数到约 134ms (2^24 / 125MHz), 超过 1000BASE-T 自协商时间
                 if (startup_cnt >= 24'hFFFFFF) begin
@@ -222,6 +229,7 @@ module rgmii_bridge #(
                     startup_cnt <= startup_cnt + 24'd1;
                 end
             end
+`endif
 
             // ---- 测试模式间隔计数器 (启动延迟完成后才运行) ----
             if (TEST_MODE && startup_done) begin
@@ -312,12 +320,22 @@ module rgmii_bridge #(
                 // frame_ready 会在 74 拍后自动变高
             end
 
-            // ---- CRC 完成后触发实际发送 (crc_done 是 1 拍脉冲) ----
-            if (crc_done) begin
+            // ---- CRC 完成 (crc_done) → 延迟 1 拍到 crc_done_r, 等 crc_reg 更新 ----
+            // 在 crc_done_r 周期: crc_reg 已更新为最终 CRC (覆盖全部 74 字节)
+            // 写入 FCS, 然后触发 RGMII_tx 发送
+            if (crc_done_r) begin
+                // FCS 字节序: LSB first (反射算法下 crc_reg[0]=x^31 项, 应在第一字节 bit0)
+                frame_buf[FCS_OFFSET + 0] <= ~crc_reg[7:0];
+                frame_buf[FCS_OFFSET + 1] <= ~crc_reg[15:8];
+                frame_buf[FCS_OFFSET + 2] <= ~crc_reg[23:16];
+                frame_buf[FCS_OFFSET + 3] <= ~crc_reg[31:24];
                 tx_data   <= frame_buf[0];   // DMAC[0] = 0xFF
                 tx_start  <= 1'b1;
                 frame_idx <= 7'd1;
                 preloaded <= 1'b1;
+                crc_done_r <= 1'b0;
+            end else if (crc_done) begin
+                crc_done_r <= 1'b1;
             end
 
             // ---- DATA 阶段: tx_req 每拍推进一字节 ----
@@ -350,7 +368,7 @@ module rgmii_bridge #(
         .dbg_state(tx_fsm_state)
     );
 
-    // TXC 90°相移: FPGA MMCM 精确提供 2ns. PHY 端 Rxc_dly_en 将被 MDIO 关闭.
+    // TXC 90°相移: FPGA 提供 2ns 延迟
     ODDR #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
         .INIT(1'b0),

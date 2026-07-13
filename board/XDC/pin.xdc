@@ -175,7 +175,7 @@ set_property IOSTANDARD LVDS_25 [get_ports dout_n_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_p_B1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_n_B1]
 
-# ---- RGMII ----
+# ---- RGMII (FPGA Bank Vcco=3.3V, PHY Cfg_ldo=00 → DVDD_RGMII=3.3V) ----
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rst_n]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_txc]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_tx_ctl]
