@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date             : Mon Jul 13 17:59:29 2026
+| Date             : Mon Jul 13 18:42:21 2026
 | Host             : Furiosa running 64-bit Arch Linux
 | Command          : report_power -file top_power_routed.rpt -pb top_power_summary_routed.pb -rpx top_power_routed.rpx
 | Design           : top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.406        |
+| Total On-Chip Power (W)  | 0.405        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.250        |
+| Dynamic (W)              | 0.249        |
 | Device Static (W)        | 0.156        |
 | Effective TJA (C/W)      | 2.5          |
 | Max Ambient (C)          | 84.0         |
@@ -52,10 +52,10 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.023 |        9 |       --- |             --- |
-| Slice Logic              |     0.003 |     5874 |       --- |             --- |
-|   LUT as Logic           |     0.002 |     1880 |    133800 |            1.41 |
-|   Register               |    <0.001 |     2622 |    269200 |            0.97 |
+| Clocks                   |     0.022 |        9 |       --- |             --- |
+| Slice Logic              |     0.003 |     5883 |       --- |             --- |
+|   LUT as Logic           |     0.002 |     1885 |    133800 |            1.41 |
+|   Register               |    <0.001 |     2628 |    269200 |            0.98 |
 |   CARRY4                 |    <0.001 |       88 |     33450 |            0.26 |
 |   LUT as Shift Register  |    <0.001 |      105 |     46200 |            0.23 |
 |   LUT as Distributed RAM |    <0.001 |       24 |     46200 |            0.05 |
@@ -66,7 +66,7 @@ Table of Contents
 | MMCM                     |     0.106 |        1 |        10 |           10.00 |
 | I/O                      |     0.111 |       57 |       285 |           20.00 |
 | Static Power             |     0.156 |          |           |                 |
-| Total                    |     0.406 |          |           |                 |
+| Total                    |     0.405 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -76,7 +76,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.067 |       0.034 |      0.033 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.066 |       0.033 |      0.033 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.090 |       0.059 |      0.031 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.010 |       0.005 |      0.005 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.043 |       0.038 |      0.005 |       NA    | Unspecified | NA         |
@@ -151,16 +151,16 @@ Table of Contents
 +--------------------------+-----------+
 | Name                     | Power (W) |
 +--------------------------+-----------+
-| top                      |     0.250 |
-|   dbg_hub                |     0.005 |
-|     inst                 |     0.005 |
-|       BSCANID.u_xsdbm_id |     0.005 |
+| top                      |     0.249 |
+|   dbg_hub                |     0.004 |
+|     inst                 |     0.004 |
+|       BSCANID.u_xsdbm_id |     0.004 |
 |   u_data_rx_dual         |     0.095 |
 |     u_panel0             |     0.048 |
 |     u_panel1             |     0.047 |
-|   u_ila                  |     0.019 |
-|     inst                 |     0.019 |
-|       ila_core_inst      |     0.019 |
+|   u_ila                  |     0.018 |
+|     inst                 |     0.018 |
+|       ila_core_inst      |     0.018 |
 |   u_mdio                 |     0.001 |
 |   u_mmcm                 |     0.107 |
 |     inst                 |     0.107 |

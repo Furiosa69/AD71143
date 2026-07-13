@@ -55,11 +55,14 @@ module mdio_ctrl (
     localparam REG_BCR     = 5'h00;   // Basic Control Register
     localparam EXTAD_CHIP  = 16'hA001;  // Chip_Config
     localparam EXTAD_RGMII = 16'hA003;  // RGMII_Config1
+    localparam EXTAD_LED2  = 16'hA00E;  // LED2_CFG
     localparam EXTAD_PKGTX = 16'h00AD;
     // Chip_Config: bit15=1(no reset) bit8=0(Rxc_dly_en=0) bit6=1(En_ldo=1) bit5:4=00(3.3V)
     localparam VAL_CHIPCFG  = 16'h8040;
     // RGMII_Config1: all delays off (FPGA 90° TXC provides 2ns)
     localparam VAL_RGMII1   = 16'h0000;
+    // LED2_CFG: LED2=1000M link ON + blink on TX/RX
+    localparam VAL_LED2     = 16'h0644;
 
     // =====================================================================
     // 帧 FSM 状态
@@ -79,8 +82,8 @@ module mdio_ctrl (
     localparam I_WAIT       = 3'd1;
     localparam I_SET_CHIP   = 3'd2;   // ext addr = 0xA001
     localparam I_WR_CHIP    = 3'd3;   // write Chip_Config
-    localparam I_SET_RGMII  = 3'd4;   // ext addr = 0xA003
-    localparam I_WR_RGMII   = 3'd5;   // write RGMII_Config1
+    localparam I_SET_LED2   = 3'd4;   // ext addr = 0xA00E
+    localparam I_WR_LED2    = 3'd5;   // write LED2_CFG
     localparam I_RD_BCR     = 3'd6;   // read BCR → rgmii2_val
     localparam I_POLL       = 3'd7;   // BMSR ↔ PkgTx 交替
 
@@ -140,12 +143,11 @@ module mdio_ctrl (
                 I_WAIT:     if (init_wait)   begin i_state <= I_SET_CHIP; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_CHIP; end
                 // Step 1: Chip_Config = 0x8040 (Rxc_dly_en=0, Cfg_ldo=3.3V)
                 I_SET_CHIP: if (req_done_rise) begin i_state <= I_WR_CHIP;  req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_CHIPCFG; end
-                // Step 2: ext addr = 0xA003 (RGMII_Config1)
-                I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_RGMII;req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_RGMII; end
-                // Step 3: RGMII_Config1 = 0x0000 (精细延迟全关)
-                I_SET_RGMII:if (req_done_rise) begin i_state <= I_WR_RGMII; req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_RGMII1; end
-                // Step 4: 清 ext addr, 读 BCR (检查 isolate/power-down)
-                I_WR_RGMII: if (req_done_rise) begin i_state <= I_RD_BCR;   req_start<=1; req_rw<=1; req_regad<=REG_BCR; end
+                // Step 2: LED2_CFG = 0x0644 (1000M link ON + TX/RX blink)
+                I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_LED2; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_LED2; end
+                I_SET_LED2: if (req_done_rise) begin i_state <= I_WR_LED2;  req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_LED2; end
+                // Step 3: 读 BCR (检查 isolate/power-down), 然后进入轮询
+                I_WR_LED2:  if (req_done_rise) begin i_state <= I_RD_BCR;   req_start<=1; req_rw<=1; req_regad<=REG_BCR; end
                 I_RD_BCR:   if (req_done_rise) begin rgmii2_val<=rdata_shift; i_state<=I_POLL; poll_cnt<=0; req_start<=1; req_rw<=1; req_regad<=REG_BMSR; end
                 // 轮询: 0=save BMSR→1=wrPKGTX→2=save PkgTx→3=clrExt
                 I_POLL: begin

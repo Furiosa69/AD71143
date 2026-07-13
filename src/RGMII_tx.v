@@ -32,6 +32,7 @@ module RGMII_tx (
     reg  [7:0]      tx_byte;            //当前发送字节
     reg             tx_en;              //当前发送使能
     reg             tx_er;              //当前发送错误
+    reg  [7:0]      tx_data_d;          // tx_data 延迟 1 拍 (对齐 state 时序)
 
     // ============ 状态寄存器 ============
     always @(posedge TXC) begin
@@ -76,14 +77,24 @@ module RGMII_tx (
         end
     end
 
+    // ---- tx_data 管线延迟 1 拍 (对齐 state 时序) ----
+    always @(posedge TXC) begin
+        if (!rst_n)
+            tx_data_d <= 8'h00;
+        else
+            tx_data_d <= tx_data;
+    end
+
     // ============ 发送字节选择 ============
+    // 用 state(寄存器) 而非 next_state(组合逻辑), 避免状态转移时早切一拍的 bug
+    // tx_data 需经过 tx_data_d 管线 1 拍对齐
     always @(posedge TXC) begin
         if (!rst_n) begin
             tx_byte <= 8'h00;
             tx_en   <= 1'b0;
             tx_er   <= 1'b0;
         end else begin
-            case (next_state)
+            case (state)
                 PREAMBLE: begin
                     tx_byte <= Preamble;
                     tx_en   <= 1'b1;
@@ -95,7 +106,7 @@ module RGMII_tx (
                     tx_er   <= 1'b0;
                 end
                 DATA: begin
-                    tx_byte <= tx_data;
+                    tx_byte <= tx_data_d;   // 用延迟后的数据
                     tx_en   <= 1'b1;
                     tx_er   <= 1'b0;
                 end
