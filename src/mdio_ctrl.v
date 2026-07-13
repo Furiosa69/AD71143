@@ -54,10 +54,14 @@ module mdio_ctrl (
     localparam REG_BMSR    = 5'h01;
     localparam REG_PKGTX   = 5'h1E;     // ext reg pointer port
     localparam REG_RGMII2  = 5'h04;     // 0xA004 via ext -> RGMII_Config2
-    localparam EXTAD_CFG1  = 16'hA003;
-    localparam EXTAD_CFG2  = 16'hA004;
-    localparam EXTAD_PKGTX = 16'h00AD;  // Pkg Tx Valid counter (low)
-    localparam DATA_TXDLY  = 16'h0000;   // PHY delay=0 (FPGA 90° shift provides 2ns)
+    localparam EXTAD_CHIPCFG = 16'hA001;  // Chip_Config
+    localparam EXTAD_CFG1    = 16'hA003;  // RGMII_Config1
+    localparam EXTAD_CFG2    = 16'hA004;  // RGMII_Config2
+    localparam EXTAD_PKGTX   = 16'h00AD;  // Pkg Tx Valid counter (low)
+    // Chip_Config (0xA001) = 0x0040: 清 bit8 Rxc_dly_en, 保留 bit6 En_ldo=1
+    localparam DATA_CHIPCFG  = 16'h0040;
+    // RGMII_Config1 (0xA003) = 0x0000: FPGA 90°相移提供 2ns, PHY 不加延迟
+    localparam DATA_TXDLY    = 16'h0000;
 
     // =====================================================================
     // 帧 FSM 状态
@@ -75,12 +79,12 @@ module mdio_ctrl (
     // =====================================================================
     localparam I_IDLE       = 3'd0;
     localparam I_WAIT       = 3'd1;
-    localparam I_WR_EXTAD   = 3'd2;
-    localparam I_WR_TXDLY   = 3'd3;
-    localparam I_RD_BACK    = 3'd4;   // 回读 0xA003 验证
-    localparam I_RD_BMSR    = 3'd5;
-    localparam I_POLL       = 3'd6;
-    localparam I_POLL2      = 3'd7;   // 读 Pkg Tx Valid, 存到 rxerr_val
+    localparam I_SET_CHIP   = 3'd2;   // 写 ext addr = 0xA001 (Chip_Config)
+    localparam I_WR_CHIP    = 3'd3;   // 写 Chip_Config = 0x0040 (关 Rxc_dly_en)
+    localparam I_SET_RGMII  = 3'd4;   // 写 ext addr = 0xA003 (RGMII_Config1)
+    localparam I_WR_RGMII   = 3'd5;   // 写 RGMII_Config1 = 0x0000
+    localparam I_CLR_EXTAD  = 3'd6;   // 清除 ext addr
+    localparam I_POLL_BMSR  = 3'd7;   // 轮询 BMSR
 
     reg [2:0]   i_state;
     reg [23:0]  init_delay;
@@ -132,28 +136,24 @@ module mdio_ctrl (
                 req_start <= 1'b0;
 
             case (i_state)
-                I_IDLE:    if (init_ready)  i_state <= I_WAIT;
-                I_WAIT:    if (init_wait)   begin i_state <= I_WR_EXTAD; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CFG1; end
-                // Step 1: 写 TX delay → RGMII_Config1
-                I_WR_EXTAD: if (req_done_rise) begin i_state <= I_WR_TXDLY; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTDT; req_wdata <= DATA_TXDLY; end
-                // Step 2: 回读 RGMII_Config2 (0xA004) 检查 RGMII 链路状态
-                I_WR_TXDLY: if (req_done_rise) begin i_state <= I_RD_BACK;  req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CFG2; end
-                // Step 3: 读 RGMII_Config2 值 → bmsr_val
-                I_RD_BACK:  if (req_done_rise) begin i_state <= I_RD_BMSR;  req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_EXTDT; end
-                // Step 4: 永久保存 RGMII_Config2 → rgmii2_val, 接下来读 Rx Error Counter
-                I_RD_BMSR:  if (req_done_rise) begin rgmii2_val <= rdata_shift; i_state <= I_POLL;  req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_PKGTX; end
-                I_POLL:     if (req_done_rise) begin i_state <= I_POLL2; req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_EXTDT; end
-                // Pkg Tx Valid0 → rxerr_val, 然后转轮询 BMSR
-                I_POLL2:    if (req_done_rise) begin rxerr_val <= rdata_shift; i_state <= 3'd7; req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
+                I_IDLE:     if (init_ready)  i_state <= I_WAIT;
+                I_WAIT:     if (init_wait)   begin i_state <= I_SET_CHIP; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CHIPCFG; end
+                // Step 1: 写 Chip_Config = 0x0040 (关 Rxc_dly_en, 保留 En_ldo=1)
+                I_SET_CHIP: if (req_done_rise) begin i_state <= I_WR_CHIP;  req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTDT; req_wdata <= DATA_CHIPCFG; end
+                // Step 2: 写 RGMII_Config1 = 0x0000
+                I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_RGMII;req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= EXTAD_CFG1; end
+                I_SET_RGMII:if (req_done_rise) begin i_state <= I_WR_RGMII; req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTDT; req_wdata <= DATA_TXDLY; end
+                // Step 3: 清除 ext addr, 开始轮询 BMSR
+                I_WR_RGMII: if (req_done_rise) begin i_state <= I_CLR_EXTAD;req_start <= 1'b1; req_rw <= 1'b0; req_regad <= REG_EXTAD; req_wdata <= 16'h0000; end
+                I_CLR_EXTAD:if (req_done_rise) begin i_state <= I_POLL_BMSR; req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
                 // 轮询 BMSR
-                3'd7:       if (req_done_rise) begin bmsr_val <= rdata_shift;  req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
-                I_POLL2:    if (req_done_rise) begin bmsr_val  <= rdata_shift;  req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
+                I_POLL_BMSR:if (req_done_rise) begin bmsr_val <= rdata_shift;  req_start <= 1'b1; req_rw <= 1'b1; req_regad <= REG_BMSR; end
                 default: i_state <= I_IDLE;
             endcase
         end
     end
 
-    assign cfg_done = (i_state >= I_POLL2);
+    assign cfg_done = (i_state >= I_POLL_BMSR);
     assign link_up  = (bmsr_val[2] == 1'b1);
 
     // =====================================================================

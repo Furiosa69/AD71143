@@ -818,6 +818,9 @@ module top #(
   wire        rgmii_dbg_phy_rdy;
   wire        rgmii_dbg_tx_send;
   wire [3:0]  rgmii_dbg_state;
+  wire [2:0]  rgmii_dbg_tx_fsm;
+  wire        rgmii_dbg_crc_busy;
+  wire        rgmii_dbg_tx_start_d;
 
   rgmii_bridge u_rgmii_bridge (
       .rst_n      (pll_locked  ),
@@ -835,22 +838,27 @@ module top #(
       .dbg_startup_done (rgmii_dbg_startup),
       .dbg_phy_ready    (rgmii_dbg_phy_rdy),
       .dbg_tx_sending   (rgmii_dbg_tx_send),
-      .dbg_state        (rgmii_dbg_state)
+      .dbg_state        (rgmii_dbg_state),
+      .dbg_tx_fsm       (rgmii_dbg_tx_fsm),
+      .dbg_crc_busy     (rgmii_dbg_crc_busy),
+      .dbg_tx_start_d   (rgmii_dbg_tx_start_d)
   );
 
   // =========================================================================
-  // ILA 调试探针 (网口测试专用)
-  // probe0 [3:0]:  {PLL锁定, PHY复位释放, MDIO配置完成, 链路建立}
-  // probe1 [10:0]: BMSR[10:0] (Link/Autoneg-Complete 等状态位)
-  // probe2 [7:0]:  {init_state[2:0], f_state[3:0], 未用}
-  // probe3 [2:0]:  BMSR[15:13]
+  // ILA 调试探针 (RGMII 发送路径诊断, clk_125m 域)
+  // probe0 [3:0]:  {rst_n_125m, startup_done, tx_sending, test_trig}
+  // probe1 [10:0]: {dbg_state[3:1], tx_fsm[2:0], crc_busy, tx_start_d, phy_rdy, PkgTx[1:0]}
+  //                PkgTx = PHY 收到的有效帧数 (Pkg Tx Valid counter)
+  // probe2 [7:0]:  {phy_rst_n, cfg_done, link_up, pll_locked, BMSR[5:2]}
+  //                BMSR[5]=AN Complete, [4]=Remote Fault, [3]=AN Ability, [2]=Link Status
+  // probe3 [2:0]:  tx_fsm[2:0] (触发用: 0=IDLE 1=PREAMBLE 2=SFD 3=DATA)
   // =========================================================================
   ila_0 u_ila (
-      .clk    (clk_100m),
-      .probe0 ({pll_locked, phy_rst_n_reg, mdio_cfg_done, mdio_link_up}),
-      .probe1 (mdio_rxerr[10:0]),
-      .probe2 ({mdio_init_state, mdio_f_state, 1'b0}),
-      .probe3 ({mdio_rgmii2[12], mdio_rgmii2[15], mdio_rgmii2[14]})
+      .clk    (clk_125m),
+      .probe0 ({rst_n_125m, rgmii_dbg_startup, rgmii_dbg_tx_send, rgmii_dbg_state[0]}),
+      .probe1 ({rgmii_dbg_state[3:1], rgmii_dbg_tx_fsm, rgmii_dbg_crc_busy, rgmii_dbg_tx_start_d, rgmii_dbg_phy_rdy, mdio_rxerr[1:0]}),
+      .probe2 ({phy_rst_n_reg, mdio_cfg_done, mdio_link_up, pll_locked, mdio_bmsr[5], mdio_bmsr[4], mdio_bmsr[3], mdio_bmsr[2]}),
+      .probe3 (rgmii_dbg_tx_fsm)
   );
 
 endmodule

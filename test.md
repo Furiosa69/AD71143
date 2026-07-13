@@ -1,4 +1,8 @@
 # TEST
+
+```
+reset_runs synth_1;launch_runs synth_1 impl_1 -jobs 4;wait_on_runs impl_1;launch_runs impl_1 -to_step write_bitstream -jobs 4;wait_on_run impl_1
+```
 ## 时钟频率测试
 利用示波器来测量时钟频率clk_100m/clk_125m/gate_clk是否正常 [yes]
 验证AFE控制模块sync/aclk [yes]
@@ -34,3 +38,14 @@ PHY芯片型号是YT8531C,原因在没有绑定引脚
 没有绑定引脚是其中一个原因,以及MDIO没有配置好？
 现在MDIO配置好了，但是用wireshark依旧抓取不到东西
 网口就是enp0s13f0u2u1
+```
+# PC端配置网口
+sudo ip link set enp0s13f0u2u1
+sudo ip addr add 192.168.1.1/24 dev enp0s13f0u2u1
+ethtool enp0s13f0u2u1
+```
+灯不亮不影响PHY链路建立，这个需要单独配置寄存器
+```
+#  确认PC端能否接收到FPGA的原始帧
+sudo tcpdump -i enp0s13f0u2u1 -e -vv -c 10
+```

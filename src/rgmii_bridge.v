@@ -39,7 +39,10 @@ module rgmii_bridge #(
     output wire         dbg_startup_done,
     output wire         dbg_phy_ready,
     output wire         dbg_tx_sending,
-    output wire [3:0]   dbg_state
+    output wire [3:0]   dbg_state,
+    output wire [2:0]   dbg_tx_fsm,       // RGMII_tx 状态机状态
+    output wire         dbg_crc_busy,      // CRC 计算中
+    output wire         dbg_tx_start_d     // tx_start 延迟1拍 (帧数据发送中)
 );
 
     // =====================================================================
@@ -126,6 +129,10 @@ module rgmii_bridge #(
 
     reg  test_trig_d1;   // test_trig 延迟 1 拍, 对齐帧组装时序
 
+    // ---- 内部调试线 ----
+    wire [2:0] tx_fsm_state;
+    reg        tx_start_d;        // tx_start 延迟 1 拍 (表示帧数据正在发送)
+
     // =====================================================================
     // CRC-32 (Ethernet FCS)
     // =====================================================================
@@ -183,6 +190,7 @@ module rgmii_bridge #(
             test_trig_d1    <= 1'b0;
             tx_data          <= 8'd0;
             tx_start         <= 1'b0;
+            tx_start_d       <= 1'b0;
             frame_idx        <= 7'd0;
             preloaded        <= 1'b0;
             test_seq_num    <= 32'd0;
@@ -193,6 +201,7 @@ module rgmii_bridge #(
                 frame_buf[i] <= 8'd0;
         end else begin
             tx_start       <= 1'b0;
+            tx_start_d     <= tx_start;
             fifo_rd_en_d1  <= fifo_rd_en;
             test_trig_d1   <= test_trig;
             if (test_trig) test_trig <= 1'b0;  // 脉冲信号, 自动清除
@@ -337,10 +346,11 @@ module rgmii_bridge #(
         .TXD0     (TXD0),
         .TXD1     (TXD1),
         .TXD2     (TXD2),
-        .TXD3     (TXD3)
+        .TXD3     (TXD3),
+        .dbg_state(tx_fsm_state)
     );
 
-    // TXC 时钟 90°相移 (RGMII spec: 2ns delay), 与 TXD 用不同相位
+    // TXC 90°相移: FPGA MMCM 精确提供 2ns. PHY 端 Rxc_dly_en 将被 MDIO 关闭.
     ODDR #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
         .INIT(1'b0),
@@ -362,5 +372,8 @@ module rgmii_bridge #(
     assign dbg_phy_ready    = interval_cnt[16];       // 每 524ms 翻转, 表示定时器运行
     assign dbg_tx_sending   = preloaded;              // 正在发送帧
     assign dbg_state        = {test_trig, test_trig_d1, fifo_empty, fifo_rd_en};
+    assign dbg_tx_fsm       = tx_fsm_state;           // RGMII_tx FSM 状态
+    assign dbg_crc_busy     = crc_busy;               // CRC 计算中
+    assign dbg_tx_start_d   = tx_start_d;             // tx_start 延迟 1 拍
 
 endmodule

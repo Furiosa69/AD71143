@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (lin64) Build 4029153 Fri Oct 13 20:13:54 MDT 2023
-| Date         : Fri Jul 10 18:44:18 2026
+| Date         : Mon Jul 13 13:40:30 2026
 | Host         : Furiosa running 64-bit Arch Linux
 | Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
 | Design       : top
@@ -63,8 +63,8 @@ Related violations: <none>
 
 LUTAR-1#5 Warning
 LUT drives async reset alert  
-LUT cell rst_sync1_100m_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) rst_sync1_100m_reg/CLR, rst_sync1_50m_reg/CLR, rst_sync2_100m_reg/CLR
-rst_sync2_50m_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell rst_sync1_100m_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) rst_sync1_100m_reg/CLR, rst_sync1_125m_reg/CLR, rst_sync1_50m_reg/CLR,
+rst_sync2_100m_reg/CLR, rst_sync2_125m_reg/CLR, rst_sync2_50m_reg/CLR. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 TIMING-18#1 Warning
