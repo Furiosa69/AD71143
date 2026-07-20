@@ -1,27 +1,28 @@
 name: X-Ray TFT Driver
-description: 3.99英寸 X射线平板探测器 TFT 驱动系统，包含 NT39565D Gate Driver 和 AD71143 AFE 的 FPGA 控制逻辑
-version: 2.0
+description: 3.99英寸 X射线平板探测器 TFT 驱动系统，包含 NT39565D Gate Driver 和 AD71143 AFE 的 FPGA 控制逻辑，含 RGMII 以太网数据上传
+version: 3.0
 author: Furiosa
 
 # X-Ray TFT Driver 项目 Skill
 
 ## 项目概述
 
-这是一个 **X射线平板探测器（FPD）** 的 FPGA 控制逻辑项目。系统包含三个核心芯片：
+这是一个 **X射线平板探测器（FPD）** 的 FPGA 控制逻辑项目。系统包含四个核心芯片：
 
 | 芯片 | 型号 | 功能 | 通道数 |
 |------|------|------|--------|
 | **Gate Driver** | NT39565D | 逐行打开 TFT 开关 | 541/513/385/361 可选 |
-| **AFE (Readout)** | AD71143 | 电荷 → 数字信号转换 | 256 通道/片，共 2 片 |
+| **AFE (Readout)** | AD71143 × 2 | 电荷 → 数字信号转换 | 256 通道/片，共 2 片 (Panel 0 + Panel 1) |
+| **Ethernet PHY** | YT8531C | RGMII 千兆以太网 | 1 路 |
 | **TFT Sensor** | 3.99" IGZO | X射线感光面板 | 512 × 512 像素 |
 
 ### 信号链
 
 ```
 X射线 → 闪烁体 → 可见光 → TFT传感器(电荷) → AFE(数字) → FPGA(处理) → PC(图像)
-                                        ↑
-                                    Gate Driver
-                                    (逐行打开TFT)
+                                        ↑                         |
+                                    Gate Driver              RGMII/UDP
+                                    (逐行打开TFT)            以太网上传
 ```
 
 ---
@@ -29,23 +30,44 @@ X射线 → 闪烁体 → 可见光 → TFT传感器(电荷) → AFE(数字) →
 ## 项目结构
 
 ```
-ctrl/
+AD71143/
 ├── src/
+│   ├── top.v                    # 顶层模块 (FSM + 例化)
 │   ├── nt39565d_ctrl.v          # Gate Driver 控制模块
 │   ├── ad71143_ctrl.v           # AD71143 控制信号发生器 (RESET + SYNC + ACLK)
 │   ├── ad71143_spi.v            # AD71143 SPI 配置主机
-│   ├── ad71143_data_rx.v        # AFE LVDS 数据接收模块（双片合并）
-│   └── top.v                    # 顶层模块（状态机 + 例化）
+│   ├── ad71143_data_rx.v        # AFE LVDS 单 Panel 数据接收模块
+│   ├── ad71143_data_rx_dual.v   # AFE LVDS 双 Panel 数据接收+合并模块
+│   ├── rgmii_bridge.v           # RGMII 桥接 (CDC + UDP/IP/MAC + CRC-32)
+│   ├── RGMII_tx.v               # RGMII 发送模块 (ODDR)
+│   ├── RGMII_rx.v               # RGMII 接收模块 (IDDR)
+│   └── mdio_ctrl.v              # MDIO 控制器 (YT8531C PHY 管理)
 ├── tb/
 │   ├── tb_top.v                 # 顶层 Testbench
-│   ├── tb_ad71143_data_rx.v     # AFE 数据接收 Testbench
-│   └── spi_test_top.v           # SPI 模块 Testbench
-├── Makefile                     # Icarus Verilog 仿真
+│   ├── tb_ad71143_data_rx.v     # AFE 单 Panel 数据接收 Testbench
+│   ├── tb_ad71143_data_rx_dual.v# AFE 双 Panel 数据接收 Testbench
+│   ├── tb_crc32.v               # CRC-32 单元 Testbench
+│   ├── tb_mdio.v                # MDIO 控制器 Testbench
+│   ├── tb_rgmii_crc.v           # RGMII CRC Testbench
+│   ├── tb_rgmii_direct.v        # RGMII 直连 Testbench
+│   ├── tb_rgmii_full.v          # RGMII 全链路 Testbench
+│   ├── spi_test_top.v           # SPI 模块 Testbench
+│   └── xilinx_mocks.v           # Xilinx 原语 Mock (仿真用)
+├── board/
+│   ├── RTL/top.v                # 板级顶层 (仅 Gate Driver, 25MHz 简化版)
+│   ├── XDC/pin.xdc              # 引脚约束 (完整 pinout)
+│   ├── XDC/timing.xdc           # 时序约束
+│   ├── TCL/bitgen_compress.tcl  # 位流压缩
+│   ├── TCL/write_cfgmem.tcl     # 配置存储器写入 (MCS/BIN)
+│   └── Project/                 # Vivado 2023.2 项目文件
 ├── document/
 │   ├── 3.AD71143 SPEC.pdf       # AD71143 芯片规格书 (Rev. SpA, 34页)
 │   └── 1.1 NT39565D_V01_20130219.pdf  # NT39565D 数据手册
-└── .claude/skill/
-    └── xray-tft-driver.md       # 本文件
+├── sim_models/
+│   └── xilinx_unisim.v          # Xilinx UNISIM 仿真模型
+├── Makefile                     # Icarus Verilog 仿真
+├── Develop.md                   # 开发日志
+└── README.md                    # 项目进度 + 时钟树
 ```
 
 ---
@@ -54,11 +76,11 @@ ctrl/
 
 ### 1. nt39565d_gate_ctrl（Gate Driver 控制）
 
-**功能**：产生 NT39565D 所需的 CPV/STV/OE 时序
+**功能**：产生 NT39565D 所需的 CPV/STV/OE 时序。支持 Normal / 2G / 2G+LCS 模式。
 
-**关键参数**（25MHz 时钟）：
+**关键参数**（50MHz 时钟）：
 ```verilog
-CLK_FREQ_MHZ      = 25     // 系统时钟
+CLK_FREQ_MHZ      = 50     // 系统时钟 (gate_clk)
 CPV_PERIOD_US     = 10     // CPV 周期 (10µs → 100kHz)
 CPV_PW_US_X10     = 10     // CPV 脉宽 (1.0µs)
 STV_SETUP_US_X10  = 3      // STV 建立时间 (0.3µs)
@@ -66,23 +88,29 @@ STV_HOLD_US_X10   = 4      // STV 保持时间 (0.4µs)
 OE_PW_US_X10      = 10     // OE 脉宽 (1.0µs)
 ```
 
-**状态机**：
+**状态机** (10 状态 + XAO_SHUT)：
 ```
-IDLE → STV_SETUP → STV1_ASSERT → STV_HOLD → CPV_LOW → CPV_HIGH → (循环) → FRAME_END → IDLE
+IDLE → STV_SETUP_S → STV_IDENT_S / STV1_ONLY_S → STV12_GAP_S → STV2_ONLY_S → CPV_LOW_S → CPV_HIGH_S → WAIT_LINE / FRAME_END_S → IDLE
 ```
 
 **输出信号**：
 - `cpv`: 移位时钟（≤200kHz）
-- `stv1`: 帧起始脉冲
+- `stv1/stv2`: 帧起始脉冲（支持双 STV 同步或延迟 1CPV 模式）
 - `oe1/oe2`: 输出使能（低有效）
+- `xao`: 全能输出（紧急关断）
+- `ud/lr`: 扫描方向控制
+- `mode1/mode2/sel/stv_mode/chip_sel1/chip_sel2/oepsn`: 模式配置输出
+- `busy`: 帧进行中
 - `line_done`: 单行扫描完成脉冲
 - `frame_done`: 一帧扫描完成脉冲
+
+**双 FPV 排线**：所有信号同时扇出到 `_r` 和 `_l` 两组物理引脚，支持左右两块 Gate Driver PCB。
 
 ---
 
 ### 2. ad71143_ctrl（AD71143 控制信号发生器）
 
-**功能**：产生 AD71143 所需的 RESET、SYNC、ACLK 时序。实现 AD71143 SPEC Figure 22 (Pipeline Mode) 的时序。
+**功能**：产生 AD71143 所需的 RESET、SYNC、ACLK 时序。实现 AD71143 SPEC Figure 22 (Pipeline Mode)。
 
 **系统时钟**: 100MHz (10ns)
 
@@ -90,8 +118,8 @@ IDLE → STV_SETUP → STV1_ASSERT → STV_HOLD → CPV_LOW → CPV_HIGH → (�
 ```verilog
 ACLK_PULSES      = 9      // 每行 ACLK 脉冲数
 LINE_CYCLES      = 6000   // 行周期 60µs @ 100MHz
-RESET_CYCLES     = 1000   // RESET 脉宽 10µs
-INIT_WAIT_CYCLES = 10000  // 初始化等待 100µs
+RESET_CYCLES     = 10     // RESET 脉宽 10µs (实际配置)
+INIT_WAIT_CYCLES = 100    // 初始化等待 100µs (实际配置)
 ```
 
 **输出信号**：
@@ -99,13 +127,15 @@ INIT_WAIT_CYCLES = 10000  // 初始化等待 100µs
 - `sync`: 转换同步（低有效），下降沿 = 新行开始
 - `aclk`: AFE 时序时钟（50MHz, 20ns 周期），每行 9 个脉冲
 - `aclk_idx`: 当前 ACLK 脉冲编号（0~8）
+- `aclk_done`: ACLK 序列完成脉冲
 - `init_done`: 初始化完成
 - `line_start` / `line_done`: 行起止脉冲
 - `line_cnt`: 行计数
+- `frame_done`: 帧完成脉冲
 
 **状态机**：
 ```
-INIT_RESET → INIT_WAIT → SYNC_SETUP → ACLK_ACT → SYNC_HOLD → LINE_GAP → SYNC_SETUP → ...
+S_INIT_RESET → S_INIT_WAIT → S_IDLE → S_SYNC_SETUP → S_ACLK_ACT → S_SYNC_HOLD → S_LINE_GAP → S_SYNC_SETUP → ...
 ```
 
 **时序（Pipeline Mode, 参照 SPEC Figure 22）**：
@@ -144,41 +174,38 @@ Bit[9:0]   = Register Data
 
 ---
 
-### 4. ad71143_data_rx（AFE LVDS 数据接收）
+### 4. ad71143_data_rx（AFE LVDS 单 Panel 数据接收）
 
-**功能**：接收 AD71143 的 LVDS 串行数据，合并两片 AFE 的数据。
+**功能**：接收单个 AD71143 的 LVDS 串行数据。
 按 SPEC Figure 37/38 实现：
 - DOUTMODE = 1（双 LVDS 输出模式）
-- 用 DCLKO 上升沿采样 DOUTA/DOUTB
+- 内部用 `clk_sys` 替代 DCLKO 回波时钟采样 DOUTA/DOUTB
 - 每个 Burst 采 64bit/lane，共 128bit
 - 数据 Burst 内合并为 8 个 16-bit 样本
 
 **接口定义**：
 ```verilog
 // 系统
-clk_sys         : 200MHz 系统时钟
+clk_sys         : 100MHz 系统时钟
 rst_n           : 低有效复位
 
-// 时序控制（两片共用）
+// 时序控制
 sync_in         : SYNC 信号（下降沿 = 新行开始）
 aclk_done       : ACLK 序列完成标志
 
-// DCLK 输出（两片共用）
-dclk_p/dclk_n   : LVDS 差分时钟（FPGA → AFE）
+// DCLK 输出
+dclk_p/dclk_n   : LVDS 差分时钟（FPGA → AFE, DDR 模式）
 
-// DCLKO 输入（回波时钟，AFE → FPGA）
-dclko_p/n_A     : 用 DCLKO 上升沿采样数据
-
-// DOUT 输入（两片独立）
-dout_p/n_A      : AFE A 数据（偶数通道: 0,2,4,...,254）
-dout_p/n_B      : AFE B 数据（奇数通道: 1,3,5,...,255）
+// DOUT 输入
+dout_p/n_A      : AFE Lane A（偶数通道: 0,2,4,...,254）
+dout_p/n_B      : AFE Lane B（奇数通道: 1,3,5,...,255）
 
 // 合并输出
-merged_burst[127:0]     : 两片 AFE 合并数据（64+64 bit）
+merged_burst[127:0]     : 合并数据（64+64 bit，含 8 个 16-bit 通道）
 merged_burst_index[6:0] : 0=Header, 1~32=数据通道
-merged_burst_valid      : 数据有效标志
+merged_valid            : 数据有效标志
 line_done               : 一行完成脉冲
-header_ok               : Header 同步字匹配
+header_ok               : Header 同步字匹配 (0x0A)
 ```
 
 **Burst 结构**（双 LVDS 模式，256 通道）：
@@ -202,33 +229,173 @@ Burst 33: Configuration Registers
 B[63:0]  = 与 A 相同的镜像
 ```
 
-**数据合并格式**（READDOWN=0）:
-```
-merged_burst[127:0] = {A_word0, B_word0, A_word1, B_word1, A_word2, B_word2, A_word3, B_word3}
-每个 word = 16 bit → 8 通道/Burst
-Burst N 包含通道: N*8 ~ N*8+7
-```
+**MUTE_MIN 参数**：100MHz 时 tBURST(min)=1765ns → 177 cycles - 64 active = 113
 
 **状态机**：
 ```
-IDLE → WAIT（等待 aclk_done）→ ACT（收64bit）→ MUTE（静默期）→ ACT/MUTE 循环 → DONE → IDLE
+S_IDLE → S_WAIT（等待 aclk_done）→ S_ACT（收64bit）→ S_MUTE（静默期）→ S_ACT/MUTE 循环 → S_DONE → S_IDLE
 ```
+
+**DCLKO 域**：`cap_start_tgl_sys` (clk_sys 域) → 2-FF CDC → DCLKO 域采样 `cap_start_tgl_d1/d2`，开始捕获。完成后 `cap_done_tgl_dclko` toggle → CDC 回 clk_sys 域检测边沿。
 
 ---
 
-### 5. top（顶层状态机）
+### 5. ad71143_data_rx_dual（AFE LVDS 双 Panel 数据接收）
 
-**功能**：控制帧扫描循环，自动触发多帧采集
+**功能**：封装两个 `ad71143_data_rx` 实例，共享 `sync_in`/`aclk_done`/`clk_sys`，各自独立 LVDS 物理口。
 
-**当前连接**：
-- 仅例化了 `nt39565d_gate_ctrl`
-- Gate Driver 产生 `line_done`/`frame_done` 反馈给 top 状态机
-- AD71143 的 AFE 控制链 (ad71143_ctrl → ad71143_spi → ad71143_data_rx) 尚未集成到 top
+**输出拼接**：
+```verilog
+merged_burst[255:0] = {panel1_burst[127:0], panel0_burst[127:0]}
+```
+
+**对齐逻辑**：两 Panel 共享 SYNC/ACLK，FSM 理论上同步。但 DCLKO 域 CDC 可能有 1~2 周期偏移 → 用 capture+hold 对齐。MUTE 期 (~113+ cycles) 远大于 CDC 偏移，不会丢 Burst。
+
+---
+
+### 6. RGMII_tx（RGMII 发送）
+
+**功能**：RGMII 发送模块，含前导码+SFD+数据+ODDR 输出。
 
 **状态机**：
 ```
-IDLE → START → WAIT_FRAME → (frame_done) → FRAME_GAP → (计数完成) → START
+IDLE → PREAMBLE (7×0x55) → SFD_STATE (0xD5) → DATA (FRAME_SIZE bytes) → IDLE
 ```
+
+**时钟**: 125MHz TXC 域。数据路径：`tx_data` → 1 拍延迟 → `tx_byte` → ODDR (上升沿=低4bit, 下降沿=高4bit)。
+
+**TX_CTL**: ODDR 上升沿=TX_EN, 下降沿=TX_EN xor TX_ER。
+
+**输出握手**：`tx_req = (next_state == DATA)` 告知上层下一拍需要 `tx_data`。
+
+---
+
+### 7. RGMII_rx（RGMII 接收）
+
+**功能**：RGMII 接收模块，含 IDDR 输入 + 前导码检测 + SFD 检测。
+
+**状态机**：
+```
+IDLE → RECEIVE (RX_DV_d 有效) → IDLE (RX_DV_d 失效)
+```
+
+**输入**：4 路 IDDR (SAME_EDGE_PIPELINED) + RX_CTL IDDR → RX_DV + RX_ER 解码。
+
+**前导码检测**：累计 3 次 0x55 视为前导码有效，然后检测 SFD (0xD5)。
+
+---
+
+### 8. rgmii_bridge（RGMII 桥接 + 协议栈）
+
+**功能**：100MHz AFE 数据域 → 125MHz RGMII 域 CDC + UDP/IP/MAC 帧封装 + CRC-32 FCS。
+
+**时钟域**：
+- `clk_100m`: 100MHz — 写 FIFO (来自 ad71143_data_rx_dual)
+- `clk_125m`: 125MHz — 读 FIFO + 帧封装 + RGMII_tx
+- `clk_125m_ph90`: 125MHz 90°相移 — TXC ODDR
+
+**数据通路**：
+```
+data_in (256-bit burst) → FIFO IP (100→125 CDC) → 帧组装 (DMAC+SMAC+IP+UDP+Payload) → CRC-32 → tx_start → RGMII_tx
+```
+
+**帧格式** (大端序)：
+```
+MAC Header (14B): DMAC=broadcast, SMAC=02:00:00:00:00:01, EtherType=0x0800
+IP Header (20B):  Src=192.168.1.2, Dst=192.168.1.1, Proto=UDP, TTL=64
+UDP Header (8B):  SrcPort=1234, DstPort=1234, Checksum=0
+Payload (BURST_BYTES):  256-bit burst, MSB first
+FCS (4B):         CRC-32 (Ethernet polynomial 0xEDB88320, LSB-first)
+```
+
+**CRC-32**：覆盖前 74 字节 (HDR_BYTES + BURST_BYTES)，反射算法，FCS 字节序为小端 (crc_reg[7:0] 先发)。
+
+**测试模式** (`TEST_MODE=1`)：上电启动延迟 ~134ms 后，若 FIFO 为空且空闲，自动发送递增序号的测试帧。
+
+**帧组装流水线**：
+1. FIFO 非空 → `fifo_rd_en` (读发起)
+2. 1 拍后 `fifo_rd_en_d1` → 组装帧头 (MAC+IP+UDP+Payload) 到 `frame_buf`
+3. 同时启动 CRC-32 计算 (74 cycles)
+4. CRC 完成后 1 拍 → 写 FCS → `tx_start` 脉冲 → 逐字节发送
+
+---
+
+### 9. mdio_ctrl（MDIO PHY 管理）
+
+**功能**：IEEE 802.3 Clause 22 MDIO 控制器，配置 YT8531C PHY。
+
+**MDC**: 5MHz (100MHz / 20)
+
+**初始化序列**：
+```
+I_IDLE (等待 ~16.7ms 上电延迟)
+→ I_WAIT (额外等待)
+→ I_SET_CHIP (ExtAddr=0xA001)
+→ I_WR_CHIP (Chip_Config=0x8040: Rxc_dly_en=0, Cfg_ldo=3.3V)
+→ I_SET_LED2 (ExtAddr=0xA00E)
+→ I_WR_LED2 (LED2_CFG=0x0644: 1000M link ON + TX/RX blink)
+→ I_RD_BCR (读 BCR)
+→ I_POLL (循环: BMSR→PkgTx→clrExt→BMSR...)
+```
+
+**轮询循环** (I_POLL)：
+```
+poll_cnt=0: 读 BMSR → 保存 bmsr_val
+poll_cnt=1: 写 ExtAddr=0x00AD (PkgTx 寄存器)
+poll_cnt=2: 读 ExtData → 保存 rxerr_val (Pkg Tx 计数)
+poll_cnt=3: 写 ExtAddr=0x0000 (清零)
+```
+
+**状态信号**：
+- `cfg_done` = MDIO 初始化序列完成 (i_state >= I_POLL)
+- `link_up` = BMSR[2] (Link Status)
+
+---
+
+### 10. top（顶层集成）
+
+**功能**：集成所有模块，包含 SPI 配置 FSM + 帧控制 FSM + CDC 同步器。
+
+**时钟生成** (clk_wiz_0 MMCM)：
+```
+sys_clk (100MHz) → MMCM
+  ├── gate_clk  (50 MHz) : 顶层 FSM + nt39565d_gate_ctrl
+  ├── clk_100m  (100 MHz): ad71143_ctrl + ad71143_spi + ad71143_data_rx_dual + mdio_ctrl
+  ├── clk_125m  (125 MHz): rgmii_bridge + RGMII_tx
+  └── clk_125m_ph90 (125 MHz, 90°): TXC ODDR
+```
+
+**复位策略**：
+- `rst_n_async = key & pll_locked`
+- 每时钟域独立复位同步器 (2-FF 异步断言/同步释放)
+- PHY 复位 (`rgmii_rst_n`): PLL 锁定后拉低 ~100ms
+
+**SPI 配置 FSM** (100MHz 域)：
+```
+CFG_IDLE → (ctrl_init_done && 1s 延迟) → CFG_ISSUE → CFG_WAIT → (spi_done) → CFG_DONE
+                                                                                    ↓
+                                                              (cfg_reg_idx!=15) → CFG_ISSUE (循环)
+```
+
+双 Panel SPI 并行配置，共享 `spi_start`/`spi_reg_addr`/`spi_reg_data`。
+
+**帧控制 FSM** (50MHz 域)：
+```
+TOP_POWERUP → TOP_WAIT_INIT → TOP_WAIT_CFG → TOP_IDLE → TOP_START → TOP_WAIT_FRAME → TOP_FRAME_GAP → TOP_START ...
+```
+
+**CDC 策略**：
+
+| 信号 | 源域 | 目标域 | 方法 |
+|------|------|--------|------|
+| `ctrl_init_done` | 100 MHz | 50 MHz | 2-FF level sync |
+| `ctrl_line_start` | 100 MHz | 50 MHz | toggle + 3-FF + edge detect |
+| `frame_start` | 50 MHz | 100 MHz | toggle + 3-FF + edge detect |
+| `ctrl_frame_done` | 100 MHz | 50 MHz | toggle + 3-FF + edge detect |
+| `spi_cfg_done` | 100 MHz | 50 MHz | 2-FF level sync |
+| 数据 Burst | 100 MHz | 125 MHz | Xilinx FIFO IP (async) |
+
+**ILA 调试**：`ila_0` 在 125MHz 域监控 RGMII 发送路径 (startup_done, tx_fsm, crc_busy, BMSR, link_up 等)。
 
 ---
 
@@ -237,14 +404,19 @@ IDLE → START → WAIT_FRAME → (frame_done) → FRAME_GAP → (计数完成) 
 ### 时钟域
 | 时钟 | 频率 | 用途 |
 |------|------|------|
-| `sys_clk` (输入) | 50MHz | 板载晶振 → top 状态机 |
-| `clk_sys` (ad71143_ctrl) | 100MHz | AD71143 控制信号 + SPI |
-| `clk_sys` (ad71143_data_rx) | 200MHz | LVDS 数据接收（DCLK 基频） |
+| `sys_clk` (输入) | 100MHz | 板载晶振 → MMCM 输入 |
+| `gate_clk` | 50MHz | 顶层 FSM + nt39565d_gate_ctrl |
+| `clk_100m` | 100MHz | AD71143 控制 + SPI + 数据接收 + MDIO |
+| `clk_125m` | 125MHz | RGMII 桥接 + 发送 |
+| `clk_125m_ph90` | 125MHz 90° | RGMII TXC ODDR |
+| `rgmii_rxc` (输入) | 125MHz | PHY → RGMII_rx IDDR |
 
 ### 复位策略
-- `rst_n = key & locked`（PLL 锁定后才释放复位）
+- `rst_n_async = key & pll_locked`（PLL 锁定后才释放复位）
+- 每时钟域独立复位同步器（2-FF）：`rst_n_50m`, `rst_n_100m`, `rst_n_125m`
+- `rgmii_rst_n`（PHY 复位）: PLL 锁定后保持低 ~100ms，满足 YT8531C 上电时序
 - `roic_reset`（AD71143 RESET 引脚）: 高有效, 脉宽 ≥ 10ns（SPEC）, 本设计 10µs
-- RESET 释放后需等待 ≥ 4000ns (tRESETCS) 才能开始 SPI 配置
+- RESET 释放后需等待 ≥ 4000ns (tRESETCS) + 本设计额外 1s 延迟 才能开始 SPI 配置
 
 ### 信号命名规范
 | 前缀/后缀 | 含义 |
@@ -254,6 +426,8 @@ IDLE → START → WAIT_FRAME → (frame_done) → FRAME_GAP → (计数完成) 
 | `_reg` | 寄存器信号 |
 | `_cnt` | 计数器信号 |
 | `_ff` | 打拍延迟信号 |
+| `_r/_l` | 右/左 FPV 排线输出 |
+| `_p0/_p1` | Panel 0 / Panel 1 |
 
 ---
 
@@ -293,262 +467,74 @@ IDLE → START → WAIT_FRAME → (frame_done) → FRAME_GAP → (计数完成) 
 ```
 每个 Burst = 64 个 Active DCLK + M 个 Muted DCLK
 tBURST(min) = 1765ns @ 200MHz → MUTE_MIN ≈ 289 周期 @ 200MHz
-转换期间连续时钟 DCLKx: 34 个 Burst 后可以连续输出
+@ 100MHz: tBURST=1765ns → 177 cycles - 64 active = 113 mute cycles
 ```
-
-### 电源 (SPEC Table 1)
-| 电源 | 电压 | 说明 |
-|------|------|------|
-| AVDD5F, AVDD5B, DVDD5 | 4.75~5.25V | 5V 模拟/数字供电 |
-| AVDD2, DVDD2 | 2.375~2.625V | 2.5V 模拟/数字供电 |
-| AVDDI | REF_TFT + 1.2V | 积分器高压供电 |
-| AVSSI | REF_TFT - 0.6V (max) | 积分器低压供电 |
-| AVDDI − AVSSI | 1.8~2.7V | 积分器供电差 |
-| IOVDD | 2.3~2.7V | 数字 IO 供电 (推荐 2.5V) |
-
-### 运行供电约束 (SPEC Figure 28)
-- 0 ≤ AVDDI − AVSSI ≤ 2.7V
-- |AVDDI − REF_TFT| ≤ 2.7V
-- |AVSSI − REF_TFT| ≤ 2.7V
-- AVDD5F − AVSSI ≥ 0.0V
-- AVDD5Q − AVSSI ≥ 0.0V
-- REF_TFT 必须 ≥ AVSSI + 0.6V 且 ≤ AVDDI − 1.2V
-
-### 上电顺序 (SPEC Figure 29)
-1. 施加 AVDD2, AVDD5B/5F/5Q, DVDD5, DVDD2, REF_ADC
-2. REF_OUT 启动（默认 2.5V）→ REF_INT, REF_TFT 跟随
-3. 通过 SPI 配置 REF_OUT 最终值
-4. 使能 REF_OUT（设置 PDTFTEN 或选择其他电源模式）
-5. 施加 AVDDI 到最终值
-6. 施加 AVSSI 到最终值（必须在 AVDDI 之后或同时）
-7. 如果 REF_TFT ≥ 2.7V，AVDDI 和 AVSSI 必须在 REF_TFT 到达最终值之前或同时到达
-
-### 功耗模式 (SPEC Table 10)
-| 模式 | PWR[2:0] | 功耗 | 说明 |
-|------|----------|------|------|
-| Normal | 0 | 363 mW (1.42 mW/ch) | 全速运行 |
-| Low Power | 4 + LP_EN=1 | 260 mW (1.02 mW/ch) | 低功耗，噪声略高 |
-| Sleep | 4 + LP_EN=0 | 56~61 mW | 积分器保持 REF_TFT |
-| Power-Down | 5 | 1.2 mW | 最低功耗 (SPI 仅存活) |
-| Power-Down + Panel Bias | 5 + PDTFTEN=1 | 16~21 mW | 断电但维持面板偏压 |
-
----
-
-## AD71143 转换模式 (SPEC Figure 27)
-
-### Pipeline Mode (PIPELINE=1)
-- AFE 采样和数字转换**并行**进行
-- 最小行时间 = max(tAFE, tDCONV)
-- 双数据率: 最小 60µs
-- 单数据率: 最小 70µs
-- 推荐 Pipeline 模式下不使用 ACLK0 关闭 CDS1
-
-### Serial Mode (PIPELINE=0)
-- AFE 采样和数字转换**串行**进行
-- 最小行时间 = tAFE + tDCONV
-
-**共用约束**:
-- 数据转换和数据输出总是同时进行（之间有 1 行的流水线延迟）
-- Pipeline 模式下 DCLKx Burst 不能与 INTRST 开/关、CDS1 关、CDS2 关的 200ns 内重叠
 
 ---
 
 ## AD71143 SPI 配置寄存器详表 (SPEC Table 12)
 
-**SPI 协议**: 16-bit 帧 = Bit[15] Write + Bit[14] Read + Bit[13:10] Address + Bit[9:0] Data
-**基地址**: 寄存器地址编码在 Bit[13:10] 中
-**双缓冲**: 寄存器在 CS 下降沿更新
-
 ### Register 0 — 电源模式 + 满量程
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 15 | Write | 写使能 | 0 |
+| Bits | Name | 说明 | 当前值 |
+|------|------|------|--------|
+| 15 | Write | 写使能 | 1 |
 | 14 | Read | 读使能 | 0 |
 | [13:10] | ADDR | 固定为 0 | 0 |
-| 9 | — | 工厂保留，写 0 | 0 |
-| [8:6] | PWR | 000=Normal, 100=Sleep/LP, 101=Power-Down | 101 |
-| 5 | — | 工厂保留，写 0 | 1 |
-| [4:0] | IFS | 积分器满量程: FSR = 0.5×(IFS+1) pC (max 16pC) | 0 |
+| [8:6] | PWR | 000=Normal | 000 |
+| [4:0] | IFS | FSR = 0.5×(IFS+1) pC | 20 |
 
 ### Register 1 — 滤波器 + 数据格式
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| [8:7] | LPF | 00=1.3, 01=3.9, 10=7.8, 11=11.7 µs | 0 |
-| 5 | CDS2_RESETEN | 1=INTRST+CDS1 闭合时复位 CDS2 电容 | 0 |
-| 4 | CMR_EN | 1=使能共模抑制 | 0 |
-| 3 | READDOWN | 1=CH255→CH0, 0=CH0→CH255 | 0 |
-| 2 | EXTRST | 1=外部 REF_INT, 0=REF_TFT | 0 |
-| 1 | ADCAVG | 1=ADC 4次平均（需 PIPELINE_AVGEN=1 配合）| 0 |
-| 0 | Holes | 1=空穴积分, 0=电子积分 | 0 |
+| Bits | Name | 说明 | 当前值 |
+|------|------|------|--------|
+| [8:7] | LPF | 01=3.9µs | 01 |
+| 5 | CDS2_RESETEN | 1=使能 CDS2 复位 | 1 |
+| 0 | Holes | 0=电子积分 | 0 |
 
 ### Register 2 — 模式控制
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 8 | PDTFTEN | 1=Power-Down 时维持 REF_TFT 偏压 | 0 |
-| 7 | REFDACDIS | 1=禁用内部参考 DAC (省 5mW) | 0 |
-| 5 | RNDOMIZE | 1=随机采样积分器（减少模式噪声）, 0=顺序 | 1 |
-| 3 | INTCLAMP | 1=使能积分器防饱和钳位 (antiblooming) | 0 |
-| 2 | DOUTMODE | 1=双 LVDS 输出 (A偶数+B奇数), 0=单 LVDS | 0 |
-| 1 | ECHOCLK | 1=使能 DCLKO 回波时钟 | 0 |
-| 0 | Pipeline | 1=Pipeline 模式, 0=Serial 模式 | 0 |
+| Bits | Name | 说明 | 当前值 |
+|------|------|------|--------|
+| 5 | RNDOMIZE | 1=随机采样积分器 | 1 |
+| 2 | DOUTMODE | 1=双 LVDS 输出 | 1 |
+| 1 | ECHOCLK | 1=使能 DCLKO | 1 |
+| 0 | Pipeline | 1=Pipeline 模式 | 1 |
 
-### Register 3 — 参考 DAC + 自动调零
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 8 | AZEN | 1=使能自动调零 (改善 1/f 噪声，无 VT/Temp 数据) | 0 |
-| [7:0] | REFDAC | REF_OUT = 0.5V + REFDAC × 15.625mV (0.5~4.5V) | 128 (2.5V) |
+### Register 3 — 参考 DAC
+| Bits | Name | 说明 | 当前值 |
+|------|------|------|--------|
+| 8 | AZEN | 0=禁用自动调零 | 0 |
+| [7:0] | REFDAC | REF_OUT = 0.5V + REFDAC × 15.625mV | 32 (~1.0V) |
 
-**REFDAC 关键值**：
-- Code 0 → 0.5V
-- Code 128 → 2.5V (默认)
-- Code 224 (0xE0) → 4.0V
-- Code 255 → ~4.5V
+### Register 4~7 — AFE 时序开关
+| Reg | 字段 | 当前值 | 说明 |
+|-----|------|--------|------|
+| 4 | INTRST | 0x082 | C=ACLK8, O=ACLK2 |
+| 5 | CDS1 | 0x013 | C=ACLK1, O=ACLK3 |
+| 6 | CDS2 | 0x046 | C=ACLK4, O=ACLK6 |
+| 7 | FA | 0x025 | CDS1=ACLK2, CDS2=ACLK5 |
 
-### Register 4 — INTRST 开关时序
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| [7:4] | INTRST_C | 关闭时刻 (ACLK 编号 0x0~0xC) | 7 |
-| [3:0] | INTRST_O | 打开时刻 (0xE=常开, 0xF=常闭) | 1 |
-
-### Register 5 — CDS1 开关时序
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| [7:4] | CDS1_C | 关闭时刻 | 0 |
-| [3:0] | CDS1_O | 打开时刻 | 3 |
-
-### Register 6 — CDS2 开关时序
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| [7:4] | CDS2_C | 关闭时刻 | 4 |
-| [3:0] | CDS2_O | 打开时刻 | 6 |
-
-### Register 7 — FA (Filter Acceleration) 时序
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| [7:4] | FA_CDS1 | CDS1 后 FA 打开时刻 | 2 |
-| [3:0] | FA_CDS2 | CDS2 后 FA 打开时刻 | 5 |
-
-### Register 8 — 自定义钳位时序
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 8 | CUSTCLMPEN | 1=使能自定义钳位窗口 | 0 |
-| [7:4] | CUSTCLMP_C | 钳位窗口开启时刻 (ACLK 编号) | 0 |
-| [3:0] | CUSTCLMP_O | 钳位窗口关闭时刻 (必须 > CDS2 关闭) | 0 |
-
-### Register 10 — Pipeline 平均
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 0 | PIPELINE_AVGEN | 1=使能 Pipeline 模式下的 ADC 平均 | 0 |
-
-### Register 11 — LFSR 数字完整性检查
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 6 | LFSR_EN | 1=使能 LFSR 数字接口完整性校验 | 0 |
-
-### Register 12 — 低功耗使能
-| Bits | Name | 说明 | Reset |
-|------|------|------|-------|
-| 8 | LP_EN | 1=使能低功耗模式 (需 PWR=4) | 0 |
-
-### 典型配置序列（上电后）
-```
-1. RESET 高 → 等待 10µs → RESET 低 → 等待 ≥ 4µs (tRESETCS)
-2. Reg 3: 配置 REFDAC → REF_OUT 目标电压
-3. Reg 0: 设置 IFS (满量程) + PWR (退出 Power-Down)
-4. Reg 1: 设置 LPF, READDOWN, EXTRST, Holes
-5. Reg 2: 设置 DOUTMODE, ECHOCLK, Pipeline
-6. Reg 4~7: 配置 AFE 时序开关 (INTRST/CDS1/CDS2/FA)
-7. 等待电源稳定 → 开始转换
-```
+### Register 8~15
+| Reg | 当前值 | 说明 |
+|-----|--------|------|
+| 8 | 0x000 | CUSTCLMPEN=0 |
+| 10 | 0x000 | PIPELINE_AVGEN=0 |
+| 11 | 0x000 | LFSR_EN=0 |
+| 12 | 0x000 | LP_EN=0 (Normal 模式) |
 
 ---
 
-## AD71143 AFE 模拟信号链 (SPEC Figure 18)
+## AFE 时序配置速查 (Pipeline Mode, SPEC Figure 22)
 
-```
-ANx → [Integrator (CF可变, IFS配置)] → [LPF (τLPF可变)] → [CDS1/CDS2] → MUX → 16-bit ADC → LVDS输出
-      ↑                                  ↑                    ↑
-   INTRST 复位                       FA 加速              CDS 相关双采样
-   (至 REF_TFT/REF_INT)             (短路LPF电阻)         (消除 offset + 1/f 噪声)
-```
-
-### AFE 采样时序（每行）
-```
-1. INTRST 闭合 → 积分器复位到 REF_TFT (或 REF_INT)
-2. INTRST 打开 → 复位结束
-3. CDS1 闭合 → 采样复位电平到 CDS1 电容
-4. CDS1 打开
-5. Gate Driver 打开 TFT → 电荷从面板转移到积分器
-6. CDS2 闭合 → 采样信号电平到 CDS2 电容
-7. CDS2 打开
-8. ADC 转换 CDS1/CDS2 差分电压
-```
-
-### 积分器复位时间建议 (SPEC Table 6, Normal Mode)
-| 面板电容 | CF ≤ 2pF | CF > 2pF |
-|----------|---------|---------|
-| 0~80 pF | 6.0 µs | 12.0 µs |
-| 100 pF | 6.6 µs | 17.7 µs |
-| 150 pF | 16.0 µs | 30.0 µs |
-| 200 pF | 43.2 µs | 64.0 µs |
-
-### CDS 时间建议
-- tCDS1, tCDS2 ≥ 5 × τLPF（16-bit 完全建立）
-
----
-
-## AD71143 数据传输接口
-
-### 数据输出模式
-| DOUTMODE | 说明 | Burst/行 | DOUTA | DOUTB |
-|----------|------|---------|-------|-------|
-| 0 (Single) | 单 LVDS | 67 (256ch) | CH0~255 串行 | 未用 |
-| 1 (Double) | 双 LVDS | 34 | 偶数 CH: 0,2,4,...,254 | 奇数 CH: 1,3,5,...,255 |
-
-### ADC 平均模式 (ADCAVG=1, PIPELINE_AVGEN=1)
-- 内部 ADC 4次平均 → 降低 back-end 噪声 (109→82 µV rms)
-- 需要 130 个 Bursts (128 Data + 1 VT/Temp + 1 CMR)
-- 最短行时间: 229.45 µs
-- τLPF 翻倍 (1.3→2.6, 3.9→7.8, ...)
-
-### Echo Clock 模式 (ECHOCLK=1)
-- DCLKOx 是 DCLKx 的缓冲副本
-- 数据在 DCLKOx 上升沿更新 (tD = -1~+1 ns)
-- 推荐用于简化 FPGA 数据同步
-
-### 传递函数
-```
-LSB_SIZE = 0.125 pF × (IFS + 1) × 61.035 µV
-Charge   = DATA_OUT × LSB_SIZE
-FSRQ     = 65536 × LSB_SIZE
-```
-
-### VT 结果
-```
-VT = VTCODE × 61.035 µV + 0.5V
-```
-
-### 温度结果
-```
-0°C → ~4380 LSB, 灵敏度 = 17 LSB/°C
-50°C → ~5230 LSB
-```
-
----
-
-## AFE 时序配置速查 (参照 SPEC Figure 22, Pipeline Mode)
-
-### ACLK 编号与开关动作映射（Pipeline Mode 推荐值）
+### ACLK 编号与开关动作映射
 ```
 ACLK0: (不使用 — 留给 SYNC 建立时间)
 ACLK1: CDS1 闭合 — 采样积分器复位电平
-ACLK2: FA 打开 (CDS1 后) — 断开滤波加速
+ACLK2: FA 打开 (CDS1 后) + INTRST 打开
 ACLK3: CDS1 打开
 ACLK4: CDS2 闭合 — 采样信号电平
 ACLK5: FA 打开 (CDS2 后)
 ACLK6: CDS2 打开
-ACLK7: INTRST 闭合 — 复位积分器
-ACLK8: INTRST 打开
+ACLK7: (不使用)
+ACLK8: INTRST 闭合 — 复位积分器
 ```
 
 ### 对应寄存器配置值
@@ -561,58 +547,33 @@ Reg 7 (FA):     Bits[7:4]=2, Bits[3:0]=5   → CDS1:ACLK2 打开, CDS2:ACLK5 打
 
 ---
 
-## 参考电压配置模式 (SPEC Figure 32-34)
-
-### 模式 1: REF_TFT = REF_INT = REF_OUT（推荐）
-- 内部 DAC 同时提供 REF_TFT 和 REF_INT
-- EXTRST = 0
-- 外部仅需 REF_ADC (4.096V ADR444)
-
-### 模式 2: REF_TFT 外部, REF_INT = REF_OUT
-- 用户提供外部 REF_TFT (0.6~2.7V)
-- REF_OUT 提供 REF_INT
-- EXTRST = 1
-
-### 模式 3: REF_TFT 外部, REF_INT 外部
-- 用户提供两者
-- REFDAC 必须近似等于外部 REF_INT（偏差 = offset）
-- EXTRST = 1
-
----
-
-## 设计约束与注意事项
-
-### DCLK/ACLK/SCK 互斥
-- DCLKx 和 ACLK 活跃时，SCK 必须保持低电平
-- 配置期间（CS=高）, SYNC 和 DCLKx 必须保持低电平
-- 转换期间 CS 必须保持低电平
-
-### Pipeline 模式 DCLK 禁区
-- DCLKx Burst 不能与以下开关动作的 200ns 内重叠：
-  - INTRST 打开
-  - INTRST 闭合
-  - CDS1 闭合
-  - CDS2 闭合
-
-### 数据完整性
-- SYNC 脉冲若在最小 Burst 数之前出现 → 数据损坏
-- 34 Burst 后可以连续时钟 DCLKx 以更快读取数据
-- 4288 个 DCLK 后（Header+Data+Config）输出全 0
-
-### Daisy-Chain SPI
-- 多个 AD71143 可通过 SDI→SDO 级联
-- SDI(ADC_N) = SDO(ADC_N-1)
-- SCK, CS, RESET 共用
-- 一次 CS 周期可写入链上所有器件
-
----
-
 ## 常用命令
 
 ### 仿真
 ```bash
-make tb          # 编译 + 运行仿真
-make clean       # 清理输出文件
+make tb              # 顶层仿真
+make tb_data_rx      # 单 Panel 数据接收仿真
+make tb_data_rx_dual # 双 Panel 数据接收仿真
+make clean           # 清理输出文件
+
+# 独立 Testbench (需手动运行, 参见 Develop.md)
+```
+
+### Vivado 综合+实现
+```tcl
+reset_runs synth_1; launch_runs synth_1 impl_1 -jobs 4; wait_on_runs impl_1; launch_runs impl_1 -to_step write_bitstream -jobs 4; wait_on_run impl_1
+```
+
+### 生成配置存储器文件
+```tcl
+source board/TCL/write_cfgmem.tcl
+```
+
+### PC 侧抓包
+```bash
+sudo ip link set enp0s13f0u2u1 up
+sudo ip addr add 192.168.1.1/24 dev enp0s13f0u2u1
+sudo tcpdump -i enp0s13f0u2u1 'udp port 1234' -e -vv
 ```
 
 ### 仿真输出示例
@@ -630,12 +591,24 @@ Average frame rate: 369.35 fps
 
 - [x] AD71143 SPI 配置模块 (`ad71143_spi.v`)
 - [x] AD71143 控制信号发生器 RESET+SYNC+ACLK (`ad71143_ctrl.v`)
-- [ ] top 层集成: nt39565d + ad71143_ctrl + ad71143_spi + ad71143_data_rx
-- [ ] 上电初始化 SPI 配置序列（自动写 16 个寄存器）
+- [x] AD71143 单 Panel LVDS 数据接收 (`ad71143_data_rx.v`)
+- [x] AD71143 双 Panel 数据接收+合并 (`ad71143_data_rx_dual.v`)
+- [x] NT39565D Gate Driver 控制 (`nt39565d_ctrl.v`)
+- [x] RGMII 发送/接收模块 (`RGMII_tx.v`, `RGMII_rx.v`)
+- [x] RGMII 桥接 + UDP/IP/MAC 协议栈 (`rgmii_bridge.v`)
+- [x] MDIO PHY 控制器 (`mdio_ctrl.v`)
+- [x] 顶层集成: SPI 配置 FSM (16 寄存器 LUT) + 帧控制 FSM + CDC
+- [x] 双 Panel SPI 并行配置
+- [x] 上电初始化 SPI 配置序列（自动写 16 个寄存器，延迟 1s 后启动）
+- [x] PHY 复位时序 (~100ms)
+- [x] ILA 调试探针集成 (RGMII 发送诊断)
+- [x] CRC-32 FCS 计算与校验
 - [ ] 两片 AFE 数据的 Bitslip/Deskew 对齐
-- [ ] 数据缓存到 BRAM/FIFO
-- [ ] 数据上传到 PC（以太网口）
-- [ ] 实际硬件测试
+- [ ] AD 芯片 SPI 修复 / 硬件更换 (SPI SDO 无响应)
+- [ ] RGMII 物理层信号质量诊断 (PC 端偶有丢帧)
+- [ ] 数据缓存到 BRAM/FIFO（FIFO IP 已集成，待优化深度/位宽）
+- [ ] PC 端完整数据接收与图像重建软件
+- [ ] 实际硬件全链路测试 (需两片 AD 均正常工作)
 
 ---
 
@@ -644,4 +617,7 @@ Average frame rate: 369.35 fps
 - AD71143 SPEC (Rev. SpA, 2016) — `document/3.AD71143 SPEC.pdf`
 - NT39565D 数据手册 — `document/1.1 NT39565D_V01_20130219.pdf`
 - TFT 传感器规格书（3.99" IGZO）
+- YT8531C 数据手册
 - AFE2256 EVM 用户指南（参考设计）
+- 项目进度 + 时钟树 — `README.md`
+- 开发日志 — `Develop.md`
