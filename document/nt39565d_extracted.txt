@@ -1,0 +1,1858 @@
+Total pages: 27
+=== Page 1 ===
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+NT39565D 
+541/513/385/361 
+Channel Selection 
+TFT LCD Gate Driver 
+V 0.1 
+Preliminary
+Novatek Microelectronics Corp.
+
+
+=== Page 2 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 2 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+1. General Description 
+ 
+The NT39565D is a dedicated 541/513/385/361 channel outputs gate driver IC for TFT-LCD 
+panels. While a start pulse is triggered, output pins will sequentially output high-driving voltage 
+pulses for the gate signals of the LCD panel. The NT39565D also provides shift up/down selection 
+and cascade functions for dot expansion. The special pin location is designed for COF 
+manufacturing. 
+ 
+ 
+ 
+ 
+2. Features 
+ 
+! 2-level Gate driver for TFT LCD panel 
+! 541/513/385/361 channels output selectable for normal output waveform. 
+! 540/512/384/360 channels output selectable for 2G, 2G+LCS output waveform.(Refer to chip selection description) 
+! Bi-directional data shift capability 
+! Digital supply voltage : 2.3V to 3.6V 
+! Maximum +40V output driving voltage 
+! 200KHz maximum operation frequency 
+! High voltage CMOS process technology 
+! COF package 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 3 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 3 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+ 
+3. Block Diagram 
+Input Buffer
+Bi- directional Shift Register
+Level Shifter
+Output Buffer
+OUT[2]
+OUT[3]
+OUT[4]
+OUT[537]
+OUT[1]
+VGG
+V EE
+VCC
+GND
+CPV_L, CPV_R
+LR
+OE1_L, OE1_R
+XAO_L, XAO_R
+MODE2_L, MODE2_R
+OUT[538]
+OUT[539]
+OUT[540]
+OE2_L, OE2_R
+MODE1_L, MODE1_R
+SEL _L, SEL _R
+UD_L, UD_R
+C HI P_SE
+,
+L 2 L
+_
+C
+L2
+HIP S
+_ E
+_R
+C HI P_SE
+,
+L 1 L
+_
+C
+L1
+HIP S
+_ E
+_R
+STV1R, ST V2R
+ST V1L , STV 2L
+OEPSN_L, OEPSN_R
+OUT[0]
+OUT[541]
+STV_MODE_L, STV_MODE_R
+ 
+
+
+=== Page 4 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 4 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+ 
+*Note: This functional block diagram is just for reference 
+ 
+4. Pin Description 
+Designation 
+I/O 
+Descriptions 
+XAO_L,XAO_R 
+I 
+(Default:H) 
+When XAO_L / XAO_R go low, all outputs are fixed to VGG. And there is a 200k ohm pull-up 
+resistor with this pin.  
+XAO_L / XAO_R signal has priority over OE1_L/R, OE2_L/R. 
+MODE1_L, 
+MODE1_R  
+MODE2_L, 
+MODE2_R 
+I 
+(Default:H) 
+Channel mode selection. 
+Output 
+Channel
+Disable channel  
+(VEE level) 
+(CHIP_SEL2, 
+CHIP_SEL1) 
+MODE2_L
+MODE2_R
+MODE1_L 
+MODE1_R 
+540 
+OUT[0], OUT[541] 
+(H,H) 
+(L,H) 
+(L,L) 
+H 
+H 
+512 
+OUT[0], 
+OUT[257]~OUT[284], 
+OUT[541] 
+(H,H) 
+(L,H) 
+(L,L) 
+H 
+L 
+384 
+OUT[0], 
+OUT[193]~OUT[348],
+OUT[541] 
+(H,H) 
+(L,H) 
+(L,L) 
+L 
+H 
+360 
+OUT[0]~OUT[12], 
+OUT[193]~OUT[348], 
+OUT[529]~OUT[541] 
+(H,H) 
+(L,H) 
+(L,L) 
+L 
+L 
+ 
+Output 
+Channel
+Disable channel  
+(VEE level) 
+LR
+(CHIP_SEL2,
+CHIP_SEL1) 
+MODE2_L
+MODE2_R
+MODE1_L 
+MODE1_R 
+OUT[0] 
+H 
+541 
+      OUT[541] 
+L 
+ 
+(H,L) 
+H 
+H 
+OUT[0], 
+OUT[257]~OUT[284],
+H 
+513 
+OUT[257]~OUT[284], 
+OUT[541] 
+L 
+(H,L) 
+H 
+L 
+OUT[0], 
+OUT[193]~OUT[348] 
+ H 
+385 
+OUT[193]~OUT[348],
+OUT[541] 
+L 
+(H,L) 
+L 
+H 
+OUT[0]~OUT[12], 
+OUT[193]~OUT[348], 
+OUT[529]~OUT[540] 
+ H 
+361 
+OUT[1]~OUT[12], 
+OUT[193]~OUT[348], 
+OUT[529]~OUT[541] 
+L 
+(H,L) 
+L 
+L 
+ 
+ 
+CHIP_SEL1_L 
+CHIP_SEL1_R 
+ 
+CHIP_SEL2_L 
+CHIP_SEL2_R 
+ 
+I 
+(Default:L) 
+Chip selection 
+CHIP_SEL2 
+CHIP_SEL1
+Function 
+H 
+H 
+2G+LCS (4 lines) 
+L 
+H 
+2G (Two channel pulse mode) 
+H 
+L 
+Normal output 
+L 
+L 
+2G+LCS (2 lines)   
+ 
+
+
+=== Page 5 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 5 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+SEL_L, 
+SEL_R 
+I 
+(Default:H) 
+UD_L, 
+UD_R 
+I 
+(Default:H) 
+Output mode selection (For “2G+LCS (4lines)” application) 
+SEL 
+UD 
+Output mode 
+Output delay 
+H 
+H 
+One pulse mode 
+1CPV cycle 
+L 
+H 
+Jumping one pulse mode 
+2CPV cycle 
+H 
+L 
+Reverse one pulse mode 
+1CPV cycle 
+L 
+L 
+Reverse jumping one pulse mode 
+2CPV cycle 
+ 
+1. 
+The “delayed” output is control by “SEL” pin. If SEL=”H”, output will delay 1CPV cycle 
+and if SEL=”L”, output will delay 2CPV cycle. (Refer to “UD” function). 
+ 
+UD
+Output mode 
+H 
+Non-reversed. 
+L 
+STV1 and STV2 start pulse are reversed. 
+ 
+STV_MODE_L, 
+STV_MODE_R, 
+I 
+(Default:L)
+STV input mode selection (For “2G+LCS (2lines)” application) 
+Please refer to 5-5 Operation Waveform. 
+STV Pulse width 
+STV_MODE 
+Long (2T) 
+Output delay
+H 
+The first 1T (1 CPV pulse width) of the delayed outputs 
+is masked. 
+1CPV cycle 
+L 
+No masked for the delayed outputs. 
+1CPV cycle 
+ 
+OE1_L,OE1_R, 
+OE2_L,OE2_R 
+I 
+Output enables control. 
+The OE1_L, OE1_R & OE2_L, OE2_R signals control the duty cycle width of output channel. 
+When OE goes high, output will pulled to low level output (VEE).  
+When 541/540CH, (CHIP_SEL1&2 = H/L) 
+OE1_L/R is used to control : 
+OUT[1],OUT[3],OUT[5],……,OUT537],OUT[539] ,OUT[541] 
+OE2_L/R is used to control :  
+OUT[0],OUT[2],OUT[4],OUT[6],……,OUT[538],OUT[540] 
+When 513/512CH, (CHIP_SEL1&2 = H/L) 
+OE1_L/R is used to control : 
+OUT[1],OUT[3],OUT[5],…OUT[255],OUT[285],…,OUT[537],OUT[539] ,OUT[541] 
+OE2_L/R is used to control : 
+OUT[0],OUT[2],OUT[4],OUT[6],…OUT[256],OUT[286]….,OUT[538],OUT[540] 
+When 385/384CH, (CHIP_SEL1&2 = H/L) 
+OE1_L/R is used to control : 
+OUT[1],OUT[3],OUT[5],…OUT[191],OUT[349],…,OUT[537],OUT[539] ,OUT[541]  
+OE2_L/R is used to control :  
+OUT[0],OUT[2],OUT[4],OUT[6],…OUT[192],OUT[350],…,OUT[538],OUT[540] 
+When 361/360CH, (CHIP_SEL1&2 = H/L) 
+OE1_L/R is used to control : 
+OUT[13],OUT[15],OUT[17],…OUT[191],OUT[349],…OUT[527],OUT[541] 
+OE2_L/R is used to control :  
+OUT[0],OUT[14],OUT[16],OUT[18],…OUT[192],OUT[350],…OUT[528] 
+
+
+=== Page 6 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 6 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+OEPSN_L, 
+OEPSN_R 
+ 
+I 
+(Default:L) 
+Select OE mask function. 
+OEPSN 
+Output Channel 
+H 
+OE1 and OE2 is activated only on the rising edge and falling edge 
+of OUT[n]. 
+L 
+Normal OE function. 
+OEPSN = L
+OEPSN = H
+Tcpv-oe
+ 
+1.Tcpv-oe > 0 
+LR 
+I 
+Shift up or down control. Please refer to STV1R, STV2R, STV1L, STV2L function description.
+CPV_L, CPV_R 
+I 
+Shift clock. Clock signal for internal shift register. 
+STV1R 
+STV2R 
+STV1L 
+STV2L 
+I/O 
+Start pulse input/output. 
+These pins are used to input and output shift data. These pins are switched between input and 
+output by setting the LR pin as below table. 
+ 
+1. Single STV input (Only in Normal mode & Two channel pulse mode (2G) function) 
+LR 
+ 
+H 
+STV1R is used for start pulse input. 
+L 
+STV1L is used for start pulse input. 
+----STV2R and STV2L are floating. 
+ 
+2. Dual STV input (Only in 2G+LCS(2 lines) and 2G+LCS(4 lines) function) 
+LR 
+ 
+H 
+STV1R, STV2R is used for start pulse input. 
+STV1L, STV2L is used for start pulse output. 
+L 
+STV1L, STV2L is used for start pulse input. 
+STV1R, STV2R is used for start pulse output. 
+ 
+1. When set for input 
+These pins are used as the start pulse to the shift registers of the gate driver. 
+The data is latched into the shift registers at the rising edge of CPV_L/R. 
+ 
+2. When set for output 
+When two or more gate drivers are cascaded, these pins output the start pulse to the next stage. 
+VGG 
+- 
+Positive power supply for OUT[0]~ OUT[541] outputs 
+VEE 
+- 
+Negative power supply for OUT[0] ~ OUT[541] outputs 
+VCC 
+- 
+Power supply for digital circuit. 
+GND 
+- 
+Ground pin 
+OUT[0]~OUT[541] 
+O 
+For driving LCD’s gate signals, the output amplitude of these pins is VGG – VEE. Output 
+timing of these signals is synchronous with the rising edge of shift clock. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Gout为2个CPV周
+期，按照下面的预
+测，Gout min 
+10.64us,实际最小
+4us
+
+
+=== Page 7 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 7 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5. Functional Description 
+5-1. Power On / off sequence 
+ 
+To prevent the device damage from latch up, the power ON/OFF sequence shown below must be 
+followed. 
+ 
+When power on: VCC→VGL(VEE)→VGH(VGG) 
+When power off: VGH(VGG)→VGL(VEE)→VCC 
+VGH
+VCC
+control 
+signal
+AGND,DGND  (0V)
+t
+t1
+90%
+t2
+90%
+10%
+t5
+t4
+t6
+90%
+90%
+t8
+VGL
+10%
+10%
+10%
+10%
+10%
+10%
+10%
+VGH
+VCC
+control 
+signal
+VGL
+90%
+t7
+10%
+t3
+t1
+t4
+ 
+ 
+Timing 
+Min.
+Typ.
+Max.
+unit
+note 
+t1 
+0.5 
+ 
+10 
+ms
+Refer to VESA timing 
+t2 
+0 
+ 
+ 
+ms
+ 
+t3 
+0 
+ 
+ 
+ms
+ 
+t4 
+0 
+ 
+ 
+ms
+ 
+t5 
+0 
+ 
+ 
+ms
+ 
+t6 
+0 
+ 
+ 
+ms
+ 
+t7 
+0 
+ 
+ 
+ms
+ 
+t8 
+0 
+ 
+ 
+ms
+ 
+(Display image may be abnormal before analog voltage reaches it’s target value) 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 8 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 8 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5-2. Power level: 
+VGG
+VCC
+GND
+VEE
+Logic input
+Gate Line Driving output
+ 
+Note: For the input signals: CPV_L/R, XAO_L/R, MODE1_L/R, MODE2_L/R, CHIP_SEL1_L/R, CHIP_SEL2_L/R, SEL_L/R, 
+UD_L/R, OE1_L/R, OE2_L/R, OEPSN_L/R, STV1R, STV2R, STV1L, STV2L, STV_MODE_L/R & LR 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 9 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 9 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5-3. Operation Waveform (Normal output) 
+ 
+1. Short STV input, Output channel = 541 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L 
+H 
+H 
+H 
+L 
+H / L
+H / L
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+ 
+2. Long STV input, Output channel = 541 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L 
+H 
+H 
+H 
+L 
+H / L
+H / L
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+
+
+=== Page 10 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 10 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5-4. Operation Waveform (Two Channel Pulse mode) 
+ 
+1. Short STV input, Output channel = 540  
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L 
+H 
+H 
+L 
+H 
+H / L
+H / L
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+ 
+2. Long STV input, Output channel = 540 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L 
+H 
+H 
+L 
+H 
+H / L
+H / L
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+
+
+=== Page 11 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 11 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5-5. Operation Waveform (2G+LCS 2 lines) 
+1. Short STV input, Output channel = 540  
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+H 
+H 
+L 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(a) Identical STV1 & STV2 timing (UD =H with 1st channel output first) 
+ 
+ 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+H 
+L 
+L 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(b) Identical STV1 & STV2 timing (UD =L with 2nd channel output first) 
+ 
+Note : 
+Output masked by OE 
+
+
+=== Page 12 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 12 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+ 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+H 
+H 
+L 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(c) Delay 1CLK timing between STV1 & STV2  
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 13 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 13 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+2. Long STV input, Output channel = 540 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+H 
+H 
+H 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(a) Identical STV1 & STV2 timing 
+ 
+ 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+L 
+H 
+H 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(b) Identical STV1 & STV2 timing  
+ 
+Note : 
+Output masked by OE ;
+Output masked STV_MODE 
+
+
+=== Page 14 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 14 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+H 
+H 
+H 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(c) Delay 1CLK timing between STV1 & STV2  
+ 
+ 
+LR MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+STV_MODE
+H/L 
+H 
+H 
+L 
+L 
+L 
+H 
+H 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+(d) Delay 1CLK timing between STV1 & STV2 
+ 
+Note : 
+Output masked by OE 
+
+
+=== Page 15 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 15 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5-6. Operation Waveform (2G+LCS 4 lines) 
+ 
+1. 
+One pulse mode, Output channel = 540 
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+H  
+H 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+
+
+=== Page 16 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 16 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+2. 
+One pulse mode (Long STV), Output channel = 540 
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+H  
+H 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 17 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 17 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+3. 
+Reverse One pulse mode, Output channel = 540  
+     
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+H  
+L 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 18 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 18 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+4. 
+Reverse One pulse mode(Long STV),Output channel = 540  
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+H  
+L 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 19 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 19 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+5. 
+Jumping One pulse mode, Output channel = 540  
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+L 
+H 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 20 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 20 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+6. 
+Jumping One pulse mode (Long STV), Output channel = 540  
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+L 
+H 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 21 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 21 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+7. 
+Reverse Jumping One pulse mode, Output channel = 540  
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+L 
+L 
+L 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 22 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 22 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+8. 
+Reverse Jumping One pulse mode (Long STV), Output channel = 540  
+ 
+LR
+MODE1
+MODE2 CHIP_SEL2 CHIP_SEL1
+SEL
+UD
+OEPSN 
+H/L
+H 
+H 
+H 
+H 
+L 
+L 
+H 
+(“H” level =VCC, ”L” level =GND) 
+ 
+ 
+ 
+Note : 
+Output masked by OE 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+=== Page 23 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 23 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+Absolute Maximum Rating* 
+Logic supply voltage, VCC  
+ 
+ 
+ 
+-0.3V to 5.0V 
+Supply voltage, VEE 
+  
+ 
+ 
+     
+-20V to +0.3V 
+Supply range, VGG-VEE 
+ 
+ 
+ 
+ 
+-0.3V to 45V 
+Supply voltage, VGG 
+ 
+ 
+ 
+     
+-0.3V to 40V 
+Operating temperature  
+ 
+ 
+     
+-30
+ to 85
+ 
+Storage temperature 
+ 
+ 
+     
+ 
+-55
+ to 125
+ 
+ 
+*Comments 
+Stresses above those listed under “Absolute Maximum Rating” may cause permanent damage to the device. These are stress ratings only. Functional 
+operation of this device at these or any other conditions above those indicated in the operational sections of this specification is not implied and exposure to 
+absolute maximum rating conditions for extended periods may affect device reliability. 
+ 
+6. DC Electrical Characteristics 
+Symbol
+Parameters 
+Min. 
+Typ.
+Max. Unit
+Conditions 
+VGG 
+VGG Voltage 
+VCC 
+30 
+VEE+40
+V
+ 
+VEE 
+VEE Voltage 
+-15 
+- 
+-5 
+V
+ 
+Vxo 
+Voltage Range of 
+VGG – VEE 
+12 
+- 
+40 
+V
+VCC = 3.3V 
+VCC 
+VCC Supplied Voltage 
+2.3 
+3.3 
+3.6 
+V
+ 
+VIH 
+High Level Input Voltage 
+0.7*VCC
+- 
+VCC 
+V
+VCC = 3.3V 
+VIL 
+Low Level Input Voltage 
+0 
+- 
+0.3*VCC
+V
+VCC = 3.3V 
+IXOH 
+High Level Output Current
+0.5 
+- 
+- 
+mA
+Driving current,  
+VO = VGG – 0.5V,  
+VGG –VEE = 30V 
+IXOL 
+Low Level Output Current
+-0.5 
+- 
+- 
+mA
+Sink current,  
+VO = VEE + 0.5V,  
+VGG –VEE = 30V 
+IPOH 
+High Level Output Current
+200 
+- 
+- 
+uA STV1/STV2, 
+VO = VCC – 0.3V 
+IPOL 
+Low Level Output Current
+-200 
+- 
+- 
+uA STV1/STV2, 
+VO = 0.3V 
+Rin 
+Pull-up & Pull down 
+Impedance 
+70K 
+200K
+- 
+Ω
+Note1 
+IIL 
+Input Leakage Current 
+- 
+- 
+±1 
+uA Note2 
+IDD 
+Operating Current 
+Consumption 
+- 
+15 
+100 
+uA
+VCC=3.3V, 
+FCPV =50KHz, No load 
+Note3 
+IGG 
+Operating Current 
+Consumption 
+- 
+50 
+250 
+uA
+VGG=25V, 
+FCPV=50KHz, No load 
+Note3 
+IEE 
+Operating Current 
+Consumption 
+- 
+-50 
+-250 
+uA
+VEE=-10V, 
+FCPV =50KHz, No load 
+Note3 
+(VGG=25V, VEE= -15V, VCC=3.3V, GND=0V, TA= 25
+) 
+Note1 : XAO_L/R, SEL_L/R, UD_L/R, MODE1_L/R, MODE2_L/R, CHIP_SEL2_L/R, OEPSN, STV_MODE_L/R 
+Note2 : Except --- XAO_L/R, SEL_L/R, UD_L/R, MODE1_L/R, MODE2_L/R, CHIP_SEL1_L/R, CHIP_SEL2_L/R, OEPSN, STV_MODE_L/R 
+Note3 : For only one output channel turns on during one CPV period 
+ 
+
+
+=== Page 24 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 24 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+7. AC Electrical Characteristics 
+Symbol
+Parameters 
+Min. Typ. Max. Unit
+Conditions 
+Tdt 
+STV1/STV2 Delay Time 
+- 
+- 
+550
+ns
+CL = 20pF 
+Tdo 
+Driver Output Delay Time 
+- 
+- 
+500
+ns
+CL = 300pF, RL = 5KΩ   
+Note(1) 
+Tthl 
+Output Falling Time 
+- 
+- 
+400
+ns
+CL = 300pF RL = 5KΩ  
+Note(1), 90% to 10% 
+Ttlh 
+Output Rise Time 
+- 
+- 
+500
+ns
+CL = 300pF, RL = 5KΩ  
+Note(1), 10% to 90% 
+TXAO XAO_L&XAO_R to Driver Output 
+Delay Time 
+- 
+- 
+20 
+us
+CL = 300pF 
+Toe 
+OE1_L, OE1_R, OE2_L, OE2_R to 
+Driver Output Delay Time 
+- 
+- 
+500
+ns
+CL = 300pF, RL = 5KΩ  
+Note(1), 
+FCPV 
+Clock Frequency 
+- 
+- 
+200
+kHz In cascade connection 
+Trck 
+Clock Rise Time 
+- 
+- 
+100
+ns
+CL = 20pF 
+Tfck 
+Clock Falling Time 
+- 
+- 
+100
+ns
+CL = 20pF 
+PWCPV Clock Pulse Width  
+(High & Low) 
+500
+- 
+- 
+ns
+ 
+Tsu 
+STV1/STV2 Set-up Time 
+200
+- 
+- 
+ns
+ 
+Thd 
+STV1/STV2 Hold Time 
+300
+- 
+- 
+ns
+ 
+Twcl 
+Output Enabled pulse width 
+0.5
+- 
+- 
+us
+ 
+(VGG=25V, VEE= -15V, VCC=3.3V, GND=0V, TA= 25
+) 
+ 
+Note (1) 
+OE1/2
+CPV
+STV1/2
+DUT
+RL
+CL
+Measure point
+ 
+CL = 300pF , RL = 5kΩ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+8. Timing Waveform 
+HX8698 max 
+380 kHz；
+CPV period 
+min 2.8us
+预估本产品
+CPV period 
+min 5.32us
+实际调试发
+现本产品可
+以支持到
+2.0us的CPV
+实际
+
+
+=== Page 25 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 25 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+VEE
+VGG
+GND
+PWCPV
+PWCPV
+Tsu
+Thd
+Tdo
+Tdo
+Ttlh
+CPV_L
+CPV_R
+STV1
+( in )
+OUT[n]
+90%
+50%
+50%
+90%
+10%
+Tdt
+Tdt
+Tfck
+Trck
+10%
+10%
+90%
+10%
+90%
+70%
+70%
+70%
+70%
+30%
+70%
+30%
+Tthl
+OE1_L,OE1_R
+OE2_L, OE2_R
+Toe
+Toe
+OUT[n]
+VGG
+VEE
+10%
+90%
+Twcl
+70%
+70%
+TXAO
+TXAO
+OUT[n]
+VGG
+VEE
+30%
+70%
+30%
+70%
+XAO_L
+XAO_R
+GND
+GND
+50%
+30%
+70%
+30%
+STV2
+STV1
+( out)
+STV2
+ 
+ 
+ 
+
+
+=== Page 26 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 26 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+9. Pin Assignment 
+NT39565
+TOP View
+D
+      
+VIEW
+BUMP
+BUMP
+ 
+
+
+=== Page 27 ===
+NT39565D 
+541/513/385/361 -channel selection 
+TFT LCD Gate Driver 
+Preliminary V0.1 
+Novatek Microelectronics Corp. Novatek all rights reserved. 
+ 
+ 27 of 27  
+      
+Reproduction and distribution prohibited without Novatek’s permission. 
+ 
+10. Revision History 
+ 
+NT39565D Specification Revision History 
+Version 
+Content 
+Page 
+Date 
+0.0 
+Original 
+All 
+2012/04/16 
+0.1 
+Updated Tdo
+Toe AC electrical characteristics. 
+Modified STV1L description when single STV input and LR=L. 
+24 
+6 
+2013/02/19 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+

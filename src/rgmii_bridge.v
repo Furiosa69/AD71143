@@ -368,14 +368,14 @@ module rgmii_bridge #(
         .dbg_state(tx_fsm_state)
     );
 
-    // TXC 90°相移: FPGA 提供 2ns 延迟
+    // TXC 90°相移 (clk_125m_ph90): FPGA 提供 2ns 延迟, PHY 不额外加延迟
     ODDR #(
         .DDR_CLK_EDGE("OPPOSITE_EDGE"),
         .INIT(1'b0),
         .SRTYPE("SYNC")
     ) ODDR_txc (
         .Q  (TXC),
-        .C  (clk_125m_ph90),
+        .C  (clk_125m_ph90),     // 135°: FPGA 提供相移, 还原 0723-0956 版
         .CE (1'b1),
         .D1 (1'b1),
         .D2 (1'b0),

@@ -1,0 +1,11 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Fri Jul 24 12:01:56 2026
+# Process ID: 54672
+# Current directory: D:/AD71143/AD71143-master
+# Command line: vivado.exe -mode batch -source D:\AD71143\AD71143-master\board\Project\project_1\project_1.runs\synth_1\top.tcl -log D:\AD71143\AD71143-master\board\Project\project_1\synth_log.log -journal D:\AD71143\AD71143-master\board\Project\project_1\synth.jou
+# Log file: D:/AD71143/AD71143-master/board/Project/project_1/synth_log.log
+# Journal file: D:\AD71143\AD71143-master\board\Project\project_1\synth.jou
+#-----------------------------------------------------------

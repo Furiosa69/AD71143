@@ -1,0 +1,34 @@
+-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+-- --------------------------------------------------------------------------------
+-- Tool Version: Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
+-- Date        : Thu Jul 23 18:35:45 2026
+-- Host        : Stouch_ZXIN running 64-bit major release  (build 9200)
+-- Command     : write_vhdl -force -mode synth_stub
+--               d:/AD71143/AD71143-master/board/Project/project_1/project_1.gen/sources_1/ip/ila_0_1/ila_0_1_stub.vhdl
+-- Design      : ila_0_1
+-- Purpose     : Stub declaration of top-level module interface
+-- Device      : xc7a200tfbg484-2
+-- --------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity ila_0_1 is
+  Port ( 
+    clk : in STD_LOGIC;
+    probe0 : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    probe1 : in STD_LOGIC_VECTOR ( 10 downto 0 );
+    probe2 : in STD_LOGIC_VECTOR ( 7 downto 0 );
+    probe3 : in STD_LOGIC_VECTOR ( 2 downto 0 )
+  );
+
+end ila_0_1;
+
+architecture stub of ila_0_1 is
+attribute syn_black_box : boolean;
+attribute black_box_pad_pin : string;
+attribute syn_black_box of stub : architecture is true;
+attribute black_box_pad_pin of stub : architecture is "clk,probe0[3:0],probe1[10:0],probe2[7:0],probe3[2:0]";
+attribute X_CORE_INFO : string;
+attribute X_CORE_INFO of stub : architecture is "ila,Vivado 2020.2";
+begin
+end;

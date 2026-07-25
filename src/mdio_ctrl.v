@@ -48,18 +48,19 @@ module mdio_ctrl (
     // =====================================================================
     // 常量
     // =====================================================================
-    localparam PHY_ADDR    = 5'd0;
+    localparam PHY_ADDR    = 5'd0;      // 还原 0723-0956 版: 备份原值
     localparam REG_EXTAD   = 5'h1E;
     localparam REG_EXTDT   = 5'h1F;
     localparam REG_BMSR    = 5'h01;
     localparam REG_BCR     = 5'h00;   // Basic Control Register
     localparam EXTAD_CHIP  = 16'hA001;  // Chip_Config
-    localparam EXTAD_RGMII = 16'hA003;  // RGMII_Config1
     localparam EXTAD_LED2  = 16'hA00E;  // LED2_CFG
     localparam EXTAD_PKGTX = 16'h00AD;
+    localparam EXTAD_RGMII = 16'hA003;  // RGMII_Config1
     // Chip_Config: bit15=1(no reset) bit8=0(Rxc_dly_en=0) bit6=1(En_ldo=1) bit5:4=00(3.3V)
     localparam VAL_CHIPCFG  = 16'h8040;
-    // RGMII_Config1: all delays off (FPGA 90° TXC provides 2ns)
+    // RGMII_Config1: TXC_dly_en+RXC_dly_en
+    //   0x0000: 无延迟 (还原 0723-0956 版: 备份原值)
     localparam VAL_RGMII1   = 16'h0000;
     // LED2_CFG: LED2=1000M link ON + blink on TX/RX
     localparam VAL_LED2     = 16'h0644;
@@ -78,16 +79,18 @@ module mdio_ctrl (
     // =====================================================================
     // 初始化序列
     // =====================================================================
-    localparam I_IDLE       = 3'd0;
-    localparam I_WAIT       = 3'd1;
-    localparam I_SET_CHIP   = 3'd2;   // ext addr = 0xA001
-    localparam I_WR_CHIP    = 3'd3;   // write Chip_Config
-    localparam I_SET_LED2   = 3'd4;   // ext addr = 0xA00E
-    localparam I_WR_LED2    = 3'd5;   // write LED2_CFG
-    localparam I_RD_BCR     = 3'd6;   // read BCR → rgmii2_val
-    localparam I_POLL       = 3'd7;   // BMSR ↔ PkgTx 交替
+    localparam I_IDLE       = 4'd0;
+    localparam I_WAIT       = 4'd1;
+    localparam I_SET_CHIP   = 4'd2;   // ext addr = 0xA001
+    localparam I_WR_CHIP    = 4'd3;   // write Chip_Config
+    localparam I_SET_LED2   = 4'd4;   // ext addr = 0xA00E
+    localparam I_WR_LED2    = 4'd5;   // write LED2_CFG
+    localparam I_SET_RGMII  = 4'd6;   // ext addr = 0xA003
+    localparam I_WR_RGMII   = 4'd7;   // write RGMII_Config1
+    localparam I_RD_BCR     = 4'd8;   // read BCR → rgmii2_val
+    localparam I_POLL       = 4'd9;   // BMSR ↔ PkgTx 交替
 
-    reg [2:0]   i_state;
+    reg [3:0]   i_state;
     reg [1:0]   poll_cnt;       // 0:BMSR→1:wrPKGTX→2:rdPKGTX→3:clrEXT
     reg [23:0]  init_delay;
     reg         req_start;
@@ -146,8 +149,12 @@ module mdio_ctrl (
                 // Step 2: LED2_CFG = 0x0644 (1000M link ON + TX/RX blink)
                 I_WR_CHIP:  if (req_done_rise) begin i_state <= I_SET_LED2; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_LED2; end
                 I_SET_LED2: if (req_done_rise) begin i_state <= I_WR_LED2;  req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_LED2; end
-                // Step 3: 读 BCR (检查 isolate/power-down), 然后进入轮询
-                I_WR_LED2:  if (req_done_rise) begin i_state <= I_RD_BCR;   req_start<=1; req_rw<=1; req_regad<=REG_BCR; end
+                // Step 3: RGMII_Config1 配置
+                I_WR_LED2:  if (req_done_rise) begin i_state <= I_SET_RGMII; req_start<=1; req_rw<=0; req_regad<=REG_EXTAD; req_wdata<=EXTAD_RGMII; end
+                // Step 4: 写 RGMII_Config1 = 0x0003 (TX+RX delay 双向补偿)
+                I_SET_RGMII: if (req_done_rise) begin i_state <= I_WR_RGMII;  req_start<=1; req_rw<=0; req_regad<=REG_EXTDT; req_wdata<=VAL_RGMII1; end
+                // Step 5: 读 BCR → 进入轮询
+                I_WR_RGMII:  if (req_done_rise) begin i_state <= I_RD_BCR;   req_start<=1; req_rw<=1; req_regad<=REG_BCR; end
                 I_RD_BCR:   if (req_done_rise) begin rgmii2_val<=rdata_shift; i_state<=I_POLL; poll_cnt<=0; req_start<=1; req_rw<=1; req_regad<=REG_BMSR; end
                 // 轮询: 0=save BMSR→1=wrPKGTX→2=save PkgTx→3=clrExt
                 I_POLL: begin
