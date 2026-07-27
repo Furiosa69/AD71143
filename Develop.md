@@ -156,8 +156,10 @@ PHY 链路已协商至 1000Mbps Full，MDIO BMSR 确认 Link Up。FPGA 侧 ILA �
 
 ## 门控测试
 
-> 底板需修改。
-
+> 已修改好底板
+> 修复好XAO_SHUT异常复位状态
+>
+ 
 ---
 
 ## 双 Panel 数据合并测试

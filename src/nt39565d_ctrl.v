@@ -60,7 +60,13 @@ module nt39565d_gate_ctrl #(
 
     output reg        busy,
     output reg        line_done,
-    output reg        frame_done
+    output reg        frame_done,
+
+    // 调试信号输出
+    output wire [3:0]  dbg_state,
+    output wire [15:0] dbg_cnt,
+    output wire [15:0] dbg_shift_cnt,
+    output wire [15:0] dbg_target_lines
 );
 
     localparam integer CPV_PERIOD_CNT = (CPV_PERIOD_US * CLK_FREQ_MHZ < 2) ? 2 : (CPV_PERIOD_US * CLK_FREQ_MHZ);
@@ -428,5 +434,11 @@ module nt39565d_gate_ctrl #(
             endcase
         end
     end
+
+    // 调试信号输出
+    assign dbg_state = state;
+    assign dbg_cnt = cnt;
+    assign dbg_shift_cnt = shift_cnt;
+    assign dbg_target_lines = target_lines;
 
 endmodule

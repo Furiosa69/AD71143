@@ -844,21 +844,4 @@ module top #(
       .dbg_tx_start_d   (rgmii_dbg_tx_start_d)
   );
 
-  // =========================================================================
-  // ILA 调试探针 (RGMII 发送路径诊断, clk_125m 域)
-  // probe0 [3:0]:  {rst_n_125m, startup_done, tx_sending, test_trig}
-  // probe1 [10:0]: {dbg_state[3:1], tx_fsm[2:0], crc_busy, tx_start_d, phy_rdy, PkgTx[1:0]}
-  //                PkgTx = PHY 收到的有效帧数 (Pkg Tx Valid counter)
-  // probe2 [7:0]:  {phy_rst_n, cfg_done, link_up, pll_locked, BMSR[5:2]}
-  //                BMSR[5]=AN Complete, [4]=Remote Fault, [3]=AN Ability, [2]=Link Status
-  // probe3 [2:0]:  tx_fsm[2:0] (触发用: 0=IDLE 1=PREAMBLE 2=SFD 3=DATA)
-  // =========================================================================
-  ila_0 u_ila (
-      .clk    (clk_125m),
-      .probe0 ({rst_n_125m, rgmii_dbg_startup, rgmii_dbg_tx_send, rgmii_dbg_state[0]}),
-      .probe1 ({rgmii_dbg_state[3:1], rgmii_dbg_tx_fsm, rgmii_dbg_crc_busy, rgmii_dbg_tx_start_d, rgmii_dbg_phy_rdy, mdio_rxerr[1:0]}),
-      .probe2 ({phy_rst_n_reg, mdio_cfg_done, mdio_link_up, pll_locked, mdio_bmsr[5], mdio_bmsr[4], mdio_bmsr[3], mdio_bmsr[2]}),
-      .probe3 (rgmii_dbg_tx_fsm)
-  );
-
 endmodule
