@@ -44,7 +44,9 @@ module rgmii_bridge #(
     output wire         dbg_crc_busy,      // CRC 计算中
     output wire         dbg_crc_done,      // CRC 完成脉冲
     output wire         dbg_crc_done_r,    // CRC 完成注册 (→tx_start)
-    output wire         dbg_tx_start_d     // tx_start 延迟1拍 (帧数据发送中)
+    output wire         dbg_tx_start_d,    // tx_start 延迟1拍 (帧数据发送中)
+    output wire         dbg_fifo_full,     // FIFO满标志 - 新增
+    output wire         dbg_fifo_empty     // FIFO空标志 - 新增
 );
 
     // =====================================================================
@@ -197,8 +199,19 @@ module rgmii_bridge #(
             startup_cnt     <= 24'd0;
             startup_done    <= 1'b0;
             crc_done_r      <= 1'b0;
-            for (i = 0; i < FRAME_BYTES; i = i + 1)
-                frame_buf[i] <= 8'd0;
+            // 初始化frame_buf为测试数据（调试用）
+            for (i = 0; i < HDR_BYTES; i = i + 1)
+                frame_buf[i] <= 8'd0;  // Header部分会被后续填充
+            // Payload: 固定测试模式
+            frame_buf[HDR_BYTES + 0] <= 8'hAA;  // 固定标识
+            frame_buf[HDR_BYTES + 1] <= 8'hBB;
+            frame_buf[HDR_BYTES + 2] <= 8'hCC;
+            frame_buf[HDR_BYTES + 3] <= 8'hDD;
+            for (i = 4; i < BURST_BYTES; i = i + 1)
+                frame_buf[HDR_BYTES + i] <= i[7:0];  // 04 05 06 ... 1F
+            // FCS部分
+            for (i = 0; i < FCS_BYTES; i = i + 1)
+                frame_buf[FCS_OFFSET + i] <= 8'd0;
         end else begin
             tx_start       <= 1'b0;
             tx_start_d     <= tx_start;
@@ -237,8 +250,8 @@ module rgmii_bridge #(
             if (TEST_MODE && startup_done) begin
                 if (interval_cnt >= TEST_INTERVAL - 1) begin
                     interval_cnt <= 17'd0;
-                    // FIFO 为空且当前空闲时, 产生测试触发
-                    if (fifo_empty && !preloaded && !fifo_rd_en && !test_trig) begin
+                    // 强制产生测试触发（移除 fifo_empty 条件）
+                    if (!preloaded && !fifo_rd_en && !test_trig) begin
                         test_trig    <= 1'b1;
                         test_seq_num <= test_seq_num + 32'd1;
                     end
@@ -400,5 +413,7 @@ module rgmii_bridge #(
     assign dbg_crc_done     = crc_done;               // CRC 完成脉冲 (组合逻辑)
     assign dbg_crc_done_r   = crc_done_r;             // CRC 完成注册
     assign dbg_tx_start_d   = tx_start_d;             // tx_start 延迟 1 拍
+    assign dbg_fifo_full    = fifo_full;              // FIFO满标志 - 新增
+    assign dbg_fifo_empty   = fifo_empty;             // FIFO空标志 - 新增
 
 endmodule

@@ -70,7 +70,7 @@ input [2 : 0] probe3;
 input [6 : 0] probe4;
 input [7 : 0] probe5;
 input [7 : 0] probe6;
-input [6 : 0] probe7;
+input [15 : 0] probe7;
 
 
 endmodule

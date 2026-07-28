@@ -35,7 +35,10 @@ module ad71143_ctrl #(
     output reg  [9:0]   line_cnt,
 
     output reg          frame_done,
-    output reg          aclk_done
+    output reg          aclk_done,
+
+    // 调试输出
+    output wire [3:0]   dbg_state
 );
 
     // =========================================================================
@@ -220,5 +223,8 @@ module ad71143_ctrl #(
     assign sync       = sync_reg;
     assign aclk       = aclk_reg;
     assign aclk_idx   = aclk_idx_reg;
+
+    // 调试输出: 状态机当前状态
+    assign dbg_state  = state;
 
 endmodule

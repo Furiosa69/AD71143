@@ -1,15 +1,15 @@
-// 按文档 Figure 37 / Figure 38 实现:
-//   - DOUTMODE = 1, 双 LVDS 输出
-//   - 用 DCLKO 上升沿采样 DOUTA / DOUTB
-//   - 每个 burst 采 64bit/lane, 共 128bit
-//   - 数据 burst 内合并为 8 个 16-bit 样本
+// 按文�?? Figure 37 / Figure 38 实现:
+//   - DOUTMODE = 1, �?? LVDS 输出 (DM=1, 仅使用DOUTA)
+//   - �?? DCLKO 上升沿采�?? DOUTA
+//   - 每个 burst �?? 64bit/lane, 单�?�道模式下每burst包含4�??16-bit样本
 //   - READDOWN = 0 : 升序输出  ch_even, ch_odd, ch_even+2, ch_odd+2 ...
 //   - READDOWN = 1 : 降序输出  ch_odd,  ch_even, ch_odd-2,  ch_even-2 ...
 //
-// merged_burst[127:112] -> 第 1 个通道样本
-// merged_burst[111:96]  -> 第 2 个通道样本
-// ...
-// merged_burst[15:0]    -> 第 8 个通道样本
+// 单LVDS模式下，每个burst只有64bit (4个样�??):
+// lane_a_shift[63:48] -> �?? 1 个�?�道样本
+// lane_a_shift[47:32] -> �?? 2 个�?�道样本
+// lane_a_shift[31:16] -> �?? 3 个�?�道样本
+// lane_a_shift[15:0]  -> �?? 4 个�?�道样本
 // =============================================================================
 
 module ad71143_data_rx (
@@ -24,8 +24,9 @@ module ad71143_data_rx (
 
     input  wire         dout_p_A,
     input  wire         dout_n_A,
-    input  wire         dout_p_B,
-    input  wire         dout_n_B,
+    // Lane B未使用（单LVDS模式�??
+    // input  wire         dout_p_B,
+    // input  wire         dout_n_B,
 
     output reg          line_done,
     output wire         header_ok,
@@ -47,9 +48,10 @@ module ad71143_data_rx (
     output wire         burst_en_comb,
     output wire         roic_trigger,
     output wire         dbg_header_valid,   // 组合: lane_a_shift[63:56]==0x0A
-    output reg          dbg_header_latched, // 寄存: 首次捕获到 header 后锁存
+    output reg          dbg_header_latched, // 寄存: 首次捕获�?? header 后锁�??
     output wire         dbg_dout_a_raw,     // 调试: LVDS A原始输入
-    output wire         dbg_dout_b_raw      // 调试: LVDS B原始输入
+    output wire         dbg_dout_b_raw,      // 调试: LVDS B原始输入（单LVDS模式未使用，保留端口兼容性）,
+    output wire [63:0]  dbg_lane_a_shift    // 调试: Lane A移位寄存器完整数�?
 );
 
     localparam [2:0] S_IDLE = 3'd0;
@@ -58,11 +60,11 @@ module ad71143_data_rx (
     localparam [2:0] S_MUTE = 3'd3;
     localparam [2:0] S_DONE = 3'd4;
 
-    localparam integer ACTIVE_DCLK = 64;    // 每 lane 采 64bit (AD71143 规范: 每 burst 64 DCLK)
-    localparam integer PRE_DELAY   = 1;     // DCLK 预延迟周期 (1=跳过第1个无效采样)
-    localparam integer TOTAL_CYCLES = ACTIVE_DCLK + PRE_DELAY; // 总采样周期=65
-    localparam integer DATA_BURSTS = 32;    // dual LVDS: 256ch * 16bit / 128bit-per-burst
-    localparam integer TOTAL_BURSTS = 34;   // header + 32 data + config bursts
+    localparam integer ACTIVE_DCLK = 64;    // �?? lane �?? 64bit (AD71143 规范: �?? burst 64 DCLK)
+    localparam integer PRE_DELAY   = 1;     // DCLK 预延迟周�?? (1=跳过�??1个无效采�??)
+    localparam integer TOTAL_CYCLES = ACTIVE_DCLK + PRE_DELAY; // 总采样周�??=65
+    localparam integer DATA_BURSTS = 64;    // 单LVDS: 256ch * 16bit / 64bit-per-burst (双LVDS时为32)
+    localparam integer TOTAL_BURSTS = 66;   // header + 64 data + config bursts (双LVDS时为34)
     parameter  integer MUTE_MIN    = 112;   // tBURST=1765ns: 177cyc-65=112 @ 100MHz (PRE_DELAY=1)
 
    (* MAX_FANOUT = "300" *) reg  [2:0] state;
@@ -79,7 +81,7 @@ module ad71143_data_rx (
     wire burst_en;
 
     reg  [63:0] lane_a_shift;
-    reg  [63:0] lane_b_shift;
+    // reg  [63:0] lane_b_shift;  // 单LVDS模式未使�??
     reg  [6:0]  cap_bit_cnt_dclko;
     reg         cap_active_dclko;
     reg         cap_start_tgl_d1;
@@ -89,12 +91,12 @@ module ad71143_data_rx (
 
     wire dclko_i;
     wire dout_a_i;
-    wire dout_b_i;
-    reg  dout_a_mid;   // 下降沿采样 (DCLK 上升沿后 ~5ns, 数据已稳定)
-    reg  dout_b_mid;   // 下降沿采样
+    // wire dout_b_i;  // 单LVDS模式未使�??
+    reg  dout_a_mid;   // 下降沿采�?? (DCLK 上升沿后 ~5ns, 数据已稳�??)
+    // reg  dout_b_mid;   // 单LVDS模式未使�?
     always @(negedge clk_sys) begin
         dout_a_mid <= dout_a_i;
-        dout_b_mid <= dout_b_i;
+        // dout_b_mid <= dout_b_i;
     end
     wire dclk_pre;
 
@@ -102,10 +104,11 @@ module ad71143_data_rx (
     wire [15:0] a_word1 = lane_a_shift[47:32];
     wire [15:0] a_word2 = lane_a_shift[31:16];
     wire [15:0] a_word3 = lane_a_shift[15:0];
-    wire [15:0] b_word0 = lane_b_shift[63:48];
-    wire [15:0] b_word1 = lane_b_shift[47:32];
-    wire [15:0] b_word2 = lane_b_shift[31:16];
-    wire [15:0] b_word3 = lane_b_shift[15:0];
+    // 单LVDS模式: Lane B未使�??
+    // wire [15:0] b_word0 = lane_b_shift[63:48];
+    // wire [15:0] b_word1 = lane_b_shift[47:32];
+    // wire [15:0] b_word2 = lane_b_shift[31:16];
+    // wire [15:0] b_word3 = lane_b_shift[15:0];
 
     reg  [127:0] merged_burst_next;
     reg  [7:0]   merged_first_channel_next;
@@ -150,7 +153,7 @@ module ad71143_data_rx (
     end
 
     // =========================================================================
-    // DCLKO 域 -> clk_sys 域完成握手
+    // DCLKO �?? -> clk_sys 域完成握�??
     // =========================================================================
     always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n) begin
@@ -247,35 +250,37 @@ module ad71143_data_rx (
     end
 
     // =========================================================================
-    // 双路合并
+    // 单LVDS合并（只使用Lane A�??
     // =========================================================================
     always @(*) begin
         if (!header_readdown) begin
+            // 单LVDS模式: 只使用Lane A，每个burst包含4个样本（64bit�??
+            // READDOWN=0: 升序 CH0,1,2,3...
             merged_burst_next = {
-                a_word0, b_word0,
-                a_word1, b_word1,
-                a_word2, b_word2,
-                a_word3, b_word3
+                a_word0,         // [127:112] 通道0 = 实际CH0
+                a_word1,         // [111:96]  通道1 = 实际CH1
+                a_word2,         // [95:80]   通道2 = 实际CH2
+                a_word3,         // [79:64]   通道3 = 实际CH3
+                64'd0            // [63:0]    填充0（单LVDS只有4通道/burst）
             };
-            merged_first_channel_next = ((burst_cnt - 1'b1) << 3);
-            merged_last_channel_next  = ((burst_cnt - 1'b1) << 3) + 8'd7;
+            merged_first_channel_next = ((burst_cnt - 1'b1) << 2);      // 每burst=4通道
+            merged_last_channel_next  = ((burst_cnt - 1'b1) << 2) + 8'd3;
         end else begin
-            // READDOWN=1: Lane A=odd desc (CH7,5,3,1), Lane B=even desc (CH6,4,2,0)
-            // Interleaving A,B gives CH7,6,5,4,3,2,1,0 within each burst
-            // Same merge pattern as READDOWN=0 — lanes already carry correct channels
+            // READDOWN=1: 降序
             merged_burst_next = {
-                a_word0, b_word0,
-                a_word1, b_word1,
-                a_word2, b_word2,
-                a_word3, b_word3
+                a_word3,         // [127:112] 通道0 = 实际CH3
+                a_word2,         // [111:96]  通道1 = 实际CH2
+                a_word1,         // [95:80]   通道2 = 实际CH1
+                a_word0,         // [79:64]   通道3 = 实际CH0
+                64'd0            // [63:0]    填充0（单LVDS只有4通道/burst）
             };
-            merged_first_channel_next = ((burst_cnt - 1'b1) << 3) + 8'd7;
-            merged_last_channel_next  = ((burst_cnt - 1'b1) << 3);
+            merged_first_channel_next = 8'd255 - ((burst_cnt - 1'b1) << 2);
+            merged_last_channel_next  = 8'd255 - ((burst_cnt - 1'b1) << 2) - 8'd3;
         end
     end
 
     // =========================================================================
-    // DCLKO 域采样
+    // DCLKO 域采�??
     // =========================================================================
     always @(posedge dclko_i or negedge rst_n) begin
         if (!rst_n) begin
@@ -284,7 +289,7 @@ module ad71143_data_rx (
             cap_active_dclko  <= 1'b0;
             cap_bit_cnt_dclko <= 7'd0;
             lane_a_shift      <= 64'd0;
-            lane_b_shift      <= 64'd0;
+            // lane_b_shift      <= 64'd0;  // 单LVDS模式未使�??
             cap_done_tgl_dclko<= 1'b0;
             pre_delay_cnt     <= 7'd0;
         end else begin
@@ -296,18 +301,18 @@ module ad71143_data_rx (
                 cap_bit_cnt_dclko <= 7'd0;
                 pre_delay_cnt     <= PRE_DELAY;
                 lane_a_shift      <= 64'd0;
-                lane_b_shift      <= 64'd0;
+                // lane_b_shift      <= 64'd0;  // 单LVDS模式未使�??
             end else if (cap_active_dclko) begin
-                // 预延迟: 跳过 AD71143 初始输出延迟, 不采数据
+                // 预延�??: 跳过 AD71143 初始输出延迟, 不采数据
                 if (pre_delay_cnt > 0) begin
                     pre_delay_cnt <= pre_delay_cnt - 1'b1;
                 end else begin
-                    // 实际 64-bit 移位 (直接采样LVDS输入，去掉中间寄存器)
-                    lane_a_shift <= {lane_a_shift[62:0], dout_a_i};
-                    lane_b_shift <= {lane_b_shift[62:0], dout_b_i};
+                    // 实际 64-bit 移位 (单LVDS模式只采样Lane A)
+                    lane_a_shift <= {lane_a_shift[62:0], dout_a_mid};
+                    // lane_b_shift <= {lane_b_shift[62:0], dout_b_i};  // 单LVDS模式未使�??
                 end
 
-                // 总计数 = PRE_DELAY + ACTIVE_DCLK
+                // 总计�?? = PRE_DELAY + ACTIVE_DCLK
                 if (cap_bit_cnt_dclko == TOTAL_CYCLES - 1) begin
                     cap_active_dclko   <= 1'b0;
                     cap_bit_cnt_dclko  <= 7'd0;
@@ -320,14 +325,14 @@ module ad71143_data_rx (
         end
     end
 
-    assign burst_en_comb = (state == S_ACT);       // 组合逻辑, 仅用于观察
-    reg  burst_en_reg;                              // 寄存器打断 DCLK 反馈环路
+    assign burst_en_comb = (state == S_ACT);       // 组合逻辑, 仅用于观�??
+    reg  burst_en_reg;                              // 寄存器打�?? DCLK 反馈环路
 
     always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n)
             burst_en_reg <= 1'b0;
         else
-            burst_en_reg <= (state_next == S_ACT);  // 提前一拍, 与 state 跳变同步
+            burst_en_reg <= (state_next == S_ACT);  // 提前�??�??, �?? state 跳变同步
     end
 
     assign burst_en     = burst_en_reg;
@@ -338,7 +343,8 @@ module ad71143_data_rx (
     assign header_ok       = (lane_a_shift[63:56] == 8'h0A);
     assign dbg_header_valid = (lane_a_shift[63:56] == 8'h0A);
     assign dbg_dout_a_raw  = dout_a_i;  // 直接输出LVDS A输入
-    assign dbg_dout_b_raw  = dout_b_i;  // 直接输出LVDS B输入
+    assign dbg_dout_b_raw  = 1'b0;      // 单LVDS模式: Lane B未使用，输出固定0
+    assign dbg_lane_a_shift = lane_a_shift;  // 输出完整�?64位移位寄存器
 
     // =========================================================================
     // LVDS I/O
@@ -365,8 +371,8 @@ module ad71143_data_rx (
         .I  (dclk_pre)
     );
 
-    // DCLKO 引脚不存在，用 clk_sys 直接作内部采样时钟
-    // clk_sys 与 dclk_pre (ODDR 输出) 同频同相, cap_active_dclko 门控实际采样
+    // DCLKO 引脚不存在，�?? clk_sys 直接作内部采样时�??
+    // clk_sys �?? dclk_pre (ODDR 输出) 同频同相, cap_active_dclko 门控实际采样
     assign dclko_i = clk_sys;
 
     IBUFDS #(
@@ -378,14 +384,15 @@ module ad71143_data_rx (
         .IB (dout_n_A)
     );
 
-    IBUFDS #(
-        .DIFF_TERM("TRUE"),
-        .IOSTANDARD("LVDS_25")
-    ) ibufds_dout_b (
-        .O  (dout_b_i),
-        .I  (dout_p_B),
-        .IB (dout_n_B)
-    );
+    // 单LVDS模式: Lane B未使�??
+    // IBUFDS #(
+    //     .DIFF_TERM("TRUE"),
+    //     .IOSTANDARD("LVDS_25")
+    // ) ibufds_dout_b (
+    //     .O  (dout_b_i),
+    //     .I  (dout_p_B),
+    //     .IB (dout_n_B)
+    // );
 
 
 endmodule

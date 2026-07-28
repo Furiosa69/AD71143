@@ -67,21 +67,19 @@ set_property PACKAGE_PIN J20 [get_ports dclk_p_A0]
 set_property PACKAGE_PIN J21 [get_ports dclk_n_A0]
 set_property PACKAGE_PIN G17 [get_ports dout_p_A0]
 set_property PACKAGE_PIN G18 [get_ports dout_n_A0]
-set_property PACKAGE_PIN G15 [get_ports dout_p_B0]
-set_property PACKAGE_PIN G16 [get_ports dout_n_B0]
+# 单LVDS模式: Lane B不使用
+# set_property PACKAGE_PIN G15 [get_ports dout_p_B0]
+# set_property PACKAGE_PIN G16 [get_ports dout_n_B0]
 
-# ---- AD71143 LVDS 数据 Panel 1 (TBD) ----
+# ---- AD71143 LVDS 数据 Panel 1 ----
 set_property PACKAGE_PIN C22 [get_ports dclk_p_A1]
 set_property PACKAGE_PIN B22 [get_ports dclk_n_A1]
-# 引脚交换测试：将Lane A与Lane B的物理引脚互换
-# 原始配置：Lane A -> E13/E14 (正常), Lane B -> B20/A20 (故障)
-# 交换后配置：Lane A -> B20/A20, Lane B -> E13/E14
-# 如果问题跟随逻辑（Lane B依然故障）-> 代码问题
-# 如果问题跟随引脚（B20/A20依然故障）-> 硬件问题
-set_property PACKAGE_PIN B20 [get_ports dout_p_A1]
-set_property PACKAGE_PIN A20 [get_ports dout_n_A1]
-set_property PACKAGE_PIN E13 [get_ports dout_p_B1]
-set_property PACKAGE_PIN E14 [get_ports dout_n_B1]
+# 单LVDS模式: 只使用Lane A (E13/E14)
+set_property PACKAGE_PIN E13 [get_ports dout_p_A1]
+set_property PACKAGE_PIN E14 [get_ports dout_n_A1]
+# Lane B不使用 (B20/A20硬件故障)
+# set_property PACKAGE_PIN B20 [get_ports dout_p_B1]
+# set_property PACKAGE_PIN A20 [get_ports dout_n_B1]
  
 # ---- RGMII ----
 set_property PACKAGE_PIN W1  [get_ports rgmii_rst_n]
@@ -169,16 +167,18 @@ set_property IOSTANDARD LVDS_25 [get_ports dclk_p_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dclk_n_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dout_p_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dout_n_A0]
-set_property IOSTANDARD LVDS_25 [get_ports dout_p_B0]
-set_property IOSTANDARD LVDS_25 [get_ports dout_n_B0]
+# 单LVDS模式: Lane B不使用
+# set_property IOSTANDARD LVDS_25 [get_ports dout_p_B0]
+# set_property IOSTANDARD LVDS_25 [get_ports dout_n_B0]
 
 # ---- AD71143 LVDS 数据 Panel 1 ----
 set_property IOSTANDARD LVDS_25 [get_ports dclk_p_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dclk_n_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_p_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_n_A1]
-set_property IOSTANDARD LVDS_25 [get_ports dout_p_B1]
-set_property IOSTANDARD LVDS_25 [get_ports dout_n_B1]
+# 单LVDS模式: Lane B不使用
+# set_property IOSTANDARD LVDS_25 [get_ports dout_p_B1]
+# set_property IOSTANDARD LVDS_25 [get_ports dout_n_B1]
 
 # ---- RGMII (FPGA Bank Vcco=3.3V, PHY Cfg_ldo=00 → DVDD_RGMII=3.3V) ----
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rst_n]

@@ -27,29 +27,32 @@ class Panel2Receiver:
         self.sock = None
 
         # 图像参数（基于硬件配置）
-        self.CHANNELS_PER_BURST = 8       # 每个 Burst 8 个通道（128 bits / 16 bits）
+        self.CHANNELS_PER_BURST = 4       # 每个 Burst 4 个通道（64 bits / 16 bits，单LVDS模式）
         self.BURSTS_PER_LINE = 65         # 每行 65 个 Bursts
-        self.PIXELS_PER_LINE = 541        # 每行有效像素数（实际只有 8×65=520，前 541 个）
+        self.PIXELS_PER_LINE = 260        # 每行有效像素数（4×65=260）
         self.LINES_PER_FRAME = 541        # 每帧行数
         self.PAYLOAD_SIZE = 32            # UDP Payload 大小（bytes）- BURST_BYTES = 32
 
-        # Panel 数据位置（基于 ad71143_data_rx_dual.v 修改）
-        # merged_burst[255:0] = {Panel1[127:0], Panel0[127:0]}
-        # 32 bytes = 256 bits
+        # Panel 数据位置（基于 ad71143_data_rx.v 单LVDS模式）
+        # merged_burst[127:0] 输出格式：
+        # - [127:64] = 4个有效通道数据（每通道16bit）
+        # - [63:0]   = 填充0（单LVDS模式只有4通道/burst）
         #
-        # RGMII 打包顺序（MSB first）：
-        # Byte 0 = merged_burst[255:248] (Panel 1 最高字节)
+        # RGMII 打包顺序（大端序，MSB first）：
+        # Byte 0  = merged_burst[255:248] (Panel 1 最高字节)
         # ...
         # Byte 15 = merged_burst[128:121] (Panel 1 最低字节)
-        # Byte 16 = merged_burst[127:120] (Panel 0 最高字节，填充 0)
+        # Byte 16 = merged_burst[127:120] (Panel 0 最高字节 = 通道0高字节)
+        # Byte 17 = merged_burst[119:112] (Panel 0 = 通道0低字节)
+        # Byte 18 = merged_burst[111:104] (Panel 0 = 通道1高字节)
         # ...
-        # Byte 31 = merged_burst[7:0] (Panel 0 最低字节，填充 0)
+        # Byte 23 = merged_burst[71:64]   (Panel 0 = 通道3低字节)
+        # Byte 24-31 = merged_burst[63:0] (填充0)
         #
-        # 所以：
-        # Panel 1: bits 255:128 = Bytes 0-15 (有效数据，8 通道)
-        # Panel 0: bits 127:0 = Bytes 16-31 (填充 0)
-        self.PANEL1_START = 0             # Panel 1: bytes 0-15 (128 bits, 8 通道)
-        self.PANEL0_START = 16            # Panel 0: bytes 16-31 (128 bits, 填充 0)
+        # 所以 Panel 1（高128位）数据在 bytes[0:16]
+        # Panel 0（低128位）数据在 bytes[16:32]，但只有前8字节有效（4通道×2字节）
+        self.PANEL1_START = 0             # Panel 1: bytes 0-15 (128 bits, 填充0)
+        self.PANEL0_START = 16            # Panel 0: bytes 16-31 (128 bits, 前64位有效)
         self.PANEL_SIZE = 16              # 每个 Panel 16 bytes (128 bits)
 
         # 接收统计
@@ -71,7 +74,7 @@ class Panel2Receiver:
         """打开 UDP socket"""
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2*1024*1024)  # 2MB 接收缓冲
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 10*1024*1024)  # 修改: 10MB (原来2MB)
             self.sock.bind((self.listen_ip, self.listen_port))
             self.sock.settimeout(1.0)  # 1 秒超时
 
@@ -138,7 +141,7 @@ class Panel2Receiver:
             channels: 8 个通道数据
 
         返回:
-            完整帧（541×520 numpy 数组，实际有效 541×541）或 None
+            完整帧（541×520 numpy 数组）或 None
         """
         self.current_frame_bursts.append(channels)
 
@@ -146,8 +149,7 @@ class Panel2Receiver:
         total_bursts = self.LINES_PER_FRAME * self.BURSTS_PER_LINE
         if len(self.current_frame_bursts) >= total_bursts:
             # 重建图像
-            # 每行 = 65 Bursts × 8 通道 = 520 通道
-            # 实际有效像素 = 541（需要截取或填充）
+            # 每行 = 65 Bursts × 8 通道 = 520 像素
             frame = np.zeros((self.LINES_PER_FRAME, self.PIXELS_PER_LINE), dtype=np.uint16)
 
             for line_idx in range(self.LINES_PER_FRAME):
@@ -160,15 +162,16 @@ class Panel2Receiver:
                         burst = self.current_frame_bursts[packet_idx]
                         line_data.extend(burst)
 
-                # 实际收集到 520 个像素（65×8）
-                # 如果需要 541 个像素，最后 21 个用 0 填充
-                actual_pixels = len(line_data)
-                if actual_pixels >= self.PIXELS_PER_LINE:
-                    frame[line_idx, :] = line_data[:self.PIXELS_PER_LINE]
+                # 直接写入 520 个像素
+                if len(line_data) == self.PIXELS_PER_LINE:
+                    frame[line_idx, :] = line_data
                 else:
-                    # 填充不足的部分
-                    frame[line_idx, :actual_pixels] = line_data
-                    # 剩余部分保持为 0
+                    # 如果数据不足，记录警告
+                    actual_pixels = len(line_data)
+                    if actual_pixels > 0:
+                        frame[line_idx, :actual_pixels] = line_data[:actual_pixels]
+                    if actual_pixels != self.PIXELS_PER_LINE:
+                        print(f"[WARN] 行 {line_idx} 像素数不匹配: {actual_pixels} != {self.PIXELS_PER_LINE}")
 
             # 清空缓冲，准备下一帧
             self.current_frame_bursts = []
@@ -242,6 +245,13 @@ class Panel2Receiver:
                     if not callback:  # 如果没有回调，才打印统计
                         stats = self.get_stats()
                         self.print_stats(stats)
+
+                        # 计算丢包率
+                        expected_packets = self.frames_completed * self.LINES_PER_FRAME * self.BURSTS_PER_LINE
+                        if expected_packets > 0:
+                            loss_rate = (expected_packets - self.packets_received) / expected_packets * 100
+                            print(f"\n[丢包率] {loss_rate:.2f}% (丢失 {expected_packets - self.packets_received}/{expected_packets} 包)")
+
                     self.last_stats_time = current_time
 
         except KeyboardInterrupt:
@@ -440,7 +450,7 @@ if __name__ == '__main__':
     print("  UDP 端口:  1234")
     print()
     print("图像参数:")
-    print("  分辨率:    541 × 520 (单 Panel, 65 Bursts × 8 通道)")
+    print("  分辨率:    541 行 × 520 列 (单 Panel, 65 Bursts × 8 通道)")
     print("  像素深度:  16 位")
     print("  数据来源:  Panel 1 (Panel 2)")
     print("  Payload:   32 bytes (256 bits)")
