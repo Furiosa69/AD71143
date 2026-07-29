@@ -155,6 +155,12 @@ class FrameAssembler:
         self.packets_received = 0
         self.packets_dropped = 0
         self.frame_count = 0
+        self.synced = False  # 帧同步标志
+
+        # 帧间隔检测
+        self.last_packet_time = None
+        self.gap_threshold = 0.003  # 3ms 间隔阈值（降低到 3ms，更容易检测）
+        self.max_gap_seen = 0.0  # 记录见过的最大间隔
 
     def reset_frame(self):
         """重置帧缓冲区"""
@@ -174,6 +180,8 @@ class FrameAssembler:
             - frame_complete: 是否完成一帧图像
             - frame_data: 完成的图像数据 (如果帧完成)
         """
+        import time
+
         # 解析 UDP 数据包
         payload = self.parser.parse_udp_packet(packet_data)
 
@@ -182,6 +190,43 @@ class FrameAssembler:
             return False, None
 
         self.packets_received += 1
+
+        # 检测帧间隔：如果距离上一个包超过阈值，认为是新帧开始
+        current_time = time.time()
+        if self.last_packet_time is not None:
+            time_gap = current_time - self.last_packet_time
+
+            # 记录最大间隔用于调试
+            if time_gap > self.max_gap_seen:
+                self.max_gap_seen = time_gap
+                if time_gap > 0.001:  # 只记录 >1ms 的间隔
+                    print(f"[调试] 新的最大间隔: {time_gap*1000:.2f}ms")
+
+            if time_gap > self.gap_threshold:
+                # 检测到帧间隔
+                if not self.synced:
+                    print(f"帧同步成功（检测到 {time_gap*1000:.1f}ms 间隔，阈值={self.gap_threshold*1000:.1f}ms）")
+                    self.synced = True
+                else:
+                    print(f"[帧边界] 间隔 {time_gap*1000:.1f}ms，行数={self.current_line}")
+
+                # 如果当前帧有数据，先返回它（即使不完整）
+                if self.current_line > 10:  # 至少有 10 行数据才认为是有效帧
+                    # 填充剩余的行为零（如果帧不完整）
+                    if self.current_line < self.config.FRAME_LINES:
+                        print(f"警告：帧不完整，只收到 {self.current_line}/{self.config.FRAME_LINES} 行")
+
+                    frame_data = self.frame_buffer.copy()
+                    self.frame_count += 1
+                    self.reset_frame()
+                    self.last_packet_time = current_time
+                    return True, frame_data
+                else:
+                    # 数据太少，重置
+                    print(f"[调试] 数据太少，忽略 (行数={self.current_line})")
+                    self.reset_frame()
+
+        self.last_packet_time = current_time
 
         # 从 payload 提取样本
         try:
@@ -210,7 +255,7 @@ class FrameAssembler:
                 self.current_line += 1
                 self.current_burst = 0
 
-            # 检查是否完成一帧
+            # 检查是否完成一帧（正常流程，作为备用）
             if self.current_line >= self.config.FRAME_LINES:
                 frame_complete = True
                 frame_data = self.frame_buffer.copy()

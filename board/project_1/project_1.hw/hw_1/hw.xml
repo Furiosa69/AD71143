@@ -40,6 +40,7 @@
     </Object>
   </ObjectList>
   <ObjectList object_type="hw_probe" gui_info="">
+    <Object name="aclk_done" gui_info=""/>
     <Object name="aclk_int" gui_info=""/>
     <Object name="cpv" gui_info=""/>
     <Object name="ctrl_line_done" gui_info=""/>
@@ -50,8 +51,10 @@
     <Object name="dbg_p1_shift_hi[7:0]" gui_info=""/>
     <Object name="frame_done" gui_info=""/>
     <Object name="frame_start" gui_info="Trigger Setup=0"/>
+    <Object name="frame_start_100m" gui_info="Trigger Setup=0"/>
     <Object name="line_done" gui_info=""/>
     <Object name="line_start" gui_info="Trigger Setup=0"/>
+    <Object name="line_start_pulse" gui_info=""/>
     <Object name="merged_burst_index[6:0]" gui_info=""/>
     <Object name="merged_valid" gui_info=""/>
     <Object name="rgmii_dbg_crc_busy" gui_info=""/>
@@ -418,7 +421,7 @@
         <Option Id="DISPLAY_VISIBILITY" value=""/>
         <Option Id="HW_ILA" value="hw_ila_1"/>
         <Option Id="LINK_TO_WAVEFORM" value="1"/>
-        <Option Id="MAP" value="probe0[7]"/>
+        <Option Id="MAP" value="probe7[7]"/>
         <Option Id="NAME.CUSTOM" value=""/>
         <Option Id="NAME.SELECT" value="Long"/>
         <Option Id="SOURCE" value="netlist"/>
@@ -913,7 +916,7 @@
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
-        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;b1"/>
         <Option Id="DISPLAY_AS_ENUM" value="1"/>
         <Option Id="DISPLAY_HINT" value=""/>
         <Option Id="DISPLAY_RADIX" value="HEX"/>
@@ -924,7 +927,7 @@
         <Option Id="NAME.CUSTOM" value=""/>
         <Option Id="NAME.SELECT" value="Long"/>
         <Option Id="SOURCE" value="netlist"/>
-        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;b1"/>
         <Option Id="WAVEFORM_STYLE" value="Digital"/>
       </probeOptions>
       <nets>
@@ -1430,7 +1433,7 @@
         <Option Id="DISPLAY_VISIBILITY" value=""/>
         <Option Id="HW_ILA" value="hw_ila_1"/>
         <Option Id="LINK_TO_WAVEFORM" value="1"/>
-        <Option Id="MAP" value="probe0[4]"/>
+        <Option Id="MAP" value="probe7[5]"/>
         <Option Id="NAME.CUSTOM" value=""/>
         <Option Id="NAME.SELECT" value="Long"/>
         <Option Id="SOURCE" value="netlist"/>
@@ -1856,7 +1859,7 @@
         <Option Id="DISPLAY_VISIBILITY" value=""/>
         <Option Id="HW_ILA" value="hw_ila_1"/>
         <Option Id="LINK_TO_WAVEFORM" value="1"/>
-        <Option Id="MAP" value="probe0[6]"/>
+        <Option Id="MAP" value="probe7[6]"/>
         <Option Id="NAME.CUSTOM" value=""/>
         <Option Id="NAME.SELECT" value="Long"/>
         <Option Id="SOURCE" value="netlist"/>

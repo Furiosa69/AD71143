@@ -18,6 +18,7 @@ AD71143 图像接收上位机 - 数据解析模块（修复版本）
 """
 
 import struct
+import time
 import numpy as np
 from typing import Tuple, Optional
 from dataclasses import dataclass
@@ -26,7 +27,7 @@ from dataclasses import dataclass
 @dataclass
 class ImageConfig:
     """图像配置参数"""
-    FRAME_LINES = 541           # 每帧行数
+    FRAME_LINES = 306           # 每帧行数（实际硬件由于 FIFO 限制只能发送约 306 行）
     CHANNELS_PER_PANEL = 256    # 每个 Panel 的通道数（单 LVDS 模式）
     PANELS = 2                  # Panel 数量
     PIXELS_PER_LINE = CHANNELS_PER_PANEL * PANELS  # 每行像素数 = 512
@@ -135,6 +136,20 @@ class UDPPacketParser:
 
         return all_samples
 
+    def check_frame_start_magic(self, burst_data: bytes) -> bool:
+        """
+        检查是否包含帧起始魔数 0xAA55
+        魔数位于 burst_data[255:240]，对应 bytes[31:30]（大端序）
+        """
+        if len(burst_data) != 32:
+            return False
+
+        # 检查最后两个字节是否为 0xAA55
+        magic = struct.unpack('>H', burst_data[30:32])[0]
+        return magic == 0xAA55
+
+        return all_samples
+
 
 class FrameAssembler:
     """帧组装器 - 将接收到的 burst 数据组装成完整图像"""
@@ -156,11 +171,17 @@ class FrameAssembler:
         self.packets_dropped = 0
         self.frame_count = 0
 
+        # 帧同步：基于固定包数（约 19600 个包/帧）
+        self.packets_in_frame = 0
+        self.packets_per_frame_threshold = 19500  # 约 305 行
+        self.synced = False
+
     def reset_frame(self):
         """重置帧缓冲区"""
         self.frame_buffer.fill(0)
         self.current_line = 0
         self.current_burst = 0
+        self.packets_in_frame = 0
 
     def process_packet(self, packet_data: bytes) -> Tuple[bool, Optional[np.ndarray]]:
         """
@@ -182,6 +203,7 @@ class FrameAssembler:
             return False, None
 
         self.packets_received += 1
+        self.packets_in_frame += 1
 
         # 从 payload 提取样本
         try:
@@ -210,13 +232,24 @@ class FrameAssembler:
                 self.current_line += 1
                 self.current_burst = 0
 
-            # 检查是否完成一帧
-            if self.current_line >= self.config.FRAME_LINES:
-                frame_complete = True
+        # 检查是否达到包数阈值（触发新帧）
+        if self.packets_in_frame >= self.packets_per_frame_threshold:
+            if not self.synced:
+                with open('frame_debug.log', 'a') as f:
+                    f.write(f"帧同步成功（基于包数阈值 {self.packets_per_frame_threshold}）\n")
+                self.synced = True
+
+            # 返回当前帧
+            if self.current_line > 100:
                 frame_data = self.frame_buffer.copy()
                 self.frame_count += 1
+                with open('frame_debug.log', 'a') as f:
+                    f.write(f"[帧完成] 行数={self.current_line}，包数={self.packets_in_frame}\n")
                 self.reset_frame()
                 return True, frame_data
+            else:
+                # 数据太少，重置
+                self.reset_frame()
 
         return False, None
 

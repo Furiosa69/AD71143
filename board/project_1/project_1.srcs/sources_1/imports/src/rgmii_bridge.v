@@ -26,6 +26,7 @@ module rgmii_bridge #(
     // ---- (来自 ad71143_data_rx_dual) ----
     input  wire [BURST_WIDTH-1:0] data_in,  // merged_burst
     input  wire         data_valid,      // merged_valid
+    input  wire         frame_start,     // 帧起始标志：每帧第一个 burst 时为高
 
     // ---- RGMII 输出 ----
     output wire         TXC,             // 125MHz RGMII 发送时钟
@@ -75,6 +76,10 @@ module rgmii_bridge #(
     reg         test_trig;                   // 测试触发 (同 fifo_rd_en_d1 语义)
     reg [23:0]  startup_cnt;                 // 上电启动延迟 (~134ms @ 125MHz)
     reg         startup_done;                // 启动延迟完成标志
+    reg [15:0]  packet_counter;              // 包计数器，用于帧同步
+
+    // 每帧包数 = 64 burst/行 × 541 行 = 34624
+    localparam PACKETS_PER_FRAME = 16'd34624;
 
     // =====================================================================
     // Xilinx FIFO IP: 100MHz (写) → 125MHz (读)
@@ -88,6 +93,7 @@ module rgmii_bridge #(
     wire fifo_wr_en;
     assign fifo_wr_en = data_valid && !fifo_full;
 
+    // 数据 FIFO (256-bit)
     fifo_generator_0 fifo_generator_0_inst (
         .wr_clk   (clk_100m),
         .rd_clk   (clk_125m),
@@ -98,6 +104,11 @@ module rgmii_bridge #(
         .full     (fifo_full),
         .empty    (fifo_empty)
     );
+
+    // 帧起始检测：检查数据的最高 16 位是否为魔数 0xAA55
+    // 这个魔数会在 top.v 中嵌入到帧起始 burst 的最高 16-bit
+    wire fifo_frame_start;
+    assign fifo_frame_start = (fifo_dout[255:240] == 16'hAA55);
 
     // ---- 读侧 (125MHz 域) + 帧封装 + RGMII_tx 控制 ----
     // IP 非 FWFT + Embedded Register: rd_en 有效后 2 拍 dout 数据有效.
@@ -199,6 +210,7 @@ module rgmii_bridge #(
             startup_cnt     <= 24'd0;
             startup_done    <= 1'b0;
             crc_done_r      <= 1'b0;
+            packet_counter  <= 16'd0;
             // 初始化frame_buf为测试数据（调试用）
             for (i = 0; i < HDR_BYTES; i = i + 1)
                 frame_buf[i] <= 8'd0;  // Header部分会被后续填充
@@ -313,23 +325,102 @@ module rgmii_bridge #(
                 // 首字节必须是 DMAC[0] = 0xFF (广播 MAC 第一字节)
                 tx_data  <= 8'hFF;
 
-                // Payload: test_trig 用测试数据, 否则用 FIFO 数据
+                // ===== Payload: 使用 FIFO 数据或测试数据 =====
                 if (test_trig_d1) begin
-                    // 测试模式: Payload[0:3] = 32bit 序号, Payload[4:31] = 递增字节
+                    // 测试模式：生成固定测试模式
+                    // 前 4 字节 = 递增序号
                     frame_buf[HDR_BYTES + 0] <= test_seq_num[31:24];
                     frame_buf[HDR_BYTES + 1] <= test_seq_num[23:16];
                     frame_buf[HDR_BYTES + 2] <= test_seq_num[15: 8];
                     frame_buf[HDR_BYTES + 3] <= test_seq_num[ 7: 0];
+                    // 后 28 字节 = 递增模式 (04 05 06 ... 1F)
                     for (i = 4; i < BURST_BYTES; i = i + 1) begin
                         frame_buf[HDR_BYTES + i] <= i[7:0];
                     end
                 end else begin
-                    // 真实数据: 直接取自 fifo_dout (MSB first)
-                    for (i = 0; i < BURST_BYTES; i = i + 1) begin
-                        frame_buf[HDR_BYTES + i] <=
-                            fifo_dout[(BURST_BYTES - 1 - i) * 8 +: 8];
+                    // 正常模式：使用 FIFO 数据 (来自 top.v 的 final_data_burst)
+                    // fifo_dout 是 256-bit，包含 16 个 16-bit 样本，大端序
+
+                    // 调试：将 packet_counter 写入 payload 的前 2 字节，验证计数器是否递增
+                    frame_buf[HDR_BYTES +  0] <= packet_counter[15:8];  // 高字节
+                    frame_buf[HDR_BYTES +  1] <= packet_counter[7:0];   // 低字节
+
+                    // 使用包计数器判断是否为帧起始包
+                    if (packet_counter == 16'd0) begin
+                        // 帧起始包：字节 2-3 也用魔数标记
+                        frame_buf[HDR_BYTES +  2] <= 8'hAA;  // 魔数标记
+                        frame_buf[HDR_BYTES +  3] <= 8'h55;
+                        // 后 28 字节使用正常数据（从 fifo_dout[223:0] 开始）
+                        frame_buf[HDR_BYTES +  4] <= fifo_dout[223:216];
+                        frame_buf[HDR_BYTES +  5] <= fifo_dout[215:208];
+                        frame_buf[HDR_BYTES +  6] <= fifo_dout[207:200];
+                        frame_buf[HDR_BYTES +  7] <= fifo_dout[199:192];
+                        frame_buf[HDR_BYTES +  8] <= fifo_dout[191:184];
+                        frame_buf[HDR_BYTES +  9] <= fifo_dout[183:176];
+                        frame_buf[HDR_BYTES + 10] <= fifo_dout[175:168];
+                        frame_buf[HDR_BYTES + 11] <= fifo_dout[167:160];
+                        frame_buf[HDR_BYTES + 12] <= fifo_dout[159:152];
+                        frame_buf[HDR_BYTES + 13] <= fifo_dout[151:144];
+                        frame_buf[HDR_BYTES + 14] <= fifo_dout[143:136];
+                        frame_buf[HDR_BYTES + 15] <= fifo_dout[135:128];
+                        frame_buf[HDR_BYTES + 16] <= fifo_dout[127:120];
+                        frame_buf[HDR_BYTES + 17] <= fifo_dout[119:112];
+                        frame_buf[HDR_BYTES + 18] <= fifo_dout[111:104];
+                        frame_buf[HDR_BYTES + 19] <= fifo_dout[103: 96];
+                        frame_buf[HDR_BYTES + 20] <= fifo_dout[ 95: 88];
+                        frame_buf[HDR_BYTES + 21] <= fifo_dout[ 87: 80];
+                        frame_buf[HDR_BYTES + 22] <= fifo_dout[ 79: 72];
+                        frame_buf[HDR_BYTES + 23] <= fifo_dout[ 71: 64];
+                        frame_buf[HDR_BYTES + 24] <= fifo_dout[ 63: 56];
+                        frame_buf[HDR_BYTES + 25] <= fifo_dout[ 55: 48];
+                        frame_buf[HDR_BYTES + 26] <= fifo_dout[ 47: 40];
+                        frame_buf[HDR_BYTES + 27] <= fifo_dout[ 39: 32];
+                        frame_buf[HDR_BYTES + 28] <= fifo_dout[ 31: 24];
+                        frame_buf[HDR_BYTES + 29] <= fifo_dout[ 23: 16];
+                        frame_buf[HDR_BYTES + 30] <= fifo_dout[ 15:  8];
+                        frame_buf[HDR_BYTES + 31] <= fifo_dout[  7:  0];
+                    end else begin
+                        // 非帧起始包：完整的 32 字节数据
+                        frame_buf[HDR_BYTES +  0] <= fifo_dout[255:248];
+                        frame_buf[HDR_BYTES +  1] <= fifo_dout[247:240];
+                        frame_buf[HDR_BYTES +  2] <= fifo_dout[239:232];
+                        frame_buf[HDR_BYTES +  3] <= fifo_dout[231:224];
+                        frame_buf[HDR_BYTES +  4] <= fifo_dout[223:216];
+                        frame_buf[HDR_BYTES +  5] <= fifo_dout[215:208];
+                        frame_buf[HDR_BYTES +  6] <= fifo_dout[207:200];
+                        frame_buf[HDR_BYTES +  7] <= fifo_dout[199:192];
+                        frame_buf[HDR_BYTES +  8] <= fifo_dout[191:184];
+                        frame_buf[HDR_BYTES +  9] <= fifo_dout[183:176];
+                        frame_buf[HDR_BYTES + 10] <= fifo_dout[175:168];
+                        frame_buf[HDR_BYTES + 11] <= fifo_dout[167:160];
+                        frame_buf[HDR_BYTES + 12] <= fifo_dout[159:152];
+                        frame_buf[HDR_BYTES + 13] <= fifo_dout[151:144];
+                        frame_buf[HDR_BYTES + 14] <= fifo_dout[143:136];
+                        frame_buf[HDR_BYTES + 15] <= fifo_dout[135:128];
+                        frame_buf[HDR_BYTES + 16] <= fifo_dout[127:120];
+                        frame_buf[HDR_BYTES + 17] <= fifo_dout[119:112];
+                        frame_buf[HDR_BYTES + 18] <= fifo_dout[111:104];
+                        frame_buf[HDR_BYTES + 19] <= fifo_dout[103: 96];
+                        frame_buf[HDR_BYTES + 20] <= fifo_dout[ 95: 88];
+                        frame_buf[HDR_BYTES + 21] <= fifo_dout[ 87: 80];
+                        frame_buf[HDR_BYTES + 22] <= fifo_dout[ 79: 72];
+                        frame_buf[HDR_BYTES + 23] <= fifo_dout[ 71: 64];
+                        frame_buf[HDR_BYTES + 24] <= fifo_dout[ 63: 56];
+                        frame_buf[HDR_BYTES + 25] <= fifo_dout[ 55: 48];
+                        frame_buf[HDR_BYTES + 26] <= fifo_dout[ 47: 40];
+                        frame_buf[HDR_BYTES + 27] <= fifo_dout[ 39: 32];
+                        frame_buf[HDR_BYTES + 28] <= fifo_dout[ 31: 24];
+                        frame_buf[HDR_BYTES + 29] <= fifo_dout[ 23: 16];
+                        frame_buf[HDR_BYTES + 30] <= fifo_dout[ 15:  8];
+                        frame_buf[HDR_BYTES + 31] <= fifo_dout[  7:  0];
                     end
                 end
+
+                // 包计数器递增（在 payload 组装完成后）
+                if (packet_counter >= PACKETS_PER_FRAME - 1)
+                    packet_counter <= 16'd0;
+                else
+                    packet_counter <= packet_counter + 16'd1;
 
                 // tx_start 延迟到 CRC 计算完成后
                 // frame_ready 会在 74 拍后自动变高

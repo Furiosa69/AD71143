@@ -1,17 +1,17 @@
 //
 //  AD71143 AFE + NT39565D Gate Driver 集成顶层
 //
-//  50MHz �?????????: nt39565d_gate_ctrl, top FSM
-//  100MHz �?????????: ad71143_ctrl, ad71143_spi, SPI config FSM
+//  50MHz �??????????: nt39565d_gate_ctrl, top FSM
+//  100MHz �??????????: ad71143_ctrl, ad71143_spi, SPI config FSM
 //
 module top #(
     parameter integer FRAME_LINES      = 541,
-    parameter integer FRAME_GAP_CYCLES = 150000,   // 修复: 3ms @ 50MHz → 30fps (原50ms导致FIFO饥饿)
+    parameter integer FRAME_GAP_CYCLES = 5000000,   // 50ms @ 100MHz (测试图像生成器运行在 clk_100m)
     parameter [1:0]   MODE_SELECT      = 2'b00,
     parameter [1:0]   STV_DELAY_SEL    = 2'b00,
     parameter         SCAN_DIRECTION   = 1'b0,
     parameter         OE_MASK_EN       = 1'b0,
-    parameter         DATA_TEST_MODE   = 1  // 数据测试模式: 0=真实AFE数据, 1=测试图像
+    parameter         DATA_TEST_MODE   = 0  // 数据测试模式: 0=真实AFE数据, 1=测试图像
 )(
     input  wire sys_clk,
     input  wire key,
@@ -71,7 +71,7 @@ module top #(
     output wire         dclk_n_A0,
     input  wire         dout_p_A0,
     input  wire         dout_n_A0,
-    // 单LVDS模式: Lane B未使�????
+    // 单LVDS模式: Lane B未使�?????
     // input  wire         dout_p_B0,
     // input  wire         dout_n_B0,
     // Panel 1
@@ -79,7 +79,7 @@ module top #(
     output wire         dclk_n_A1,
     input  wire         dout_p_A1,
     input  wire         dout_n_A1,
-    // 单LVDS模式: Lane B未使用（硬件故障�????
+    // 单LVDS模式: Lane B未使用（硬件故障�?????
     // input  wire         dout_p_B1,
     // input  wire         dout_n_B1,
     // ---- RGMII ----
@@ -105,7 +105,7 @@ module top #(
     // Test Pins
 );
 
-    // ---- MDIO 控制�???????? ----
+    // ---- MDIO 控制�????????? ----
     wire        mdio_oe;
     wire        mdio_out;
     wire        mdio_in;
@@ -136,7 +136,7 @@ module top #(
         .dbg_f_state     (mdio_f_state)
     );
 
-    // ---- 内部调试信号 (不引�?????????) ----
+    // ---- 内部调试信号 (不引�??????????) ----
     wire [255:0] merged_burst;
     wire [6:0]   merged_burst_index;
     wire         merged_valid;
@@ -169,7 +169,7 @@ module top #(
     wire oepsn;
     wire clk_125m_ph90;
     
-    // ------- FPV 排线�????????�???????? ---------
+    // ------- FPV 排线�?????????�????????? ---------
     assign cpv_r = cpv;
     assign xao_r = xao;
     assign stv1_r = stv1;
@@ -212,17 +212,17 @@ module top #(
     );
 
   // =========================================================================
-  // IDELAYCTRL: IDELAYE2参�?�时钟控制器�????200MHz�????
-  // 必须使用200MHz时钟作为REFCLK，用于IDELAYE2的延迟校�????
+  // IDELAYCTRL: IDELAYE2参�?�时钟控制器�?????200MHz�?????
+  // 必须使用200MHz时钟作为REFCLK，用于IDELAYE2的延迟校�?????
   // =========================================================================
   wire clk_200m;
 
-  // 临时方案：使用clk_100m�????2倍频或独立生�????200MHz
-  // 如果MMCM有多余输出，可以配置�????200MHz；否则用BUFG + PLL
-  // 这里假设用clk_100m暂代（需要后续修改MMCM配置输出真正�????200MHz�????
+  // 临时方案：使用clk_100m�?????2倍频或独立生�?????200MHz
+  // 如果MMCM有多余输出，可以配置�?????200MHz；否则用BUFG + PLL
+  // 这里假设用clk_100m暂代（需要后续修改MMCM配置输出真正�?????200MHz�?????
 
   IDELAYCTRL u_idelayctrl (
-      .REFCLK (clk_100m),     // 临时使用100MHz（理想应该是200MHz�????
+      .REFCLK (clk_100m),     // 临时使用100MHz（理想应该是200MHz�?????
       .RST    (~pll_locked),  // 复位信号，PLL未锁定时复位
       .RDY    ()              // Ready输出（可选监测）
   );
@@ -231,11 +231,11 @@ module top #(
   wire rst_n_async = key & pll_locked;
 
   // =========================================================================
-  // 复位同步�???????? (异步断言, 同步释放) - 每个时钟域独�????????
-  // 避免复位释放时的亚稳态导致各触发器在不可靠的时钟沿解除复�????????
+  // 复位同步�????????? (异步断言, 同步释放) - 每个时钟域独�?????????
+  // 避免复位释放时的亚稳态导致各触发器在不可靠的时钟沿解除复�?????????
   // =========================================================================
 
-  // ---- 50MHz �???????? (gate_clk) ----
+  // ---- 50MHz �????????? (gate_clk) ----
   reg rst_sync1_50m, rst_sync2_50m;
   wire rst_n_50m;
 
@@ -251,7 +251,7 @@ module top #(
 
   assign rst_n_50m = rst_sync2_50m;
 
-  // ---- 100MHz �???????? (clk_100m) ----
+  // ---- 100MHz �????????? (clk_100m) ----
   reg rst_sync1_100m, rst_sync2_100m;
   wire rst_n_100m;
 
@@ -267,7 +267,7 @@ module top #(
 
   assign rst_n_100m = rst_sync2_100m;
 
-  // ---- 125MHz �???????? (clk_125m) ----
+  // ---- 125MHz �????????? (clk_125m) ----
   reg rst_sync1_125m, rst_sync2_125m;
   wire rst_n_125m;
 
@@ -286,7 +286,7 @@ module top #(
   // =========================================================================
   // RGMII PHY 复位生成 (YT8531C: 上电后需拉低 >=10ms)
   // =========================================================================
-  // PLL 锁定后拉�???????? ~100ms, 然后释放, 满足 YT8531C 的上电复位时序要�????????
+  // PLL 锁定后拉�????????? ~100ms, 然后释放, 满足 YT8531C 的上电复位时序要�?????????
   reg [23:0] phy_rst_cnt;
   reg        phy_rst_n_reg;
 
@@ -308,17 +308,17 @@ module top #(
   // 内部信号
   // =========================================================================
   
-  // ---- 100MHz �????????? (AFE control) ----
+  // ---- 100MHz �?????????? (AFE control) ----
   wire        ctrl_init_done;
   wire        ctrl_line_start;
   wire        ctrl_line_done;
   wire        ctrl_frame_done;
   wire [9:0]  ctrl_line_cnt;
-  wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz �?????????)
-  wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl �???????? data_rx)
+  wire        frame_start_100m;      // CDC 同步后的 frame_start (100MHz �??????????)
+  wire        aclk_done;             // ACLK 序列完成 (ad71143_ctrl �????????? data_rx)
   wire [3:0]  ctrl_state;            // AFE 控制器状态机 (调试输出)
 
-  // Panel 1 调试信号 (ILA 探针, clk_100m �????????)
+  // Panel 1 调试信号 (ILA 探针, clk_100m �?????????)
   wire        dbg_p1_line_done;
   wire        dbg_p1_burst_en;
   wire        dbg_p1_header_ok;
@@ -329,7 +329,7 @@ module top #(
   wire        dbg_p1_dout_a_raw;
   wire        dbg_p1_dout_b_raw;
   wire [63:0] dbg_p1_lane_a_shift;
-  // AFE 控制信号 (内部 �????????? �????????? Panel 扇出)
+  // AFE 控制信号 (内部 �?????????? �?????????? Panel 扇出)
   wire roic_reset_int;
   wire sync_int;
   wire aclk_int;
@@ -340,20 +340,20 @@ module top #(
   assign aclk_p0       = aclk_int;
   assign aclk_p1       = aclk_int;
   
-  // ---- 50MHz �????????? (gate driver + top FSM) ----
+  // ---- 50MHz �?????????? (gate driver + top FSM) ----
   wire        busy;
   wire        line_done;
   wire        frame_done;
-  reg         frame_start;           // top FSM 发出�????????? frame_start 脉冲
+  reg         frame_start;           // top FSM 发出�?????????? frame_start 脉冲
   wire        init_done_synced;      // CDC 同步后的 init_done
   wire        cfg_done_synced;       // CDC 同步后的 spi_cfg_done
   wire        line_start_pulse;      // CDC 同步后的 line_start (toggle→pulse)
   
-  // ---- SPI 配置 FSM (100MHz �?????????) ----
+  // ---- SPI 配置 FSM (100MHz �??????????) ----
   wire        spi_cfg_done;
   wire        spi_done_p0;
   wire        spi_done_p1;
-  wire        spi_done;              // �????????? Panel 均完�?????????
+  wire        spi_done;              // �?????????? Panel 均完�??????????
   wire        spi_start;
   wire [3:0]  spi_reg_addr;
   wire [9:0]  spi_reg_data;
@@ -363,10 +363,10 @@ module top #(
   
   // ---- frame_done CDC ----
   reg         frame_done_toggle_100m;
-  wire        frame_done_rise;       // 50MHz �????????? frame_done 边沿�?????????�?????????
+  wire        frame_done_rise;       // 50MHz �?????????? frame_done 边沿�??????????�??????????
   
   // =========================================================================
-  // CDC: ctrl_init_done (100MHz �????????? 50MHz, 2-FF level sync)
+  // CDC: ctrl_init_done (100MHz �?????????? 50MHz, 2-FF level sync)
   // =========================================================================
   reg init_done_sync1, init_done_sync2;
   
@@ -383,7 +383,7 @@ module top #(
   assign init_done_synced = init_done_sync2;
   
   // =========================================================================
-  // CDC: ctrl_line_start (100MHz �????????? 50MHz, toggle + 2-FF + edge detect)
+  // CDC: ctrl_line_start (100MHz �?????????? 50MHz, toggle + 2-FF + edge detect)
   // =========================================================================
   reg ctrl_line_start_toggle;
   
@@ -411,7 +411,7 @@ module top #(
   assign line_start_pulse = line_start_sync2 ^ line_start_sync3;
   
   // =========================================================================
-  // CDC: frame_start (50MHz �????????? 100MHz, toggle + 2-FF + edge detect)
+  // CDC: frame_start (50MHz �?????????? 100MHz, toggle + 2-FF + edge detect)
   // =========================================================================
   reg frame_start_toggle_50m;
   
@@ -439,7 +439,7 @@ module top #(
   assign frame_start_100m = frame_start_sync2 ^ frame_start_sync3;
   
   // =========================================================================
-  // CDC: ctrl_frame_done (100MHz �????????? 50MHz, toggle + 2-FF + edge detect)
+  // CDC: ctrl_frame_done (100MHz �?????????? 50MHz, toggle + 2-FF + edge detect)
   // =========================================================================
   always @(posedge clk_100m or negedge rst_n_100m) begin
       if (!rst_n_100m)
@@ -465,7 +465,7 @@ module top #(
   assign frame_done_rise = frame_done_sync2 ^ frame_done_sync3;
   
   // =========================================================================
-  // CDC: spi_cfg_done (100MHz �????????? 50MHz, 2-FF level sync)
+  // CDC: spi_cfg_done (100MHz �?????????? 50MHz, 2-FF level sync)
   // =========================================================================
   reg cfg_done_sync1, cfg_done_sync2;
   
@@ -482,10 +482,10 @@ module top #(
   assign cfg_done_synced = cfg_done_sync2;
   
   // =========================================================================
-  // SPI 配置 FSM (100MHz �?????????)
-  //   写入全部 16 �????????? AD71143 寄存�????????? (ADDR 0-15)
+  // SPI 配置 FSM (100MHz �??????????)
+  //   写入全部 16 �?????????? AD71143 寄存�?????????? (ADDR 0-15)
   //   顺序: Reg3(REFDAC)→Reg0(PWR)→Reg1(LPF)→Reg2(Mode)→Reg4~7(Timing)→Reg8~15
-  //   值来�?????????: AD71143 SPEC Table 12 + Figure 22 Pipeline Mode 推荐
+  //   值来�??????????: AD71143 SPEC Table 12 + Figure 22 Pipeline Mode 推荐
   // =========================================================================
   localparam CFG_IDLE  = 2'd0;
   localparam CFG_ISSUE = 2'd1;
@@ -503,7 +503,7 @@ module top #(
   wire       cfg_delay_done;
   wire       cfg_gap_done;
   
-  // SPI 配置寄存�????????? LUT �????????? 按推荐上电顺序排�?????????
+  // SPI 配置寄存�?????????? LUT �?????????? 按推荐上电顺序排�??????????
   wire [3:0] cfg_addr_lut;
   wire [9:0] cfg_data_lut;
   
@@ -527,18 +527,18 @@ module top #(
       4'd0;
   
   assign cfg_data_lut =
-      (cfg_reg_idx == 4'd0)  ? 10'h030 :  // Reg3:  AZEN=0, REFDAC=48, ~1.5V (修复: 32�????48, 扩大ADC输入范围)
-      (cfg_reg_idx == 4'd1)  ? 10'h003 :  // Reg0:  PWR=Normal(000), IFS=3 (修复: 5�????3, 降低增益避免饱和)
-      (cfg_reg_idx == 4'd2)  ? 10'h0B0 :  // Reg1:  DM=1(单LVDS), LPF=3.9μs(01), CDS2_RESETEN=1 (修复: 0A0�????0B0, bit4=1启用单�?�道模式)
+      (cfg_reg_idx == 4'd0)  ? 10'h030 :  // Reg3:  AZEN=0, REFDAC=48, ~1.5V (修复: 32�?????48, 扩大ADC输入范围)
+      (cfg_reg_idx == 4'd1)  ? 10'h007 :  // Reg0:  PWR=Normal(000), IFS=7 (增大增益以检测微弱信�?)
+      (cfg_reg_idx == 4'd2)  ? 10'h0B0 :  // Reg1:  DM=1(单LVDS), LPF=3.9μs(01), CDS2_RESETEN=1 (修复: 0A0�?????0B0, bit4=1启用单�?�道模式)
       (cfg_reg_idx == 4'd3)  ? 10'h027 :  // Reg2:  RNDOMIZE=1, DOUTMODE=1, ECHOCLK=1, Pipeline=1
       (cfg_reg_idx == 4'd4)  ? 10'h082 :  // Reg4:  INTRST_C=8(ACLK8), INTRST_O=2(ACLK2)
       (cfg_reg_idx == 4'd5)  ? 10'h013 :  // Reg5:  CDS1_C=1(ACLK1), CDS1_O=3(ACLK3)
       (cfg_reg_idx == 4'd6)  ? 10'h046 :  // Reg6:  CDS2_C=4(ACLK4), CDS2_O=6(ACLK6)
       (cfg_reg_idx == 4'd7)  ? 10'h025 :  // Reg7:  FA_CDS1=2(ACLK2), FA_CDS2=5(ACLK5)
-      (cfg_reg_idx == 4'd8)  ? 10'h000 :  // Reg8:  CUSTCLMPEN=0 (禁用自定义钳位)
+      (cfg_reg_idx == 4'd8)  ? 10'h000 :  // Reg8:  CUSTCLMPEN=0 (禁用自定义钳�?)
       (cfg_reg_idx == 4'd9)  ? 10'h000 :  // Reg9:  Reserved
       (cfg_reg_idx == 4'd10) ? 10'h000 :  // Reg10: PIPELINE_AVGEN=0
-      (cfg_reg_idx == 4'd11) ? 10'h000 :  // Reg11: LFSR_EN=0 (禁用LFSR测试模式，输出真实ADC数据)
+      (cfg_reg_idx == 4'd11) ? 10'h001 :  // Reg11: LFSR_EN=1 (启用LFSR测试模式，输出伪随机测试数据)
       (cfg_reg_idx == 4'd12) ? 10'h000 :  // Reg12: LP_EN=0 (Normal模式)
       (cfg_reg_idx == 4'd13) ? 10'h000 :  // Reg13: Reserved
       (cfg_reg_idx == 4'd14) ? 10'h000 :  // Reg14: Reserved
@@ -617,8 +617,8 @@ module top #(
   assign spi_start    = cfg_spi_start;
   assign spi_cfg_done = cfg_all_done;
   
-  // AD71143 SPEC: 转换期间 CS 必须保持低电�?????????
-  // SPI 配置完成后强�????????? CS=0, 否则使用 SPI 模块�????????? CS 输出
+  // AD71143 SPEC: 转换期间 CS 必须保持低电�??????????
+  // SPI 配置完成后强�?????????? CS=0, 否则使用 SPI 模块�?????????? CS 输出
   wire spi_cs_raw_p0;
   wire spi_cs_raw_p1;
   // AD71143 SPEC: CS=low during conversion, CS=high pulse during write
@@ -627,8 +627,8 @@ module top #(
   assign spi_cs_p1 = spi_cfg_done ? 1'b0 : ~spi_cs_raw_p1;
   
   // =========================================================================
-  // Top FSM (50MHz �?????????)
-  //   POWERUP �????????? WAIT_INIT �????????? WAIT_CFG �????????? IDLE �????????? START �????????? WAIT_FRAME �????????? FRAME_GAP
+  // Top FSM (50MHz �??????????)
+  //   POWERUP �?????????? WAIT_INIT �?????????? WAIT_CFG �?????????? IDLE �?????????? START �?????????? WAIT_FRAME �?????????? FRAME_GAP
   // =========================================================================
   localparam TOP_POWERUP    = 3'd0;
   localparam TOP_WAIT_INIT  = 3'd1;
@@ -708,9 +708,9 @@ module top #(
   // 模块例化
   // =========================================================================
   
-  // AD71143 AFE 控制 (100MHz �?????????)
+  // AD71143 AFE 控制 (100MHz �??????????)
   ad71143_ctrl #(
-      .ACLK_PULSES      (9),        // 恢复正常：每�????? 9 �????? ACLK
+      .ACLK_PULSES      (9),        // 恢复正常：每�?????? 9 �?????? ACLK
       .LINE_CYCLES      (15000),    // 测试: 150μs @ 100MHz (继续增加，寻找临界点)
       .RESET_CYCLES     (1000),     // 10μs @ 100MHz = 1000 cycles (修复：原来是 10)
       .INIT_WAIT_CYCLES (10000),    // 100μs @ 100MHz = 10000 cycles (修复：原来是 100)
@@ -733,7 +733,7 @@ module top #(
   );
   
   
-  	// AD71143 SPI Master Panel 0 (100MHz �?????????)
+  	// AD71143 SPI Master Panel 0 (100MHz �??????????)
   	ad71143_spi u_spi_p0 (
   	    .clk_sys    (clk_100m),
   	    .rst_n      (rst_n_100m),
@@ -749,7 +749,7 @@ module top #(
   	    .spi_sdo    (spi_sdo_p0)
   	);
   
-  	// AD71143 SPI Master Panel 1 (100MHz �?????????, �????????? Panel 0 并行配置)
+  	// AD71143 SPI Master Panel 1 (100MHz �??????????, �?????????? Panel 0 并行配置)
   	ad71143_spi u_spi_p1 (
   	    .clk_sys    (clk_100m),
   	    .rst_n      (rst_n_100m),
@@ -771,20 +771,20 @@ module top #(
   wire [15:0] nt39_shift_cnt;
   wire [15:0] nt39_target_lines;
 
-  // AD71143 �????????? Panel LVDS 数据接收 (200MHz �?????????)
+  // AD71143 �?????????? Panel LVDS 数据接收 (200MHz �??????????)
   	ad71143_data_rx_dual #(
   	    .MUTE_MIN             (112)     // 100MHz: 177cyc-65=112 (ACTIVE=64+PRE_DELAY=1)
   	) u_data_rx_dual (
   	    .clk_sys              (clk_100m),
   	    .rst_n                (rst_n_100m),
-  	    .sync_in              (sync_int),      // 修复: 使用 sync_int (SYNC信号) 而不�? line_start_pulse (脉冲)
+  	    .sync_in              (sync_int),      // 修复: 使用 sync_int (SYNC信号) 而不�?? line_start_pulse (脉冲)
   	    .aclk_done            (aclk_done),
   	    .dclk_p_A0            (dclk_p_A0),
   	    .dclk_n_A0            (dclk_n_A0),
   
   	    .dout_p_A0            (dout_p_A0),
   	    .dout_n_A0            (dout_n_A0),
-  	    // 单LVDS模式: Lane B未使�????
+  	    // 单LVDS模式: Lane B未使�?????
   	    // .dout_p_B0            (dout_p_B0),
   	    // .dout_n_B0            (dout_n_B0),
   	    .dclk_p_A1            (dclk_p_A1),
@@ -792,7 +792,7 @@ module top #(
   
   	    .dout_p_A1            (dout_p_A1),
   	    .dout_n_A1            (dout_n_A1),
-  	    // 单LVDS模式: Lane B未使�????
+  	    // 单LVDS模式: Lane B未使�?????
   	    // .dout_p_B1            (dout_p_B1),
   	    // .dout_n_B1            (dout_n_B1),
   	    .line_done            (rx_line_done),
@@ -814,14 +814,14 @@ module top #(
   	    .dbg_p1_lane_a_shift (dbg_p1_lane_a_shift)
   	);
   
-  // NT39565D Gate Driver (50MHz �?????????, 修复 CLK_FREQ_MHZ=50)
-  // 关键修复�????
-  // 1. CPV_PERIOD_US: 10�????6 (手册注释：实际支持最�????2μs，用6μs保守)
-  // 2. CPV_PW_US_X10: 10�????30 (3μs, 50% duty cycle)
-  // 3. OE_PW_US_X10: 10�????45 (4.5μs, 75% duty扩大Gate输出窗口)
+  // NT39565D Gate Driver (50MHz �??????????, 修复 CLK_FREQ_MHZ=50)
+  // 关键修复�?????
+  // 1. CPV_PERIOD_US: 10�?????6 (手册注释：实际支持最�?????2μs，用6μs保守)
+  // 2. CPV_PW_US_X10: 10�?????30 (3μs, 50% duty cycle)
+  // 3. OE_PW_US_X10: 10�?????45 (4.5μs, 75% duty扩大Gate输出窗口)
   nt39565d_gate_ctrl #(
       .CLK_FREQ_MHZ      (50  ),
-      .CPV_PERIOD_US     (6   ),  // 修复: 6μs (Gout=12μs，手册实测可�????2μs)
+      .CPV_PERIOD_US     (6   ),  // 修复: 6μs (Gout=12μs，手册实测可�?????2μs)
       .CPV_PW_US_X10     (30  ),  // 修复: 3μs (50% duty cycle)
       .STV_SETUP_US_X10  (3   ),
       .STV_HOLD_US_X10   (4   ),
@@ -870,43 +870,124 @@ module top #(
   );
   
   // =========================================================================
-  // 测试数据注入（绕过 FIFO 和 AFE，直接生成测试数据）
+  // 测试图像生成器：生成水平渐变图像
+  // 每行的所有像素�?? = 行号
+  // 这样可以清晰验证图像重建算法
   // =========================================================================
   reg [255:0] test_burst_data;
   reg         test_burst_valid;
-  reg [31:0]  test_packet_cnt;
-  reg [15:0]  test_interval_cnt;
+  reg         test_frame_start;   // 帧起始标志：每帧第一�? burst 时为�?
+  reg [9:0]   test_line_cnt;      // 行计数器 (0-540)
+  reg [6:0]   test_burst_cnt;     // burst 计数�? (0-63)
+  reg [15:0]  test_interval_cnt;  // 发�?�间隔计数器
+  reg [15:0]  pixel_value;        // 当前像素�?
+  reg [31:0]  test_gap_cnt;       // 帧间隔计数器
+  reg         test_in_gap;        // 是否在帧间隔期间
 
   always @(posedge clk_100m or negedge rst_n_100m) begin
       if (!rst_n_100m) begin
           test_burst_data   <= 256'd0;
           test_burst_valid  <= 1'b0;
-          test_packet_cnt   <= 32'd0;
+          test_frame_start  <= 1'b0;
+          test_line_cnt     <= 10'd0;
+          test_burst_cnt    <= 7'd0;
           test_interval_cnt <= 16'd0;
+          pixel_value       <= 16'd0;
+          test_gap_cnt      <= 32'd0;
+          test_in_gap       <= 1'b0;
       end else begin
-          test_burst_valid <= 1'b0;
+          test_burst_valid  <= 1'b0;
+          test_frame_start  <= 1'b0;
 
           if (DATA_TEST_MODE) begin
-              // 每 1000 个周期发送一个测试 burst (10μs @ 100MHz)
-              if (test_interval_cnt >= 16'd1000) begin
-                  test_interval_cnt <= 16'd0;
-
-                  // 生成测试数据：递增的样本值
-                  // 8 个样本，每个 16-bit
-                  test_burst_data <= {
-                      test_packet_cnt[15:0] + 16'd7,
-                      test_packet_cnt[15:0] + 16'd6,
-                      test_packet_cnt[15:0] + 16'd5,
-                      test_packet_cnt[15:0] + 16'd4,
-                      test_packet_cnt[15:0] + 16'd3,
-                      test_packet_cnt[15:0] + 16'd2,
-                      test_packet_cnt[15:0] + 16'd1,
-                      test_packet_cnt[15:0] + 16'd0
-                  };
-                  test_burst_valid <= 1'b1;
-                  test_packet_cnt  <= test_packet_cnt + 32'd1;
+              // �?查是否在帧间隔期�?
+              if (test_in_gap) begin
+                  // 帧间隔：停止发�?�数据，等待计数器到�?
+                  if (test_gap_cnt >= FRAME_GAP_CYCLES) begin
+                      // 间隔结束，开始新�?
+                      test_in_gap <= 1'b0;
+                      test_gap_cnt <= 32'd0;
+                      test_line_cnt <= 10'd0;
+                      test_burst_cnt <= 7'd0;
+                  end else begin
+                      test_gap_cnt <= test_gap_cnt + 32'd1;
+                  end
               end else begin
-                  test_interval_cnt <= test_interval_cnt + 16'd1;
+                  // 正常发�?�数�?
+                  // �? 200 个周期发送一�? burst (2μs @ 100MHz)
+                  if (test_interval_cnt >= 16'd200) begin
+                      test_interval_cnt <= 16'd0;
+
+                      // 生成测试图像：水平渐�?
+                      // 每行的所有像素�?? = 行号 × 121 (缩放�? 16-bit 范围)
+                      // 这样�? 0 �? = 全黑，第 540 �? = 接近全白
+                      // 注意：使用组合�?�辑立即计算，避免时序延�?
+
+                      // 帧起始标志：每帧第一�? burst (line=0, burst=0)
+                      if (test_line_cnt == 10'd0 && test_burst_cnt == 7'd0) begin
+                          test_frame_start <= 1'b1;
+                          // 帧起�? burst：最�? 16-bit 设为魔数 0xAA55，用于帧同步
+                          test_burst_data <= {
+                              16'hAA55,     // [255:240] 魔数标记
+                              16'd0,        // [239:224] Panel 1, 样本 6 (�?0�?=0)
+                              16'd0,        // [223:208] Panel 1, 样本 5
+                              16'd0,        // [207:192] Panel 1, 样本 4
+                              16'd0,        // [191:176] Panel 1, 样本 3
+                              16'd0,        // [175:160] Panel 1, 样本 2
+                              16'd0,        // [159:144] Panel 1, 样本 1
+                              16'd0,        // [143:128] Panel 1, 样本 0
+                              16'd0,        // [127:112] Panel 0, 样本 7
+                              16'd0,        // [111: 96] Panel 0, 样本 6
+                              16'd0,        // [ 95: 80] Panel 0, 样本 5
+                              16'd0,        // [ 79: 64] Panel 0, 样本 4
+                              16'd0,        // [ 63: 48] Panel 0, 样本 3
+                              16'd0,        // [ 47: 32] Panel 0, 样本 2
+                              16'd0,        // [ 31: 16] Panel 0, 样本 1
+                              16'd0         // [ 15:  0] Panel 0, 样本 0
+                          };
+                      end else begin
+                          // 计算当前行的像素值（组合逻辑�?
+                          pixel_value <= {6'd0, test_line_cnt} * 16'd121;
+
+                          // 普�?? burst�?16 个样本，都使用相同的值（同一行的像素值相同）
+                          test_burst_data <= {
+                              ({6'd0, test_line_cnt} * 16'd121),  // [255:240] Panel 1, 样本 7
+                              ({6'd0, test_line_cnt} * 16'd121),  // [239:224] Panel 1, 样本 6
+                              ({6'd0, test_line_cnt} * 16'd121),  // [223:208] Panel 1, 样本 5
+                              ({6'd0, test_line_cnt} * 16'd121),  // [207:192] Panel 1, 样本 4
+                              ({6'd0, test_line_cnt} * 16'd121),  // [191:176] Panel 1, 样本 3
+                              ({6'd0, test_line_cnt} * 16'd121),  // [175:160] Panel 1, 样本 2
+                              ({6'd0, test_line_cnt} * 16'd121),  // [159:144] Panel 1, 样本 1
+                              ({6'd0, test_line_cnt} * 16'd121),  // [143:128] Panel 1, 样本 0
+                              ({6'd0, test_line_cnt} * 16'd121),  // [127:112] Panel 0, 样本 7
+                              ({6'd0, test_line_cnt} * 16'd121),  // [111: 96] Panel 0, 样本 6
+                              ({6'd0, test_line_cnt} * 16'd121),  // [ 95: 80] Panel 0, 样本 5
+                              ({6'd0, test_line_cnt} * 16'd121),  // [ 79: 64] Panel 0, 样本 4
+                              ({6'd0, test_line_cnt} * 16'd121),  // [ 63: 48] Panel 0, 样本 3
+                              ({6'd0, test_line_cnt} * 16'd121),  // [ 47: 32] Panel 0, 样本 2
+                              ({6'd0, test_line_cnt} * 16'd121),  // [ 31: 16] Panel 0, 样本 1
+                              ({6'd0, test_line_cnt} * 16'd121)   // [ 15:  0] Panel 0, 样本 0
+                          };
+                      end
+                      test_burst_valid <= 1'b1;
+
+                      // 更新计数�?
+                      if (test_burst_cnt < 7'd63) begin
+                          test_burst_cnt <= test_burst_cnt + 7'd1;
+                      end else begin
+                          // �?行完�?
+                          test_burst_cnt <= 7'd0;
+                          if (test_line_cnt < FRAME_LINES - 1) begin
+                              test_line_cnt <= test_line_cnt + 10'd1;
+                          end else begin
+                              // �?帧完成，进入帧间�?
+                              test_in_gap <= 1'b1;
+                              test_gap_cnt <= 32'd0;
+                          end
+                      end
+                  end else begin
+                      test_interval_cnt <= test_interval_cnt + 16'd1;
+                  end
               end
           end
       end
@@ -915,9 +996,10 @@ module top #(
   // 选择数据源：测试数据 or 真实 AFE 数据
   wire [255:0] final_data_burst = DATA_TEST_MODE ? test_burst_data : merged_burst;
   wire         final_data_valid = DATA_TEST_MODE ? test_burst_valid : merged_valid;
+  wire         final_frame_start = DATA_TEST_MODE ? test_frame_start : 1'b0;  // 真实数据暂时没有帧同�?
 
   // =========================================================================
-  // RGMII 桥接: merged_burst �????????? 字节 �????????? RGMII_tx
+  // RGMII 桥接: merged_burst �?????????? 字节 �?????????? RGMII_tx
   // =========================================================================
   // RGMII debug
   wire        rgmii_dbg_startup;
@@ -929,42 +1011,43 @@ module top #(
   wire        rgmii_dbg_crc_done;
   wire        rgmii_dbg_crc_done_r;
   wire        rgmii_dbg_tx_start_d;
-  wire        rgmii_dbg_fifo_full;    // FIFO满标�?? - 新增
-  wire        rgmii_dbg_fifo_empty;   // FIFO空标�?? - 新增
+  wire        rgmii_dbg_fifo_full;    // FIFO满标�??? - 新增
+  wire        rgmii_dbg_fifo_empty;   // FIFO空标�??? - 新增
 
-  // RGMII Bridge - 使用测试数据或真实数据
+  // RGMII Bridge - 使用测试数据或真实数�?
   rgmii_bridge #(
       .TEST_MODE     (0),           // 禁用 RGMII 内部测试模式，使用我们注入的数据
       .TEST_INTERVAL (10000)
   ) u_rgmii_bridge (
-      .rst_n      (pll_locked  ),
-      .clk_100m   (clk_100m    ),
-      .clk_125m   (clk_125m    ),
-      .clk_125m_ph90 (clk_125m_ph90),
-      .data_in    (final_data_burst),  // 使用选择后的数据
-      .data_valid (final_data_valid),  // 使用选择后的 valid
-      .TXC        (rgmii_txc   ),
-      .TX_CTL     (rgmii_tx_ctl),
-      .TXD0       (rgmii_txd0  ),
-      .TXD1       (rgmii_txd1  ),
-      .TXD2       (rgmii_txd2  ),
-      .TXD3       (rgmii_txd3  ),
-      .dbg_startup_done (rgmii_dbg_startup),
-      .dbg_phy_ready    (rgmii_dbg_phy_rdy),
-      .dbg_tx_sending   (rgmii_dbg_tx_send),
-      .dbg_state        (rgmii_dbg_state),
-      .dbg_tx_fsm       (rgmii_dbg_tx_fsm),
-      .dbg_crc_busy     (rgmii_dbg_crc_busy),
-      .dbg_crc_done     (rgmii_dbg_crc_done),
+      .rst_n            (pll_locked          ),
+      .clk_100m         (clk_100m            ),
+      .clk_125m         (clk_125m            ),
+      .clk_125m_ph90    (clk_125m_ph90       ),
+      .data_in          (final_data_burst    ),   // 使用选择后的数据
+      .data_valid       (final_data_valid    ),   // 使用选择后的 valid
+      .frame_start      (final_frame_start   ),  // 帧起始信�?
+      .TXC              (rgmii_txc           ),
+      .TX_CTL           (rgmii_tx_ctl        ),
+      .TXD0             (rgmii_txd0          ),
+      .TXD1             (rgmii_txd1          ),
+      .TXD2             (rgmii_txd2          ),
+      .TXD3             (rgmii_txd3          ),
+      .dbg_startup_done (rgmii_dbg_startup   ),
+      .dbg_phy_ready    (rgmii_dbg_phy_rdy   ),
+      .dbg_tx_sending   (rgmii_dbg_tx_send   ),
+      .dbg_state        (rgmii_dbg_state     ),
+      .dbg_tx_fsm       (rgmii_dbg_tx_fsm    ),
+      .dbg_crc_busy     (rgmii_dbg_crc_busy  ),
+      .dbg_crc_done     (rgmii_dbg_crc_done  ),
       .dbg_crc_done_r   (rgmii_dbg_crc_done_r),
       .dbg_tx_start_d   (rgmii_dbg_tx_start_d),
-      .dbg_fifo_full    (rgmii_dbg_fifo_full),     // 新增
+      .dbg_fifo_full    (rgmii_dbg_fifo_full ),     // 新增
       .dbg_fifo_empty   (rgmii_dbg_fifo_empty)     // 新增
   );
 
   // =========================================================================
-  // CDC: mdio_rxerr (100MHz �????????? mdio_ctrl) �???????? mdio_rxerr_125m (125MHz �????????? ILA)
-  // 2-FF 同步�????????, PkgTx 变化缓慢 (μs �????????), 2-FF 足够
+  // CDC: mdio_rxerr (100MHz �?????????? mdio_ctrl) �????????? mdio_rxerr_125m (125MHz �?????????? ILA)
+  // 2-FF 同步�?????????, PkgTx 变化缓慢 (μs �?????????), 2-FF 足够
   // =========================================================================
   reg [15:0] mdio_rxerr_sync1;
   reg [15:0] mdio_rxerr_125m;
@@ -979,49 +1062,11 @@ module top #(
       end
   end
   
-// =========================================================================
-// ILA 调试探针 2 (Panel 1 AD71143 数据接收诊断, clk_100m �????????)
-// �???????? Vivado IP Catalog 中新�???????? ILA, Component Name = ila_0_1
-// probe0 [3:0]:  {p1_state[2:0],      p1_line_done}
-// probe1 [10:0]: {p1_shift_hi[7:0],  p1_burst_en, p1_header_ok, aclk_done}
-// probe2 [7:0]:  {p1_shift_lo[7:0]}
-// probe3 [2:0]:  {p1_merged_valid,   aclk_done,     p1_line_done}
-// =========================================================================
-//ila_1_0 u_ila_p1 (
-//    .clk    (clk_100m),
-//    .probe0 ({dbg_p1_state[2:0], dbg_p1_line_done}),
-//    .probe1 ({dbg_p1_shift_hi[7:0], dbg_p1_burst_en, dbg_p1_header_ok, aclk_done}),
-//    .probe2 ({dbg_p1_shift_lo[7:0]}),
-//    .probe3 ({dbg_p1_merged_valid, aclk_done, dbg_p1_line_done})
-//);
 
 // =========================================================================
-// ILA 调试探针 3 (NT39565D Gate Driver 诊断, gate_clk/50MHz �???????)
-// �??????? Vivado IP Catalog 中新�??????? ILA, Component Name = ila_nt39
-// 监测 NT39 模块的关键信号：状�?�机、计数器、控制信�???????
-// =========================================================================
-//ila_0 u_ila_nt39 (
-//    .clk    (gate_clk),
-//    // probe0 [7:0]: 控制信号 {cpv, stv1, stv2, oe1, busy, line_done, frame_done, frame_start}
-//    .probe0 ({cpv, stv1, stv2, oe1, busy, line_done, frame_done, frame_start}),
-//    // probe1 [3:0]: FSM 状�??
-//    .probe1 (nt39_state),
-//    // probe2 [15:0]: 时序计数�???????
-//    .probe2 (nt39_cnt),
-//    // probe3 [15:0]: 行扫描计数器
-//    .probe3 (nt39_shift_cnt),
-//    // probe4 [15:0]: 目标行数
-//    .probe4 (nt39_target_lines),
-//    // probe5 [7:0]: 配置和输出信�??????? {ud, lr, mode1, mode2, sel, stv_mode, chip_sel1, chip_sel2}
-//    .probe5 ({ud, lr, mode1, mode2, sel, stv_mode, chip_sel1, chip_sel2}),
-//    // probe6 [0:0]: line_start_pulse 触发信号
-//    .probe6 (line_start_pulse)
-//);
-
-// =========================================================================
-// ILA 调试探针 5 (数据通路�?????? SPI 诊断, clk_100m �??????)
-// �?????? Vivado IP Catalog 中新�?????? ILA, Component Name = ila_datapath
-// 监测数据是否�?????? AFE 正确传输�?????? RGMII，以�?????? SPI 配置状�??
+// ILA 调试探针 5 (数据通路�??????? SPI 诊断, clk_100m �???????)
+// �??????? Vivado IP Catalog 中新�??????? ILA, Component Name = ila_datapath
+// 监测数据是否�??????? AFE 正确传输�??????? RGMII，以�??????? SPI 配置状�??
 // =========================================================================
 ila_1 u_ila_datapath (
     .clk    (clk_100m),
@@ -1029,11 +1074,11 @@ ila_1 u_ila_datapath (
     // probe0 [7:0]: 关键状�?�信号（100MHz域）
     .probe0 ({
         cfg_all_done,          // [7] SPI 配置完成
-        ctrl_init_done,        // [6] AD71143 初始化完�? (修复: init_done -> ctrl_init_done)
+        ctrl_init_done,        // [6] AD71143 初始化完�?? (修复: init_done -> ctrl_init_done)
         aclk_done,             // [5] ACLK 序列完成
-        ctrl_line_start,       // [4] 行开始脉�? (修复: line_start -> ctrl_line_start)
-        ctrl_line_done,        // [3] 行完成脉�? (修复: line_done -> ctrl_line_done)
-        rx_line_done,          // [2] LVDS接收行完�? (修复: dbg_p0_merged_valid -> rx_line_done)
+        ctrl_line_start,       // [4] 行开始脉�?? (修复: line_start -> ctrl_line_start)
+        ctrl_line_done,        // [3] 行完成脉�?? (修复: line_done -> ctrl_line_done)
+        rx_line_done,          // [2] LVDS接收行完�?? (修复: dbg_p0_merged_valid -> rx_line_done)
         dbg_p1_merged_valid,   // [1] Panel 1 数据有效
         merged_valid           // [0] 合并数据有效
     }),
@@ -1058,18 +1103,18 @@ ila_1 u_ila_datapath (
 
     // probe7 [15:0]: RGMII状�?? + ACLK + LVDS原始数据 + AFE状�?�机 + 跨时钟域同步
     .probe7 ({
-          sync_int,              // [15] SYNC信号 (低有�?, data_rx的sync_in输入) - 关键修复!
+          sync_int,              // [15] SYNC信号 (低有效, data_rx的sync_in输入) - 关键修复!
           roic_reset_int,        // [14] ROIC_RESET信号
           line_start_pulse,      // [13] 50MHz->100MHz CDC后的line_start (仅用于gate_ctrl)
           frame_start_100m,      // [12] 50MHz->100MHz CDC后的frame_start
           ctrl_state[3:0],       // [11:8] AFE控制器状态机 (新增: 诊断line_start问题)
-          rgmii_dbg_fifo_full,   // [7] FIFO�? - �?关键
-          rgmii_dbg_fifo_empty,  // [6] FIFO�?
-          rgmii_dbg_tx_send,     // [5] RGMII发�?�中
+          rgmii_dbg_fifo_full,   // [7] FIFO满 - 关键
+          rgmii_dbg_fifo_empty,  // [6] FIFO空
+          rgmii_dbg_tx_send,     // [5] RGMII发送中
           aclk_int,              // [4] ACLK
           dbg_p1_burst_en,       // [3] burst使能
           dbg_p1_header_ok,      // [2] header正确
-          dbg_p1_line_done,      // [1] 行完�?
+          dbg_p1_line_done,      // [1] 行完成
           merged_valid           // [0] 数据有效
       })
 );
