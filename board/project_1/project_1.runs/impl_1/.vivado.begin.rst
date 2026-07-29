@@ -13,3 +13,8 @@
     <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="31140" HostCore="24" HostMemory="033752997888">
     </Process>
 </ProcessHandle>
+<?xml version="1.0"?>
+<ProcessHandle Version="1" Minor="0">
+    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="24604" HostCore="24" HostMemory="033752997888">
+    </Process>
+</ProcessHandle>

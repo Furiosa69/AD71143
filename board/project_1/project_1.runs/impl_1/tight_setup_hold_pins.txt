@@ -1,8 +1,0 @@
-+====================+====================+====================================================================================================================================================+
-| Launch Setup Clock | Launch Hold Clock  | Pin                                                                                                                                                |
-+====================+====================+====================================================================================================================================================+
-| clk_out3_clk_wiz_0 | clk_out3_clk_wiz_0 | u_ila_datapath/inst/ila_core_inst/shifted_data_in_reg[7][45]_srl8/D                                                                                |
-| clk_out3_clk_wiz_0 | clk_out3_clk_wiz_0 | u_ila_datapath/inst/ila_core_inst/shifted_data_in_reg[7][46]_srl8/D                                                                                |
-| clk_out3_clk_wiz_0 | clk_out3_clk_wiz_0 | u_ila_datapath/inst/ila_core_inst/u_trig/U_TM/N_DDR_MODE.G_NMU[7].U_M/allx_typeA_match_detection.ltlib_v1_0_1_allx_typeA_inst/probeDelay1_reg[5]/D |
-| clk_out3_clk_wiz_0 | clk_out3_clk_wiz_0 | u_ila_datapath/inst/ila_core_inst/u_trig/U_TM/N_DDR_MODE.G_NMU[7].U_M/allx_typeA_match_detection.ltlib_v1_0_1_allx_typeA_inst/probeDelay1_reg[6]/D |
-+--------------------+--------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+

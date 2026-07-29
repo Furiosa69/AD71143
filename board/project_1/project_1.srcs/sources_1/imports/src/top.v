@@ -1071,51 +1071,46 @@ module top #(
 ila_1 u_ila_datapath (
     .clk    (clk_100m),
 
-    // probe0 [7:0]: 关键状�?�信号（100MHz域）
+    // probe0 [7:0]: 关键控制信号
     .probe0 ({
         cfg_all_done,          // [7] SPI 配置完成
-        ctrl_init_done,        // [6] AD71143 初始化完�?? (修复: init_done -> ctrl_init_done)
-        aclk_done,             // [5] ACLK 序列完成
-        ctrl_line_start,       // [4] 行开始脉�?? (修复: line_start -> ctrl_line_start)
-        ctrl_line_done,        // [3] 行完成脉�?? (修复: line_done -> ctrl_line_done)
-        rx_line_done,          // [2] LVDS接收行完�?? (修复: dbg_p0_merged_valid -> rx_line_done)
-        dbg_p1_merged_valid,   // [1] Panel 1 数据有效
-        merged_valid           // [0] 合并数据有效
+        ctrl_init_done,        // [6] AD71143 初始化完成
+        frame_start_100m,      // [5] 帧起始信号
+        ctrl_line_start,       // [4] AFE控制器：行开始脉冲
+        ctrl_line_done,        // [3] AFE控制器：行完成脉冲
+        line_start_pulse,      // [2] 给Gate Driver的line_start (50MHz CDC)
+        line_done,             // [1] Gate Driver line_done
+        frame_done             // [0] Gate Driver frame_done
     }),
 
-    // probe1 [1:0]: SPI ���� FSM ״???
-    .probe1 (cfg_state),
+    // probe1 [3:0]: AFE控制器状态机
+    .probe1 (ctrl_state),
 
-    // probe2 [3:0]: SPI �Ĵ�����???
-    .probe2 (cfg_reg_idx),
+    // probe2 [3:0]: NT39 Gate Driver状态机
+    .probe2 (nt39_state),
 
-    // probe3 [2:0]: Panel 1 ״???��״???
-    .probe3 (dbg_p1_state),
+    // probe3 [9:0]: AFE控制器行计数
+    .probe3 (ctrl_line_cnt),
 
-    // probe4 [6:0]: 合并burst索引 (修复: dbg_p1_burst_index -> merged_burst_index)
-    .probe4 (merged_burst_index),
+    // probe4 [15:0]: NT39内部计数器
+    .probe4 (nt39_cnt),
 
-    // probe5 [7:0]: Panel 1 高位数据
-    .probe5 (dbg_p1_shift_hi[7:0]),
+    // probe5 [15:0]: NT39 shift计数（扫描了多少行）
+    .probe5 (nt39_shift_cnt),
 
-    // probe6 [7:0]: Panel 1 低位数据
-    .probe6 (dbg_p1_shift_lo[7:0]),
+    // probe6 [15:0]: NT39 目标行数
+    .probe6 (nt39_target_lines),
 
-    // probe7 [15:0]: RGMII状�?? + ACLK + LVDS原始数据 + AFE状�?�机 + 跨时钟域同步
+    // probe7 [7:0]: NT39关键输出信号
     .probe7 ({
-          sync_int,              // [15] SYNC信号 (低有效, data_rx的sync_in输入) - 关键修复!
-          roic_reset_int,        // [14] ROIC_RESET信号
-          line_start_pulse,      // [13] 50MHz->100MHz CDC后的line_start (仅用于gate_ctrl)
-          frame_start_100m,      // [12] 50MHz->100MHz CDC后的frame_start
-          ctrl_state[3:0],       // [11:8] AFE控制器状态机 (新增: 诊断line_start问题)
-          rgmii_dbg_fifo_full,   // [7] FIFO满 - 关键
-          rgmii_dbg_fifo_empty,  // [6] FIFO空
-          rgmii_dbg_tx_send,     // [5] RGMII发送中
-          aclk_int,              // [4] ACLK
-          dbg_p1_burst_en,       // [3] burst使能
-          dbg_p1_header_ok,      // [2] header正确
-          dbg_p1_line_done,      // [1] 行完成
-          merged_valid           // [0] 数据有效
+          cpv,                   // [7] CPV时钟
+          stv1,                  // [6] STV1帧起始
+          stv2,                  // [5] STV2帧起始
+          oe1,                   // [4] OE1输出使能
+          oe2,                   // [3] OE2输出使能
+          busy,                  // [2] NT39 busy信号
+          sync_int,              // [1] SYNC信号
+          aclk_int               // [0] ACLK信号
       })
 );
 
