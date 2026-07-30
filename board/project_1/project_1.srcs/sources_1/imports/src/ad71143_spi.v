@@ -14,7 +14,7 @@
 //   1. ���� reg_addr, reg_data, rw
 //   2. �� start һ������
 //   3. �� done=1
-//   4. ����Ƕ�����, �� reg_rdback
+//   4. ����Ƕ�����?, �� reg_rdback
 // =============================================================================
 
 module ad71143_spi (
@@ -26,20 +26,20 @@ module ad71143_spi (
     input  wire         rw,             // 1=д, 0=��
     input  wire [3:0]   reg_addr,       // �Ĵ�����ַ 0~15
     input  wire [9:0]   reg_data,       // д������ (������ʱ����)
-    output reg          done,           // ������� (����������)
+    output reg          done,           // �������? (����������)
     output reg  [9:0]   reg_rdback,     // �������� (����������Ч)
 
     // ---- SPI ������ ----
     output reg          spi_cs,         // Ƭѡ (����Ч)
     output reg          spi_sck,        // ʱ��
-    output reg          spi_sdi,        // ������� (FPGA��ROIC)
+    output reg          spi_sdi,        // �������? (FPGA��ROIC)
     input  wire         spi_sdo         // �������� (ROIC��FPGA)
 );
 
     // =========================================================================
     // SCK ���� (clk_sys 4 ��Ƶ �� 25MHz)
     // =========================================================================
-    localparam SCK_DIV = 2;             // 100MHz / (2*2) = 25MHz
+    localparam SCK_DIV = 4;             // 100MHz / (2*2) = 25MHz
 
     reg [1:0] sck_cnt;
     reg       sck_toggle;
@@ -52,7 +52,7 @@ module ad71143_spi (
     // ״̬��
     // =========================================================================
     localparam S_IDLE   = 2'd0;
-    localparam S_SETUP  = 2'd1;         // CS ���ͺ�ȴ�
+    localparam S_SETUP  = 2'd1;         // CS ���ͺ�ȴ�?
     localparam S_SHIFT  = 2'd2;         // 16-bit ��λ
     localparam S_DONE   = 2'd3;
 
@@ -116,14 +116,14 @@ module ad71143_spi (
             shift_reg <= {rw, ~rw, reg_addr, reg_data};
             bit_cnt   <= 4'd0;
         end else if (state == S_SHIFT && sck_toggle && sck_cnt == 0) begin
-            // SCK ������: �����һ�� bit (MSB first)
+            // SCK ������: �����һ��? bit (MSB first)
             shift_reg <= {shift_reg[14:0], 1'b0};
             bit_cnt   <= bit_cnt + 4'd1;
         end
     end
 
     // =========================================================================
-    // SPI �ź����
+    // SPI �ź����?
     // =========================================================================
     // SDI: �� SCK �����ظ���, �����ȶ�����һ��������
     // SDI Ӧ�� SCK �½��ر� ROIC ����, �����ڷ� SCK ����ʱ����
@@ -133,7 +133,7 @@ module ad71143_spi (
         end else if (state == S_SETUP) begin
             spi_sdi <= shift_reg[15];   // MSB �ȳ�
         end else if (state == S_SHIFT && !sck_toggle && sck_cnt == 0) begin
-            // SCK �͵�ƽ�ڼ���� SDI (�� ROIC �� SCK �½��ز����� setup ʱ��)
+            // SCK �͵�ƽ�ڼ����? SDI (�� ROIC �� SCK �½��ز����� setup ʱ��)
             spi_sdi <= shift_reg[15];
         end
     end
@@ -160,19 +160,22 @@ module ad71143_spi (
 
     // =========================================================================
     // SDO 读回捕获 (SCK 上升沿后, sck_toggle=1 期间采样)
-    // AD71143 SPEC: SDO 在 SCK 上升沿输出
+    // AD71143 SPEC: SDO �? SCK 上升沿输�?, MSB first
+    // 测试：采样所�?16个bit，看实际数据
     // =========================================================================
     always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n) begin
             rdback_buf <= 10'd0;
         end else if (state == S_SHIFT && sck_toggle && sck_cnt == SCK_DIV-1) begin
-            // SCK 高电平末尾采样 SDO (最大建立时间)
-            rdback_buf <= {rdback_buf[8:0], spi_sdo};
+            // SCK 高电平末尾采�? SDO
+            // 采样�?有bit，rdback_buf会滚动保留最�?10个bit
+            // MSB first: 从高位移�?
+            rdback_buf <= {spi_sdo, rdback_buf[9:1]};
         end
     end
 
     // =========================================================================
-    // done 输出 + 读回值锁存
+    // done 输出 + 读回值锁�?
     // =========================================================================
     always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n) begin
@@ -180,7 +183,8 @@ module ad71143_spi (
             reg_rdback <= 10'd0;
         end else if (state == S_DONE) begin
             done       <= 1'b1;
-            reg_rdback <= rdback_buf;
+            // AD71143读回数据�?要右�?1位（实测发现多了1个leading bit�?
+            reg_rdback <= {1'b0, rdback_buf[9:1]};
         end else begin
             done <= 1'b0;
         end

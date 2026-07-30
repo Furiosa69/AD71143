@@ -28,7 +28,9 @@ module nt39565d_gate_ctrl #(
     parameter integer DEFAULT_MODE_SEL  = 0,
     parameter         SCAN_DIRECTION    = 1'b0,
     parameter         USE_DUAL_STV      = 1'b0,
-    parameter         PER_LINE_TRIG     = 0     // 1=wait for line_start each row
+    parameter         PER_LINE_TRIG     = 0,    // 1=wait for line_start each row
+    parameter         TEST_HOLD_LINE    = 0,    // 测试模式：0=正常扫描，>0=停在指定行持续输出
+    parameter integer TEST_LINE_NUM     = 270   // 测试模式停留的行号（0-540）
 )(
     input  wire       clk,
     input  wire       rst_n,
@@ -376,7 +378,14 @@ module nt39565d_gate_ctrl #(
                         cpv <= 1'b0;
                         line_done <= 1'b1;
 
-                        if (shift_cnt + 16'd1 >= target_lines) begin
+                        // 测试模式：停在指定行持续输出
+                        if (TEST_HOLD_LINE && (shift_cnt == TEST_LINE_NUM)) begin
+                            // 停在当前行，继续循环CPV但不递增shift_cnt
+                            if (PER_LINE_TRIG)
+                                state <= WAIT_LINE;
+                            else
+                                state <= CPV_LOW_S;
+                        end else if (shift_cnt + 16'd1 >= target_lines) begin
                             shift_cnt <= 16'd0;
                             state <= FRAME_END_S;
                         end else begin
