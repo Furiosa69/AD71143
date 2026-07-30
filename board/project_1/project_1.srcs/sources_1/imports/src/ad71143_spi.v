@@ -72,8 +72,7 @@ module ad71143_spi (
         state_next = state;
         case (state)
             S_IDLE:  if (start) state_next = S_SETUP;
-            S_SETUP: if (sck_toggle && sck_cnt == 0)
-                         state_next = S_SHIFT;
+            S_SETUP: state_next = S_SHIFT;
             S_SHIFT: if (bit_cnt == 15 && sck_toggle && sck_cnt == 0)
                          state_next = S_DONE;
             S_DONE:  state_next = S_IDLE;
@@ -85,7 +84,7 @@ module ad71143_spi (
     // SCK ������ (���� SPI �����ڼ�����)
     // =========================================================================
     wire spi_busy;
-    assign spi_busy = (state == S_SETUP || state == S_SHIFT);
+    assign spi_busy = (state == S_SHIFT);
 
     always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n) begin
@@ -170,7 +169,7 @@ module ad71143_spi (
             // SCK 高电平末尾采�? SDO
             // 采样�?有bit，rdback_buf会滚动保留最�?10个bit
             // MSB first: 从高位移�?
-            rdback_buf <= {spi_sdo, rdback_buf[9:1]};
+            rdback_buf <= {rdback_buf[8:0], spi_sdo};
         end
     end
 
@@ -184,7 +183,7 @@ module ad71143_spi (
         end else if (state == S_DONE) begin
             done       <= 1'b1;
             // AD71143读回数据�?要右�?1位（实测发现多了1个leading bit�?
-            reg_rdback <= {1'b0, rdback_buf[9:1]};
+            reg_rdback <= rdback_buf;
         end else begin
             done <= 1'b0;
         end

@@ -38,6 +38,15 @@ class ImageConfig:
     BURSTS_PER_LINE = 64        # 每行需要的 burst 数 (256 / 4 = 64)
 
 
+    # Active FPGA path: one LVDS lane, Panel 1 only, four samples per burst.
+    FRAME_LINES = 541
+    CHANNELS_PER_PANEL = 256
+    PANELS = 1
+    PIXELS_PER_LINE = 256
+    SAMPLES_PER_BURST_PER_PANEL = 4
+    SAMPLES_PER_BURST = 4
+    BURSTS_PER_LINE = 64
+
 class UDPPacketParser:
     """UDP 数据包解析器"""
 
@@ -114,6 +123,8 @@ class UDPPacketParser:
         if len(burst_data) != 32:
             raise ValueError(f"Invalid burst data length: {len(burst_data)}")
 
+        return np.frombuffer(burst_data[:8], dtype=">u2").astype(np.uint16)
+
         # Panel 0: bytes[15:0]
         panel0_data = burst_data[0:16]
         # Panel 1: bytes[31:16]
@@ -175,6 +186,9 @@ class FrameAssembler:
         self.packets_in_frame = 0
         self.packets_per_frame_threshold = 19500  # 约 305 行
         self.synced = False
+        self.packets_per_frame_threshold = (
+            self.config.FRAME_LINES * self.config.BURSTS_PER_LINE
+        )
 
     def reset_frame(self):
         """重置帧缓冲区"""

@@ -10,109 +10,182 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0"></ZoomStartTime>
-      <ZoomEndTime time="129"></ZoomEndTime>
+      <ZoomEndTime time="15"></ZoomEndTime>
       <Cursor1Time time="0"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="246"></NameColumnWidth>
-      <ValueColumnWidth column_width="116"></ValueColumnWidth>
+      <NameColumnWidth column_width="330"></NameColumnWidth>
+      <ValueColumnWidth column_width="171"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="13" />
-   <wave_markers>
-   </wave_markers>
-   <wvobject fp_name="cfg_all_done" type="logic">
+   <WVObjectSize size="24" />
+   <wvobject fp_name="busy" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">cfg_all_done</obj_property>
-      <obj_property name="ObjectShortName">cfg_all_done</obj_property>
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="cfg_state" type="array">
+   <wvobject fp_name="chip_sel1" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">cfg_state[2:0]</obj_property>
-      <obj_property name="ObjectShortName">cfg_state[2:0]</obj_property>
+      <obj_property name="ElementShortName">chip_sel1</obj_property>
+      <obj_property name="ObjectShortName">chip_sel1</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="chip_sel2" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">chip_sel2</obj_property>
+      <obj_property name="ObjectShortName">chip_sel2</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="cpv" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">cpv</obj_property>
+      <obj_property name="ObjectShortName">cpv</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="frame_done" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">frame_done</obj_property>
+      <obj_property name="ObjectShortName">frame_done</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="frame_start" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">frame_start</obj_property>
+      <obj_property name="ObjectShortName">frame_start</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="frame_start_1" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">frame_start_1</obj_property>
+      <obj_property name="ObjectShortName">frame_start_1</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="line_done" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">line_done</obj_property>
+      <obj_property name="ObjectShortName">line_done</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="line_start_pulse" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">line_start_pulse</obj_property>
+      <obj_property name="ObjectShortName">line_start_pulse</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="lr" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">lr</obj_property>
+      <obj_property name="ObjectShortName">lr</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="mode1" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">mode1</obj_property>
+      <obj_property name="ObjectShortName">mode1</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="mode2" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">mode2</obj_property>
+      <obj_property name="ObjectShortName">mode2</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="nt39_cnt" type="array">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">nt39_cnt[9:0]</obj_property>
+      <obj_property name="ObjectShortName">nt39_cnt[9:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="ctrl_state" type="array">
+   <wvobject fp_name="nt39_shift_cnt" type="array">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">ctrl_state[3:0]</obj_property>
-      <obj_property name="ObjectShortName">ctrl_state[3:0]</obj_property>
+      <obj_property name="ElementShortName">nt39_shift_cnt[3:0]</obj_property>
+      <obj_property name="ObjectShortName">nt39_shift_cnt[3:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_cs_raw_p1" type="logic">
+   <wvobject fp_name="nt39_state" type="array">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_cs_raw_p1</obj_property>
-      <obj_property name="ObjectShortName">spi_cs_raw_p1</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="spi_done" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_done</obj_property>
-      <obj_property name="ObjectShortName">spi_done</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="spi_rdback_p1" type="array">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_rdback_p1[9:0]</obj_property>
-      <obj_property name="ObjectShortName">spi_rdback_p1[9:0]</obj_property>
+      <obj_property name="ElementShortName">nt39_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">nt39_state[3:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_reg_addr" type="array">
+   <wvobject fp_name="oe1" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_reg_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">spi_reg_addr[3:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="ElementShortName">oe1</obj_property>
+      <obj_property name="ObjectShortName">oe1</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_reg_data" type="array">
+   <wvobject fp_name="oe2" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_reg_data[9:0]</obj_property>
-      <obj_property name="ObjectShortName">spi_reg_data[9:0]</obj_property>
-      <obj_property name="Radix">HEXRADIX</obj_property>
+      <obj_property name="ElementShortName">oe2</obj_property>
+      <obj_property name="ObjectShortName">oe2</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_rw" type="logic">
+   <wvobject fp_name="oepsn" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_rw</obj_property>
-      <obj_property name="ObjectShortName">spi_rw</obj_property>
+      <obj_property name="ElementShortName">oepsn</obj_property>
+      <obj_property name="ObjectShortName">oepsn</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_sck_p1_OBUF" type="logic">
+   <wvobject fp_name="sel" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_sck_p1_OBUF</obj_property>
-      <obj_property name="ObjectShortName">spi_sck_p1_OBUF</obj_property>
+      <obj_property name="ElementShortName">sel</obj_property>
+      <obj_property name="ObjectShortName">sel</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_sdi_p1_OBUF" type="logic">
+   <wvobject fp_name="stv1" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_sdi_p1_OBUF</obj_property>
-      <obj_property name="ObjectShortName">spi_sdi_p1_OBUF</obj_property>
+      <obj_property name="ElementShortName">stv1</obj_property>
+      <obj_property name="ObjectShortName">stv1</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_sdo_p1_IBUF" type="logic">
+   <wvobject fp_name="stv2" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_sdo_p1_IBUF</obj_property>
-      <obj_property name="ObjectShortName">spi_sdo_p1_IBUF</obj_property>
+      <obj_property name="ElementShortName">stv2</obj_property>
+      <obj_property name="ObjectShortName">stv2</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="spi_start" type="logic">
+   <wvobject fp_name="stv_mode" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_start</obj_property>
-      <obj_property name="ObjectShortName">spi_start</obj_property>
+      <obj_property name="ElementShortName">stv_mode</obj_property>
+      <obj_property name="ObjectShortName">stv_mode</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="ud" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">ud</obj_property>
+      <obj_property name="ObjectShortName">ud</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="xao" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">xao</obj_property>
+      <obj_property name="ObjectShortName">xao</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
