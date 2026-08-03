@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Thu Jul 30 16:06:18 2026
-# Process ID: 20352
+# Start of session at: Fri Jul 31 16:32:54 2026
+# Process ID: 8716
 # Current directory: D:/project/AD71143/board/project_1/project_1.runs/synth_1
 # Command line: vivado.exe -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
 # Log file: D:/project/AD71143/board/project_1/project_1.runs/synth_1/top.vds
@@ -19,9 +19,9 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a200
 INFO: [Device 21-403] Loading part xc7a200tfbg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 18724
+INFO: [Synth 8-7075] Helper process launched with PID 30048
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1392.953 ; gain = 438.156
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1394.566 ; gain = 439.770
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-11241] undeclared symbol 'clk_100m', assumed default net type 'wire' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:124]
 INFO: [Synth 8-11241] undeclared symbol 'pll_locked', assumed default net type 'wire' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:125]
@@ -34,12 +34,12 @@ WARNING: [Synth 8-6901] identifier 'spi_cfg_done' is used before its declaration
 INFO: [Synth 8-6157] synthesizing module 'top' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:7]
 INFO: [Synth 8-6157] synthesizing module 'mdio_ctrl' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v:5]
 INFO: [Synth 8-6155] done synthesizing module 'mdio_ctrl' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v:5]
-INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/clk_wiz_0_stub.v:6]
 WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:224]
 INFO: [Synth 8-6157] synthesizing module 'IDELAYCTRL' [D:/software/Vivado/2023.2/scripts/rt/data/unisim_comp.v:75727]
 INFO: [Synth 8-6155] done synthesizing module 'IDELAYCTRL' (0#1) [D:/software/Vivado/2023.2/scripts/rt/data/unisim_comp.v:75727]
-INFO: [Synth 8-155] case statement is not full and has no default [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:595]
+INFO: [Synth 8-155] case statement is not full and has no default [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:598]
 INFO: [Synth 8-6157] synthesizing module 'ad71143_ctrl' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_ctrl.v:15]
 	Parameter ACLK_PULSES bound to: 9 - type: integer 
 	Parameter LINE_CYCLES bound to: 15000 - type: integer 
@@ -47,9 +47,8 @@ INFO: [Synth 8-6157] synthesizing module 'ad71143_ctrl' [D:/project/AD71143/boar
 	Parameter INIT_WAIT_CYCLES bound to: 10000 - type: integer 
 	Parameter FRAME_LINES bound to: 541 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'ad71143_ctrl' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_ctrl.v:15]
-INFO: [Synth 8-6157] synthesizing module 'ad71143_spi' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v:20]
-INFO: [Synth 8-226] default block is never used [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v:73]
-INFO: [Synth 8-6155] done synthesizing module 'ad71143_spi' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v:20]
+INFO: [Synth 8-6157] synthesizing module 'ad71143_spi' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'ad71143_spi' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v:1]
 INFO: [Synth 8-6157] synthesizing module 'ad71143_data_rx_dual' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v:11]
 	Parameter MUTE_MIN bound to: 112 - type: integer 
 INFO: [Synth 8-6157] synthesizing module 'ad71143_data_rx' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx.v:15]
@@ -74,11 +73,11 @@ WARNING: [Synth 8-7023] instance 'u_panel0' of module 'ad71143_data_rx' has 31 c
 INFO: [Synth 8-6155] done synthesizing module 'ad71143_data_rx_dual' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v:11]
 INFO: [Synth 8-6157] synthesizing module 'nt39565d_gate_ctrl' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/nt39565d_ctrl.v:18]
 	Parameter CLK_FREQ_MHZ bound to: 50 - type: integer 
-	Parameter CPV_PERIOD_US bound to: 6 - type: integer 
-	Parameter CPV_PW_US_X10 bound to: 30 - type: integer 
+	Parameter CPV_PERIOD_US bound to: 62 - type: integer 
+	Parameter CPV_PW_US_X10 bound to: 310 - type: integer 
 	Parameter STV_SETUP_US_X10 bound to: 3 - type: integer 
 	Parameter STV_HOLD_US_X10 bound to: 4 - type: integer 
-	Parameter OE_PW_US_X10 bound to: 45 - type: integer 
+	Parameter OE_PW_US_X10 bound to: 450 - type: integer 
 	Parameter XAO_DELAY_US bound to: 20 - type: integer 
 	Parameter OUT_CH_NORMAL bound to: 541 - type: integer 
 	Parameter OUT_CH_2G bound to: 540 - type: integer 
@@ -93,15 +92,15 @@ INFO: [Synth 8-6155] done synthesizing module 'nt39565d_gate_ctrl' (0#1) [D:/pro
 INFO: [Synth 8-6157] synthesizing module 'rgmii_bridge' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/rgmii_bridge.v:14]
 	Parameter TEST_MODE bound to: 0 - type: integer 
 	Parameter TEST_INTERVAL bound to: 10000 - type: integer 
-INFO: [Synth 8-6157] synthesizing module 'fifo_generator_0' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/fifo_generator_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'fifo_generator_0' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/fifo_generator_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'fifo_generator_0' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/fifo_generator_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'fifo_generator_0' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/fifo_generator_0_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'RGMII_tx' [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/RGMII_tx.v:1]
 	Parameter FRAME_SIZE bound to: 78 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'RGMII_tx' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/RGMII_tx.v:1]
 INFO: [Synth 8-6155] done synthesizing module 'rgmii_bridge' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/rgmii_bridge.v:14]
-WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1120]
-INFO: [Synth 8-6157] synthesizing module 'ila_1' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/ila_1_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'ila_1' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-20352-LAPTOP-79V8GTMI/realtime/ila_1_stub.v:6]
+WARNING: [Synth 8-4446] all outputs are unconnected for this instance and logic may be removed [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1132]
+INFO: [Synth 8-6157] synthesizing module 'ila_1' [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/ila_1_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'ila_1' (0#1) [D:/project/AD71143/board/project_1/project_1.runs/synth_1/.Xil/Vivado-8716-LAPTOP-79V8GTMI/realtime/ila_1_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'top' (0#1) [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:7]
 WARNING: [Synth 8-7137] Register bmsr_val_reg in module mdio_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v:165]
 WARNING: [Synth 8-7137] Register rxerr_val_reg in module mdio_ctrl has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v:167]
@@ -111,13 +110,23 @@ WARNING: [Synth 8-6014] Unused sequential element p0_captured_reg was removed.  
 WARNING: [Synth 8-6014] Unused sequential element cap_timeout_cnt_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v:213]
 WARNING: [Synth 8-7137] Register merged_valid_reg in module ad71143_data_rx_dual has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v:215]
 WARNING: [Synth 8-7137] Register fifo_rd_en_reg in module rgmii_bridge has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/rgmii_bridge.v:102]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_nt39565d'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:850]
-INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila_datapath'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1120]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_ila_datapath'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1132]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_nt39565d'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:862]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p1'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:777]
+INFO: [Synth 8-6071] Mark debug on the nets applies keep_hierarchy on instance 'u_spi_p0'. This will prevent further optimization [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:761]
 WARNING: [Synth 8-6014] Unused sequential element rst_sync1_125m_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:276]
 WARNING: [Synth 8-6014] Unused sequential element rst_sync2_125m_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:277]
-WARNING: [Synth 8-6014] Unused sequential element pixel_value_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:909]
-WARNING: [Synth 8-6014] Unused sequential element mdio_rxerr_sync1_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1071]
-WARNING: [Synth 8-6014] Unused sequential element mdio_rxerr_125m_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1072]
+WARNING: [Synth 8-6014] Unused sequential element test_burst_data_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:915]
+WARNING: [Synth 8-6014] Unused sequential element test_burst_valid_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:916]
+WARNING: [Synth 8-6014] Unused sequential element test_frame_start_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:917]
+WARNING: [Synth 8-6014] Unused sequential element test_line_cnt_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:918]
+WARNING: [Synth 8-6014] Unused sequential element test_burst_cnt_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:919]
+WARNING: [Synth 8-6014] Unused sequential element test_interval_cnt_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:920]
+WARNING: [Synth 8-6014] Unused sequential element pixel_value_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:921]
+WARNING: [Synth 8-6014] Unused sequential element test_gap_cnt_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:922]
+WARNING: [Synth 8-6014] Unused sequential element test_in_gap_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:923]
+WARNING: [Synth 8-6014] Unused sequential element mdio_rxerr_sync1_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1083]
+WARNING: [Synth 8-6014] Unused sequential element mdio_rxerr_125m_reg was removed.  [D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v:1084]
 WARNING: [Synth 8-7129] Port frame_start in module rgmii_bridge is either unconnected or has no load
 WARNING: [Synth 8-7129] Port xao_emergency in module nt39565d_gate_ctrl is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rgmii_rxc in module top is either unconnected or has no load
@@ -127,18 +136,18 @@ WARNING: [Synth 8-7129] Port rgmii_rxd1 in module top is either unconnected or h
 WARNING: [Synth 8-7129] Port rgmii_rxd2 in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rgmii_rxd3 in module top is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1533.965 ; gain = 579.168
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1535.055 ; gain = 580.258
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1533.965 ; gain = 579.168
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1535.055 ; gain = 580.258
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1533.965 ; gain = 579.168
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1535.055 ; gain = 580.258
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 1533.965 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.025 . Memory (MB): peak = 1535.055 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 12 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -160,21 +169,21 @@ WARNING: [Constraints 18-619] A clock with name 'sys_clk' already exists, overwr
 Finished Parsing XDC File [D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1626.648 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1639.801 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1626.648 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1639.801 ; gain = 0.000
 WARNING: [Timing 38-316] Clock period '10.000' specified during out-of-context synthesis of instance 'u_rgmii_bridge/fifo_generator_0_inst' at clock pin 'rd_clk' is different from the actual clock period '8.000', this can lead to different synthesis results.
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a200tfbg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -185,7 +194,7 @@ Applied set_property KEEP_HIERARCHY = SOFT for u_mmcm. (constraint file  auto ge
 Applied set_property KEEP_HIERARCHY = SOFT for u_rgmii_bridge/fifo_generator_0_inst. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for u_ila_datapath. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:09 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'i_state_reg' in module 'mdio_ctrl'
 INFO: [Synth 8-802] inferred FSM for state register 'f_state_reg' in module 'mdio_ctrl'
@@ -234,12 +243,15 @@ INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
-                  S_IDLE |                             0010 |                               00
-                 S_SETUP |                             1000 |                               01
-                 S_SHIFT |                             0100 |                               10
-                  S_DONE |                             0001 |                               11
+                  S_IDLE |                              000 |                              000
+                 S_SETUP |                              110 |                              001
+                 S_SHIFT |                              101 |                              010
+              S_READ_GAP |                              100 |                              011
+            S_READ_SETUP |                              011 |                              100
+            S_READ_SHIFT |                              010 |                              101
+                  S_DONE |                              001 |                              110
 ---------------------------------------------------------------------------------------------------
-INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'ad71143_spi'
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'ad71143_spi'
 INFO: [Synth 8-6159] Found Keep on FSM register 'state_reg' in module 'ad71143_data_rx', re-encoding will not be performed
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
@@ -275,16 +287,19 @@ INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 
                     DATA |                               11 |                              011
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'RGMII_tx'
+INFO: [Synth 8-6159] Found Keep on FSM register 'cfg_state_reg' in module 'top', re-encoding will not be performed
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
+*
                 CFG_IDLE |                              000 |                              000
                CFG_ISSUE |                              001 |                              001
                 CFG_WAIT |                              010 |                              010
                 CFG_DONE |                              011 |                              011
-            CFG_FINISHED |                              100 |                              101
+          CFG_READ_ISSUE |                              100 |                              100
+           CFG_READ_WAIT |                              110 |                              110
+            CFG_FINISHED |                              101 |                              101
 ---------------------------------------------------------------------------------------------------
-INFO: [Synth 8-3354] encoded FSM with state register 'cfg_state_reg' using encoding 'sequential' in module 'top'
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -298,7 +313,7 @@ INFO: [Synth 8-3354] encoded FSM with state register 'cfg_state_reg' using encod
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'top_state_reg' using encoding 'one-hot' in module 'top'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:12 ; elapsed = 00:00:13 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -306,83 +321,81 @@ Start RTL Component Statistics
 Detailed RTL Component Info : 
 +---Adders : 
 	   2 Input   32 Bit       Adders := 1     
-	   2 Input   23 Bit       Adders := 2     
+	   2 Input   23 Bit       Adders := 1     
 	   2 Input   16 Bit       Adders := 3     
-	   2 Input   10 Bit       Adders := 2     
-	   2 Input    8 Bit       Adders := 5     
+	   2 Input   10 Bit       Adders := 1     
+	   2 Input    8 Bit       Adders := 4     
 	   2 Input    7 Bit       Adders := 13    
-	   2 Input    6 Bit       Adders := 2     
-	   2 Input    5 Bit       Adders := 1     
-	   2 Input    4 Bit       Adders := 3     
+	   2 Input    6 Bit       Adders := 1     
+	   2 Input    5 Bit       Adders := 3     
+	   2 Input    4 Bit       Adders := 1     
 	   2 Input    3 Bit       Adders := 1     
-	   2 Input    2 Bit       Adders := 2     
+	   2 Input    2 Bit       Adders := 4     
 +---XORs : 
 	   2 Input     32 Bit         XORs := 9     
 	   2 Input      1 Bit         XORs := 8     
 +---Registers : 
-	              256 Bit    Registers := 2     
+	              256 Bit    Registers := 1     
 	              128 Bit    Registers := 3     
 	               64 Bit    Registers := 2     
-	               32 Bit    Registers := 5     
+	               32 Bit    Registers := 4     
 	               17 Bit    Registers := 1     
-	               16 Bit    Registers := 18    
-	               10 Bit    Registers := 8     
+	               16 Bit    Registers := 17    
+	               10 Bit    Registers := 7     
 	                8 Bit    Registers := 61    
-	                7 Bit    Registers := 13    
+	                7 Bit    Registers := 12    
 	                6 Bit    Registers := 1     
-	                5 Bit    Registers := 3     
-	                4 Bit    Registers := 4     
+	                5 Bit    Registers := 5     
+	                4 Bit    Registers := 2     
 	                3 Bit    Registers := 4     
-	                2 Bit    Registers := 5     
-	                1 Bit    Registers := 117   
+	                2 Bit    Registers := 7     
+	                1 Bit    Registers := 114   
 +---Muxes : 
-	   2 Input  256 Bit        Muxes := 1     
 	   2 Input  128 Bit        Muxes := 2     
 	   2 Input   64 Bit        Muxes := 2     
 	   2 Input   32 Bit        Muxes := 10    
 	   7 Input   32 Bit        Muxes := 1     
-	   2 Input   23 Bit        Muxes := 4     
+	   2 Input   23 Bit        Muxes := 2     
 	   4 Input   16 Bit        Muxes := 1     
 	  10 Input   16 Bit        Muxes := 3     
-	   2 Input   16 Bit        Muxes := 17    
+	   2 Input   16 Bit        Muxes := 19    
 	   7 Input   16 Bit        Muxes := 1     
 	   7 Input   10 Bit        Muxes := 1     
+	   2 Input   10 Bit        Muxes := 4     
 	   6 Input   10 Bit        Muxes := 2     
 	   4 Input   10 Bit        Muxes := 1     
-	   2 Input   10 Bit        Muxes := 3     
 	  14 Input   10 Bit        Muxes := 1     
-	   2 Input    8 Bit        Muxes := 45    
+	   2 Input    9 Bit        Muxes := 1     
+	   2 Input    8 Bit        Muxes := 43    
 	   4 Input    8 Bit        Muxes := 1     
-	   6 Input    8 Bit        Muxes := 1     
-	   2 Input    7 Bit        Muxes := 15    
+	   2 Input    7 Bit        Muxes := 14    
 	   6 Input    7 Bit        Muxes := 4     
 	   7 Input    7 Bit        Muxes := 1     
-	   3 Input    7 Bit        Muxes := 1     
-	   2 Input    6 Bit        Muxes := 4     
+	   2 Input    6 Bit        Muxes := 2     
 	   3 Input    6 Bit        Muxes := 1     
+	   4 Input    6 Bit        Muxes := 1     
 	   3 Input    5 Bit        Muxes := 1     
 	   4 Input    5 Bit        Muxes := 1     
 	  10 Input    5 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 4     
 	  10 Input    4 Bit        Muxes := 5     
-	   2 Input    4 Bit        Muxes := 15    
-	   7 Input    4 Bit        Muxes := 3     
-	   4 Input    4 Bit        Muxes := 3     
-	   7 Input    3 Bit        Muxes := 2     
-	   2 Input    3 Bit        Muxes := 26    
+	   2 Input    4 Bit        Muxes := 12    
+	   7 Input    4 Bit        Muxes := 4     
+	   7 Input    3 Bit        Muxes := 3     
+	   2 Input    3 Bit        Muxes := 32    
 	   6 Input    3 Bit        Muxes := 2     
 	   3 Input    3 Bit        Muxes := 2     
-	   5 Input    3 Bit        Muxes := 2     
+	   8 Input    3 Bit        Muxes := 1     
 	   4 Input    2 Bit        Muxes := 4     
 	  10 Input    2 Bit        Muxes := 1     
-	   2 Input    2 Bit        Muxes := 13    
+	   2 Input    2 Bit        Muxes := 15    
 	   3 Input    1 Bit        Muxes := 5     
-	   2 Input    1 Bit        Muxes := 84    
-	   4 Input    1 Bit        Muxes := 17    
-	  10 Input    1 Bit        Muxes := 26    
+	   2 Input    1 Bit        Muxes := 86    
+	   4 Input    1 Bit        Muxes := 8     
+	  10 Input    1 Bit        Muxes := 25    
 	  16 Input    1 Bit        Muxes := 1     
-	   7 Input    1 Bit        Muxes := 7     
+	   7 Input    1 Bit        Muxes := 18    
 	   6 Input    1 Bit        Muxes := 22    
-	   5 Input    1 Bit        Muxes := 1     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -399,12 +412,8 @@ Finished Part Resource Summary
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-DSP Report: Generating DSP test_burst_data0, operation Mode is: A*(B:0x79).
-DSP Report: operator test_burst_data0 is absorbed into DSP test_burst_data0.
 WARNING: [Synth 8-7129] Port frame_start in module rgmii_bridge is either unconnected or has no load
 WARNING: [Synth 8-7129] Port xao_emergency in module nt39565d_gate_ctrl is either unconnected or has no load
-WARNING: [Synth 8-7129] Port spi_sdo_p0 in module top is either unconnected or has no load
-WARNING: [Synth 8-7129] Port spi_sdo_p1 in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rgmii_rxc in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rgmii_rx_ctl in module top is either unconnected or has no load
 WARNING: [Synth 8-7129] Port rgmii_rxd0 in module top is either unconnected or has no load
@@ -413,42 +422,26 @@ WARNING: [Synth 8-7129] Port rgmii_rxd2 in module top is either unconnected or h
 WARNING: [Synth 8-7129] Port rgmii_rxd3 in module top is either unconnected or has no load
 WARNING: [Synth 8-3332] Sequential element (FSM_onehot_state_reg[4]) is unused and will be removed from module nt39565d_gate_ctrl.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:18 . Memory (MB): peak = 1626.648 ; gain = 671.852
----------------------------------------------------------------------------------
- Sort Area is  test_burst_data0_0 : 0 0 : 139 139 : Used 1 time 0
----------------------------------------------------------------------------------
-Start ROM, RAM, DSP, Shift Register and Retiming Reporting
----------------------------------------------------------------------------------
-
-DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|Module Name | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|top         | A*(B:0x79)  | 10     | 7      | -      | -      | 17     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-
-Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
----------------------------------------------------------------------------------
-Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:20 ; elapsed = 00:00:22 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 WARNING: [Synth 8-565] redefining clock 'sys_clk'
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:21 ; elapsed = 00:00:22 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:22 ; elapsed = 00:00:22 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Timing Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:22 ; elapsed = 00:00:23 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Technology Mapping : Time (s): cpu = 00:00:26 ; elapsed = 00:00:28 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -466,49 +459,41 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished IO Insertion : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
 ---------------------------------------------------------------------------------
-
-DSP Final Report (the ' indicates corresponding REG is set)
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|Module Name | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|top         | A*B         | 10     | 7      | -      | -      | 17     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-+------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-
 
 Report BlackBoxes: 
 +------+-----------------+----------+
@@ -526,33 +511,32 @@ Report Cell Usage:
 |1     |clk_wiz        |     1|
 |2     |fifo_generator |     1|
 |3     |ila            |     1|
-|4     |CARRY4         |    57|
-|5     |DSP48E1        |     1|
-|6     |IDELAYCTRL     |     1|
-|7     |LUT1           |    41|
-|8     |LUT2           |   177|
-|9     |LUT3           |   158|
-|10    |LUT4           |   140|
-|11    |LUT5           |   152|
-|12    |LUT6           |   461|
-|13    |MUXF7          |    46|
-|14    |MUXF8          |     8|
-|15    |ODDR           |     8|
-|16    |FDCE           |   722|
-|17    |FDPE           |   107|
-|18    |FDRE           |    80|
-|19    |IBUF           |     1|
-|20    |IBUFDS         |     2|
-|21    |OBUF           |    50|
-|22    |OBUFDS         |     2|
-|23    |OBUFT          |     1|
+|4     |CARRY4         |    51|
+|5     |IDELAYCTRL     |     1|
+|6     |LUT1           |    45|
+|7     |LUT2           |   122|
+|8     |LUT3           |   187|
+|9     |LUT4           |   199|
+|10    |LUT5           |   167|
+|11    |LUT6           |   517|
+|12    |MUXF7          |    39|
+|13    |MUXF8          |     9|
+|14    |ODDR           |     8|
+|15    |FDCE           |   938|
+|16    |FDPE           |   105|
+|17    |FDRE           |    83|
+|18    |IBUF           |     2|
+|19    |IBUFDS         |     2|
+|20    |OBUF           |    50|
+|21    |OBUFDS         |     2|
+|22    |OBUFT          |     1|
 +------+---------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 13 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:18 ; elapsed = 00:00:23 . Memory (MB): peak = 1626.648 ; gain = 579.168
-Synthesis Optimization Complete : Time (s): cpu = 00:00:24 ; elapsed = 00:00:25 . Memory (MB): peak = 1626.648 ; gain = 671.852
+Synthesis finished with 0 errors, 0 critical warnings and 11 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:22 ; elapsed = 00:00:28 . Memory (MB): peak = 1639.852 ; gain = 580.258
+Synthesis Optimization Complete : Time (s): cpu = 00:00:28 ; elapsed = 00:00:30 . Memory (MB): peak = 1639.852 ; gain = 685.055
 INFO: [Project 1-571] Translating synthesized netlist
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[2]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
@@ -566,21 +550,21 @@ WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'stat
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
 WARNING: [Synth 37-28] Duplicate attribute 'max_fanout' found for instance 'state_reg[0]' of module 'FDCE'.
 Resolution: Check your design sources near the definition of the module or any related 'include files, looking for duplicate definitions with different values.
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.007 . Memory (MB): peak = 1626.648 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 124 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.012 . Memory (MB): peak = 1639.852 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 111 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1626.648 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1639.852 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: ccc6e084
+Synth Design complete | Checksum: f1b6ac0f
 INFO: [Common 17-83] Releasing license: Synthesis
-74 Infos, 54 Warnings, 0 Critical Warnings and 0 Errors encountered.
+75 Infos, 60 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:27 ; elapsed = 00:00:28 . Memory (MB): peak = 1626.648 ; gain = 1121.672
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1626.648 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:31 ; elapsed = 00:00:34 . Memory (MB): peak = 1639.852 ; gain = 1132.957
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1639.852 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'D:/project/AD71143/board/project_1/project_1.runs/synth_1/top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file top_utilization_synth.rpt -pb top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Jul 30 16:06:51 2026...
+INFO: [Common 17-206] Exiting Vivado at Fri Jul 31 16:33:34 2026...

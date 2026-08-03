@@ -132,28 +132,28 @@ module nt39565d_gate_ctrl #(
         cfg_mode2            = 1'b0;
         cfg_sel              = 1'b0;
         cfg_stv_mode         = cfg_long_stv;
-        cfg_chip_sel1        = 1'b1;
-        cfg_chip_sel2        = 1'b0;
+        cfg_chip_sel1        = 1'b0;
+        cfg_chip_sel2        = 1'b1;
         cfg_oepsn            = active_oe_mask;
         cfg_max_lines        = OUT_CH_NORMAL[15:0];
 
         case (active_mode)
-            2'b00: begin
+            2'b00: begin  // Normal: {CHIP_SEL2, CHIP_SEL1} = 2'b10
                 cfg_mode1     = cfg_long_stv;
                 cfg_mode2     = 1'b0;
                 cfg_sel       = 1'b0;
                 cfg_stv_mode  = cfg_long_stv;
-                cfg_chip_sel1 = 1'b1;
-                cfg_chip_sel2 = 1'b0;
+                cfg_chip_sel1 = 1'b0;
+                cfg_chip_sel2 = 1'b1;
                 cfg_max_lines = OUT_CH_NORMAL[15:0];
             end
-            2'b01: begin
+            2'b01: begin  // 2G: {CHIP_SEL2, CHIP_SEL1} = 2'b01
                 cfg_mode1     = cfg_long_stv;
                 cfg_mode2     = 1'b1;
                 cfg_sel       = 1'b1;
                 cfg_stv_mode  = cfg_long_stv;
-                cfg_chip_sel1 = 1'b0;
-                cfg_chip_sel2 = 1'b1;
+                cfg_chip_sel1 = 1'b1;
+                cfg_chip_sel2 = 1'b0;
                 cfg_max_lines = OUT_CH_2G[15:0];
             end
             2'b10: begin
@@ -180,8 +180,8 @@ module nt39565d_gate_ctrl #(
                 cfg_mode2     = 1'b0;
                 cfg_sel       = 1'b0;
                 cfg_stv_mode  = cfg_long_stv;
-                cfg_chip_sel1 = 1'b1;
-                cfg_chip_sel2 = 1'b0;
+                cfg_chip_sel1 = 1'b0;
+                cfg_chip_sel2 = 1'b1;
                 cfg_max_lines = OUT_CH_NORMAL[15:0];
             end
         endcase
@@ -210,8 +210,8 @@ module nt39565d_gate_ctrl #(
             mode2             <= 1'b0;
             sel               <= 1'b0;
             stv_mode          <= 1'b0;
-            chip_sel1         <= 1'b1;
-            chip_sel2         <= 1'b0;
+            chip_sel1         <= 1'b0;
+            chip_sel2         <= 1'b1;
             oepsn             <= 1'b0;
             xao               <= 1'b0;  // 初始化 xao 为 0
             busy              <= 1'b0;
@@ -278,6 +278,13 @@ module nt39565d_gate_ctrl #(
                     oe2  <= oe_inactive_level;
                     ud   <= active_scan_dir;
                     lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= STV_SETUP_CNT - 1) begin
                         cnt <= 16'd0;
@@ -293,6 +300,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= cfg_dual_stv ? 1'b1 : 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= STV_PW_CNT - 1) begin
                         cnt <= 16'd0;
@@ -310,6 +326,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= STV_PW_CNT - 1) begin
                         cnt <= 16'd0;
@@ -326,6 +351,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= (CPV_PERIOD_CNT - STV_PW_CNT) - 1) begin
                         cnt <= 16'd0;
@@ -341,6 +375,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b1;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= STV_PW_CNT - 1) begin
                         cnt <= 16'd0;
@@ -357,6 +400,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= CPV_LOW_CNT - 1) begin
                         cnt   <= 16'd0;
@@ -372,6 +424,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= (active_oe_mask || (cnt >= OE_PW_CNT)) ? oe_inactive_level : oe_active_level;
                     oe2  <= (active_oe_mask || (cnt >= OE_PW_CNT)) ? oe_inactive_level : oe_active_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= CPV_PW_CNT - 1) begin
                         cnt <= 16'd0;
@@ -406,6 +467,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (line_start) begin
                         cnt   <= 16'd0;
@@ -419,6 +489,15 @@ module nt39565d_gate_ctrl #(
                     stv2 <= 1'b0;
                     oe1  <= oe_inactive_level;
                     oe2  <= oe_inactive_level;
+                    ud   <= active_scan_dir;
+                    lr   <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
 
                     if (cnt >= STV_PW_CNT - 1) begin
                         cnt <= 16'd0;
@@ -458,6 +537,15 @@ module nt39565d_gate_ctrl #(
                     stv2       <= 1'b0;
                     oe1        <= oe_inactive_level;
                     oe2        <= oe_inactive_level;
+                    ud         <= active_scan_dir;
+                    lr         <= cfg_lr;
+                    mode1      <= cfg_mode1;
+                    mode2      <= cfg_mode2;
+                    sel        <= cfg_sel;
+                    stv_mode   <= cfg_stv_mode;
+                    chip_sel1  <= cfg_chip_sel1;
+                    chip_sel2  <= cfg_chip_sel2;
+                    oepsn      <= cfg_oepsn;
                 end
             endcase
             end  // end of else (正常状态机逻辑)

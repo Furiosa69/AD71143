@@ -1,0 +1,501 @@
+{
+    "ltx_root": {
+        "version": 4,
+        "minor": 0,
+        "ltx_data": [
+            {
+                "name": "EDA_PROBESET",
+                "active": true,
+                "debug_cores": [
+                    {
+                        "type": "XSDB_V3",
+                        "name": "dbg_hub",
+                        "spec": "labtools_xsdbm_v3",
+                        "clk_input_freq_hz": "100000000"
+                    },
+                    {
+                        "type": "ILA_V3",
+                        "name": "u_ila_datapath",
+                        "spec": "labtools_ila_v6",
+                        "ipName": "ila",
+                        "core_location": {
+                            "user_chain": 1,
+                            "slave_index": 0,
+                            "bscan_switch_index": 0
+                        },
+                        "uuid": "A7EDC8D2683650CF9D2594211079D883",
+                        "pins": [
+                            {
+                                "name": "probe0",
+                                "id": 0,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "cpv_l_OBUF",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 1,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 1,
+                                "rightIndex": 1,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "chip_sel2",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 2,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 2,
+                                "rightIndex": 2,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "spi_done_p1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 3,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 3,
+                                "rightIndex": 3,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "spi_done_p0",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 4,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 4,
+                                "rightIndex": 4,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "spi_start",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 5,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 5,
+                                "rightIndex": 5,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "spi_rw",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 6,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 6,
+                                "rightIndex": 6,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "chip_sel1",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe0",
+                                "id": 7,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 7,
+                                "rightIndex": 7,
+                                "portIndex": 0,
+                                "nets": [
+                                    {
+                                        "name": "cfg_all_done",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe1",
+                                "id": 8,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 2,
+                                "portIndex": 1,
+                                "nets": [
+                                    {
+                                        "name": "cfg_state",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "cfg_state[2]",
+                                                "parentNetId": 8
+                                            },
+                                            {
+                                                "name": "cfg_state[1]",
+                                                "parentNetId": 9
+                                            },
+                                            {
+                                                "name": "cfg_state[0]",
+                                                "parentNetId": 10
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe2",
+                                "id": 9,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 9,
+                                "portIndex": 2,
+                                "nets": [
+                                    {
+                                        "name": "spi_rdback_p1",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "spi_rdback_p1[9]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[8]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[7]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[6]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[5]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[4]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[3]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[2]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[1]"
+                                            },
+                                            {
+                                                "name": "spi_rdback_p1[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 10,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "spi_sdo_p1_IBUF",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 11,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 1,
+                                "rightIndex": 1,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "spi_sdi_p1_OBUF",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 12,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 2,
+                                "rightIndex": 2,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "spi_sck_p1_OBUF",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe3",
+                                "id": 13,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 3,
+                                "rightIndex": 3,
+                                "portIndex": 3,
+                                "nets": [
+                                    {
+                                        "name": "spi_cs_p1_OBUF",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe4",
+                                "id": 14,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 9,
+                                "portIndex": 4,
+                                "nets": [
+                                    {
+                                        "name": "spi_reg_data",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "spi_reg_data[9]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[8]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[7]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[6]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[5]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[4]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[3]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[2]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[1]"
+                                            },
+                                            {
+                                                "name": "spi_reg_data[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe5",
+                                "id": 15,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 3,
+                                "portIndex": 5,
+                                "nets": [
+                                    {
+                                        "name": "spi_reg_addr",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "spi_reg_addr[3]"
+                                            },
+                                            {
+                                                "name": "spi_reg_addr[2]"
+                                            },
+                                            {
+                                                "name": "spi_reg_addr[1]"
+                                            },
+                                            {
+                                                "name": "spi_reg_addr[0]"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "parent_nets": [
+                    {
+                        "id": 8,
+                        "name": "cfg_state[2]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[2]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 9,
+                        "name": "cfg_state[1]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[1]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 10,
+                        "name": "cfg_state[0]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[0]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
