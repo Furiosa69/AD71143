@@ -29,11 +29,11 @@ set_property PACKAGE_PIN B15 [get_ports spi_sck_p1]
 set_property PACKAGE_PIN F16 [get_ports spi_sdi_p1]
 
 # ---- NT39565D 栅极驱动 ----
-set_property PACKAGE_PIN AA21 [get_ports cpv_r]
-set_property PACKAGE_PIN V9   [get_ports stv1_r]
-set_property PACKAGE_PIN V8   [get_ports stv2_r]
-set_property PACKAGE_PIN P19  [get_ports oe1_r]
-set_property PACKAGE_PIN R19  [get_ports oe2_r]
+set_property PACKAGE_PIN AA21 [get_ports cpv_r] #1
+set_property PACKAGE_PIN V9   [get_ports stv1_r] #2
+set_property PACKAGE_PIN V8   [get_ports stv2_r] #3
+set_property PACKAGE_PIN P19  [get_ports oe1_r] #4
+set_property PACKAGE_PIN R19  [get_ports oe2_r] #5
 set_property PACKAGE_PIN AA18 [get_ports ud_r]
 set_property PACKAGE_PIN U18  [get_ports lr_r]
 set_property PACKAGE_PIN W9   [get_ports mode1_r]
@@ -43,7 +43,7 @@ set_property PACKAGE_PIN Y7   [get_ports stv_mode_r]
 set_property PACKAGE_PIN Y22  [get_ports chip_sel1_r]
 set_property PACKAGE_PIN Y21  [get_ports chip_sel2_r]
 set_property PACKAGE_PIN Y9   [get_ports oepsn_r]
-set_property PACKAGE_PIN AB18 [get_ports xao_r]
+set_property PACKAGE_PIN AB18 [get_ports xao_r] #6
 
 set_property PACKAGE_PIN N13  [get_ports cpv_l]
 set_property PACKAGE_PIN W20  [get_ports stv1_l]

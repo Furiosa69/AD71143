@@ -168,16 +168,13 @@
                                         "isBus": true,
                                         "subnets": [
                                             {
-                                                "name": "cfg_state[2]",
-                                                "parentNetId": 8
+                                                "name": "cfg_state[2]"
                                             },
                                             {
-                                                "name": "cfg_state[1]",
-                                                "parentNetId": 9
+                                                "name": "cfg_state[1]"
                                             },
                                             {
-                                                "name": "cfg_state[0]",
-                                                "parentNetId": 10
+                                                "name": "cfg_state[0]"
                                             }
                                         ]
                                     }
@@ -372,123 +369,358 @@
                                         ]
                                     }
                                 ]
-                            }
-                        ]
-                    }
-                ],
-                "parent_nets": [
-                    {
-                        "id": 8,
-                        "name": "cfg_state[2]",
-                        "state_reg": [
+                            },
                             {
-                                "name": "cfg_state_reg[2]",
-                                "states": [
+                                "name": "probe6",
+                                "id": 16,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": false,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 6,
+                                "nets": [
                                     {
-                                        "name": "CFG_IDLE",
-                                        "val": "000"
-                                    },
-                                    {
-                                        "name": "CFG_ISSUE",
-                                        "val": "001"
-                                    },
-                                    {
-                                        "name": "CFG_WAIT",
-                                        "val": "010"
-                                    },
-                                    {
-                                        "name": "CFG_DONE",
-                                        "val": "011"
-                                    },
-                                    {
-                                        "name": "CFG_READ_ISSUE",
-                                        "val": "100"
-                                    },
-                                    {
-                                        "name": "CFG_READ_WAIT",
-                                        "val": "110"
-                                    },
-                                    {
-                                        "name": "CFG_FINISHED",
-                                        "val": "101"
+                                        "name": "roic_reset_int_1",
+                                        "isBus": false
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        "id": 9,
-                        "name": "cfg_state[1]",
-                        "state_reg": [
+                            },
                             {
-                                "name": "cfg_state_reg[1]",
-                                "states": [
+                                "name": "probe7",
+                                "id": 17,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 63,
+                                "portIndex": 7,
+                                "nets": [
                                     {
-                                        "name": "CFG_IDLE",
-                                        "val": "000"
-                                    },
-                                    {
-                                        "name": "CFG_ISSUE",
-                                        "val": "001"
-                                    },
-                                    {
-                                        "name": "CFG_WAIT",
-                                        "val": "010"
-                                    },
-                                    {
-                                        "name": "CFG_DONE",
-                                        "val": "011"
-                                    },
-                                    {
-                                        "name": "CFG_READ_ISSUE",
-                                        "val": "100"
-                                    },
-                                    {
-                                        "name": "CFG_READ_WAIT",
-                                        "val": "110"
-                                    },
-                                    {
-                                        "name": "CFG_FINISHED",
-                                        "val": "101"
+                                        "name": "dbg_p1_lane_a_shift",
+                                        "isBus": true,
+                                        "subnets": [
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[63]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[62]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[61]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[60]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[59]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[58]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[57]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[56]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[55]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[54]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[53]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[52]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[51]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[50]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[49]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[48]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[47]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[46]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[45]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[44]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[43]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[42]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[41]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[40]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[39]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[38]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[37]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[36]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[35]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[34]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[33]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[32]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[31]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[30]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[29]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[28]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[27]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[26]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[25]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[24]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[23]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[22]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[21]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[20]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[19]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[18]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[17]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[16]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[15]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[14]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[13]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[12]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[11]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[10]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[9]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[8]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[7]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[6]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[5]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[4]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[3]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[2]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[1]"
+                                            },
+                                            {
+                                                "name": "dbg_p1_lane_a_shift[0]"
+                                            }
+                                        ]
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        "id": 10,
-                        "name": "cfg_state[0]",
-                        "state_reg": [
+                            },
                             {
-                                "name": "cfg_state_reg[0]",
-                                "states": [
+                                "name": "probe8",
+                                "id": 18,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 0,
+                                "rightIndex": 0,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_IDLE",
-                                        "val": "000"
-                                    },
+                                        "name": "aclk_done",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 19,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 1,
+                                "rightIndex": 1,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_ISSUE",
-                                        "val": "001"
-                                    },
+                                        "name": "sync_int",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 20,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 2,
+                                "rightIndex": 2,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_WAIT",
-                                        "val": "010"
-                                    },
+                                        "name": "dbg_p1_line_done",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 21,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 3,
+                                "rightIndex": 3,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_DONE",
-                                        "val": "011"
-                                    },
+                                        "name": "dbg_p1_merged_valid",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 22,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 4,
+                                "rightIndex": 4,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_READ_ISSUE",
-                                        "val": "100"
-                                    },
+                                        "name": "dbg_p1_header_ok",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 23,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 5,
+                                "rightIndex": 5,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_READ_WAIT",
-                                        "val": "110"
-                                    },
+                                        "name": "dbg_p1_burst_en",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 24,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 6,
+                                "rightIndex": 6,
+                                "portIndex": 8,
+                                "nets": [
                                     {
-                                        "name": "CFG_FINISHED",
-                                        "val": "101"
+                                        "name": "dbg_p1_dout_a_raw",
+                                        "isBus": false
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "probe8",
+                                "id": 25,
+                                "type": "DATA_TRIGGER",
+                                "direction": "IN",
+                                "isVector": true,
+                                "leftIndex": 7,
+                                "rightIndex": 7,
+                                "portIndex": 8,
+                                "nets": [
+                                    {
+                                        "name": "roic_reset_int",
+                                        "isBus": false
                                     }
                                 ]
                             }
