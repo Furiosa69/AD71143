@@ -2,16 +2,16 @@
 ## PIN
 #################################################################################################
 
-# ---- 系统 ----
+# ---- ϵͳ ----
 set_property PACKAGE_PIN R4 [get_ports sys_clk]
 set_property PACKAGE_PIN T3 [get_ports key]
 
-# ---- AD71143 AFE 控制 Panel 0 ----
+# ---- AD71143 AFE ���� Panel 0 ----
 set_property PACKAGE_PIN G21 [get_ports roic_reset_p0]
 set_property PACKAGE_PIN H13 [get_ports sync_p0]
 set_property PACKAGE_PIN G13 [get_ports aclk_p0]
 
-# ---- AD71143 AFE 控制 Panel 1 (TBD) ----
+# ---- AD71143 AFE ���� Panel 1 (TBD) ----
 set_property PACKAGE_PIN C13 [get_ports roic_reset_p1]
 set_property PACKAGE_PIN F13 [get_ports sync_p1]
 set_property PACKAGE_PIN F14 [get_ports aclk_p1]
@@ -28,12 +28,12 @@ set_property PACKAGE_PIN B16 [get_ports spi_cs_p1]
 set_property PACKAGE_PIN B15 [get_ports spi_sck_p1]
 set_property PACKAGE_PIN F16 [get_ports spi_sdi_p1]
 
-# ---- NT39565D 栅极驱动 ----
-set_property PACKAGE_PIN AA21 [get_ports cpv_r] #1
-set_property PACKAGE_PIN V9   [get_ports stv1_r] #2
-set_property PACKAGE_PIN V8   [get_ports stv2_r] #3
-set_property PACKAGE_PIN P19  [get_ports oe1_r] #4
-set_property PACKAGE_PIN R19  [get_ports oe2_r] #5
+# ---- NT39565D դ������ ----
+set_property PACKAGE_PIN AA21 [get_ports cpv_r]
+set_property PACKAGE_PIN V9   [get_ports stv1_r]
+set_property PACKAGE_PIN V8   [get_ports stv2_r]
+set_property PACKAGE_PIN P19  [get_ports oe1_r]
+set_property PACKAGE_PIN R19  [get_ports oe2_r]
 set_property PACKAGE_PIN AA18 [get_ports ud_r]
 set_property PACKAGE_PIN U18  [get_ports lr_r]
 set_property PACKAGE_PIN W9   [get_ports mode1_r]
@@ -43,7 +43,7 @@ set_property PACKAGE_PIN Y7   [get_ports stv_mode_r]
 set_property PACKAGE_PIN Y22  [get_ports chip_sel1_r]
 set_property PACKAGE_PIN Y21  [get_ports chip_sel2_r]
 set_property PACKAGE_PIN Y9   [get_ports oepsn_r]
-set_property PACKAGE_PIN AB18 [get_ports xao_r] #6
+set_property PACKAGE_PIN AB18 [get_ports xao_r]
 
 set_property PACKAGE_PIN N13  [get_ports cpv_l]
 set_property PACKAGE_PIN W20  [get_ports stv1_l]
@@ -62,22 +62,22 @@ set_property PACKAGE_PIN R18  [get_ports oepsn_l]
 set_property PACKAGE_PIN W19  [get_ports xao_l]
 
 
-# ---- AD71143 LVDS 数据 Panel 0 ----
+# ---- AD71143 LVDS ���� Panel 0 ----
 set_property PACKAGE_PIN J20 [get_ports dclk_p_A0]
 set_property PACKAGE_PIN J21 [get_ports dclk_n_A0]
 set_property PACKAGE_PIN G17 [get_ports dout_p_A0]
 set_property PACKAGE_PIN G18 [get_ports dout_n_A0]
-# 单LVDS模式: Lane B不使用
+# ��LVDSģʽ: Lane B��ʹ��
 # set_property PACKAGE_PIN G15 [get_ports dout_p_B0]
 # set_property PACKAGE_PIN G16 [get_ports dout_n_B0]
 
-# ---- AD71143 LVDS 数据 Panel 1 ----
+# ---- AD71143 LVDS ���� Panel 1 ----
 set_property PACKAGE_PIN C22 [get_ports dclk_p_A1]
 set_property PACKAGE_PIN B22 [get_ports dclk_n_A1]
-# 单LVDS模式: 只使用Lane A (E13/E14)
+# ��LVDSģʽ: ֻʹ��Lane A (E13/E14)
 set_property PACKAGE_PIN E13 [get_ports dout_p_A1]
 set_property PACKAGE_PIN E14 [get_ports dout_n_A1]
-# Lane B不使用 (B20/A20硬件故障)
+# Lane B��ʹ�� (B20/A20Ӳ������)
 # set_property PACKAGE_PIN B20 [get_ports dout_p_B1]
 # set_property PACKAGE_PIN A20 [get_ports dout_n_B1]
  
@@ -103,16 +103,16 @@ set_property PACKAGE_PIN AA1 [get_ports rgmii_mdio]
 ## IOSTANDARD
 #################################################################################################
 
-# ---- 系统 ----
+# ---- ϵͳ ----
 set_property IOSTANDARD LVCMOS33 [get_ports sys_clk]
 set_property IOSTANDARD LVCMOS33 [get_ports key]
 
-# ---- AD71143 AFE 控制 Panel 0 ----
+# ---- AD71143 AFE ���� Panel 0 ----
 set_property IOSTANDARD LVCMOS25 [get_ports roic_reset_p0]
 set_property IOSTANDARD LVCMOS25 [get_ports sync_p0]
 set_property IOSTANDARD LVCMOS25 [get_ports aclk_p0]
 
-# ---- AD71143 AFE 控制 Panel 1 ----
+# ---- AD71143 AFE ���� Panel 1 ----
 set_property IOSTANDARD LVCMOS25 [get_ports roic_reset_p1]
 set_property IOSTANDARD LVCMOS25 [get_ports sync_p1]
 set_property IOSTANDARD LVCMOS25 [get_ports aclk_p1]
@@ -129,7 +129,7 @@ set_property IOSTANDARD LVCMOS25 [get_ports spi_cs_p1]
 set_property IOSTANDARD LVCMOS25 [get_ports spi_sck_p1]
 set_property IOSTANDARD LVCMOS25 [get_ports spi_sdi_p1]
 
-# ---- NT39565D 栅极驱动 ----
+# ---- NT39565D դ������ ----
 set_property IOSTANDARD LVCMOS33 [get_ports cpv_r]
 set_property IOSTANDARD LVCMOS33 [get_ports xao_r]
 set_property IOSTANDARD LVCMOS33 [get_ports stv1_r]
@@ -162,25 +162,25 @@ set_property IOSTANDARD LVCMOS33 [get_ports chip_sel1_l]
 set_property IOSTANDARD LVCMOS33 [get_ports chip_sel2_l]
 set_property IOSTANDARD LVCMOS33 [get_ports oepsn_l]
 
-# ---- AD71143 LVDS 数据 Panel 0 ----
+# ---- AD71143 LVDS ���� Panel 0 ----
 set_property IOSTANDARD LVDS_25 [get_ports dclk_p_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dclk_n_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dout_p_A0]
 set_property IOSTANDARD LVDS_25 [get_ports dout_n_A0]
-# 单LVDS模式: Lane B不使用
+# ��LVDSģʽ: Lane B��ʹ��
 # set_property IOSTANDARD LVDS_25 [get_ports dout_p_B0]
 # set_property IOSTANDARD LVDS_25 [get_ports dout_n_B0]
 
-# ---- AD71143 LVDS 数据 Panel 1 ----
+# ---- AD71143 LVDS ���� Panel 1 ----
 set_property IOSTANDARD LVDS_25 [get_ports dclk_p_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dclk_n_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_p_A1]
 set_property IOSTANDARD LVDS_25 [get_ports dout_n_A1]
-# 单LVDS模式: Lane B不使用
+# ��LVDSģʽ: Lane B��ʹ��
 # set_property IOSTANDARD LVDS_25 [get_ports dout_p_B1]
 # set_property IOSTANDARD LVDS_25 [get_ports dout_n_B1]
 
-# ---- RGMII (FPGA Bank Vcco=3.3V, PHY Cfg_ldo=00 → DVDD_RGMII=3.3V) ----
+# ---- RGMII (FPGA Bank Vcco=3.3V, PHY Cfg_ldo=00 �� DVDD_RGMII=3.3V) ----
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_rst_n]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_txc]
 set_property IOSTANDARD LVCMOS33 [get_ports rgmii_tx_ctl]

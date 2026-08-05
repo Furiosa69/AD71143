@@ -534,9 +534,9 @@ module top #(
       4'd0;
   
   assign cfg_data_lut =
-      // Reg3: target REF_OUT approximately 1.8V.
-      // REFDAC=0x53 gives 0.5V + 83*15.625mV = 1.796875V; AZEN=1.
-      (cfg_reg_idx == 4'd0)  ? 10'h153 :
+      // Reg3: target REF_OUT approximately 0.6V.
+      // REFDAC=0x06 gives 0.5V + 6*15.625mV = 0.59375V; AZEN=1.
+      (cfg_reg_idx == 4'd0)  ? 10'h106 :
       (cfg_reg_idx == 4'd1)  ? 10'h014 :  // Reg0:  PWR=000 (normal), IFS=20
       (cfg_reg_idx == 4'd2)  ? 10'h0A0 :  // Reg1:  LPF=3.9us, CDS2_RESETEN=1, electrons
       (cfg_reg_idx == 4'd3)  ? 10'h023 :  // Reg2:  randomize, single DOUT, echo clock, pipeline
@@ -1093,33 +1093,28 @@ module top #(
 ila_1 u_ila_datapath (
     .clk    (clk_100m),
 
-    // probe0[6]=CHIP_SEL1, probe0[1]=CHIP_SEL2, probe0[0]=CPV_L
-    .probe0 ({
-        cfg_all_done,
-        chip_sel1,
-        spi_rw,
-        spi_start,
-        spi_done_p0,
-        spi_done_p1,
-        chip_sel2,
-        cpv_l
-    }),
+    // AD71143 probe0[7:0] = {cfg_done, RESET, SYNC, ACLK, aclk_done,
+    //                         DOUT_raw, burst_en, header_ok}.
+    .probe0 ({spi_cfg_done, roic_reset_int, sync_int, aclk_int,
+              aclk_done, dbg_p1_dout_a_raw, dbg_p1_burst_en,
+              dbg_p1_header_ok}),
 
+    // AD71143 SPI configuration FSM state.
     .probe1 (cfg_state),
-    // probe2 is the complete Reg11 readback; expected value is 10'h058.
+    // AD71143 Reg11 readback; LFSR test mode expects 10'h058.
     .probe2 (spi_rdback_p1),
+    // SPI physical signals: CS, SCK, SDI, SDO.
     .probe3 ({spi_cs_p1, spi_sck_p1, spi_sdi_p1, spi_sdo_p1}),
     .probe4 (spi_reg_data),
     .probe5 (spi_reg_addr),
-    // probe6: AD71143 控制器复位输出，等价�? ad71143_ctrl.roic_reset_reg
-    .probe6 (roic_reset_int),
-    // probe7: Panel 1 Lane A captured LVDS serial data, shifted into 64-bit words.
+    // Completed receive line pulse.
+    .probe6 (rx_line_done),
+    // Panel 1 Lane A captured LVDS serial data, shifted into 64-bit words.
     .probe7 (dbg_p1_lane_a_shift),
-    // probe8[7:0] = {ROIC_RESET, DOUT, burst_en, header_ok, merged_valid,
-    //                line_done, SYNC, aclk_done}.
-    .probe8 ({roic_reset_int, dbg_p1_dout_a_raw, dbg_p1_burst_en,
-              dbg_p1_header_ok, dbg_p1_merged_valid, dbg_p1_line_done,
-              sync_int, aclk_done})
+    // AD71143 runtime status.
+    .probe8 ({roic_reset_int, sync_int, aclk_int, aclk_done,
+              dbg_p1_dout_a_raw, dbg_p1_burst_en, dbg_p1_header_ok,
+              dbg_p1_merged_valid})
 );
 
 endmodule

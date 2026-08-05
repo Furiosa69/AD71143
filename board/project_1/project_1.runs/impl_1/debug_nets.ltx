@@ -36,7 +36,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "cpv_l_OBUF",
+                                        "name": "dbg_p1_header_ok_1",
                                         "isBus": false
                                     }
                                 ]
@@ -52,7 +52,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "chip_sel2",
+                                        "name": "dbg_p1_burst_en_1",
                                         "isBus": false
                                     }
                                 ]
@@ -68,7 +68,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "spi_done_p1",
+                                        "name": "dbg_p1_dout_a_raw_1",
                                         "isBus": false
                                     }
                                 ]
@@ -84,7 +84,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "spi_done_p0",
+                                        "name": "aclk_done_1",
                                         "isBus": false
                                     }
                                 ]
@@ -100,7 +100,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "spi_start",
+                                        "name": "aclk_int_1",
                                         "isBus": false
                                     }
                                 ]
@@ -116,7 +116,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "spi_rw",
+                                        "name": "sync_int_1",
                                         "isBus": false
                                     }
                                 ]
@@ -132,7 +132,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "chip_sel1",
+                                        "name": "roic_reset_int_1",
                                         "isBus": false
                                     }
                                 ]
@@ -148,7 +148,7 @@
                                 "portIndex": 0,
                                 "nets": [
                                     {
-                                        "name": "cfg_all_done",
+                                        "name": "spi_cfg_done",
                                         "isBus": false
                                     }
                                 ]
@@ -168,13 +168,16 @@
                                         "isBus": true,
                                         "subnets": [
                                             {
-                                                "name": "cfg_state[2]"
+                                                "name": "cfg_state[2]",
+                                                "parentNetId": 8
                                             },
                                             {
-                                                "name": "cfg_state[1]"
+                                                "name": "cfg_state[1]",
+                                                "parentNetId": 9
                                             },
                                             {
-                                                "name": "cfg_state[0]"
+                                                "name": "cfg_state[0]",
+                                                "parentNetId": 10
                                             }
                                         ]
                                     }
@@ -381,7 +384,7 @@
                                 "portIndex": 6,
                                 "nets": [
                                     {
-                                        "name": "roic_reset_int_1",
+                                        "name": "rx_line_done",
                                         "isBus": false
                                     }
                                 ]
@@ -607,7 +610,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "aclk_done",
+                                        "name": "dbg_p1_merged_valid",
                                         "isBus": false
                                     }
                                 ]
@@ -623,7 +626,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "sync_int",
+                                        "name": "dbg_p1_header_ok",
                                         "isBus": false
                                     }
                                 ]
@@ -639,7 +642,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "dbg_p1_line_done",
+                                        "name": "dbg_p1_burst_en",
                                         "isBus": false
                                     }
                                 ]
@@ -655,7 +658,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "dbg_p1_merged_valid",
+                                        "name": "dbg_p1_dout_a_raw",
                                         "isBus": false
                                     }
                                 ]
@@ -671,7 +674,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "dbg_p1_header_ok",
+                                        "name": "aclk_done",
                                         "isBus": false
                                     }
                                 ]
@@ -687,7 +690,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "dbg_p1_burst_en",
+                                        "name": "aclk_int",
                                         "isBus": false
                                     }
                                 ]
@@ -703,7 +706,7 @@
                                 "portIndex": 8,
                                 "nets": [
                                     {
-                                        "name": "dbg_p1_dout_a_raw",
+                                        "name": "sync_int",
                                         "isBus": false
                                     }
                                 ]
@@ -721,6 +724,125 @@
                                     {
                                         "name": "roic_reset_int",
                                         "isBus": false
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "parent_nets": [
+                    {
+                        "id": 8,
+                        "name": "cfg_state[2]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[2]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 9,
+                        "name": "cfg_state[1]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[1]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "id": 10,
+                        "name": "cfg_state[0]",
+                        "state_reg": [
+                            {
+                                "name": "cfg_state_reg[0]",
+                                "states": [
+                                    {
+                                        "name": "CFG_IDLE",
+                                        "val": "000"
+                                    },
+                                    {
+                                        "name": "CFG_ISSUE",
+                                        "val": "001"
+                                    },
+                                    {
+                                        "name": "CFG_WAIT",
+                                        "val": "010"
+                                    },
+                                    {
+                                        "name": "CFG_DONE",
+                                        "val": "011"
+                                    },
+                                    {
+                                        "name": "CFG_READ_ISSUE",
+                                        "val": "100"
+                                    },
+                                    {
+                                        "name": "CFG_READ_WAIT",
+                                        "val": "110"
+                                    },
+                                    {
+                                        "name": "CFG_FINISHED",
+                                        "val": "101"
                                     }
                                 ]
                             }
