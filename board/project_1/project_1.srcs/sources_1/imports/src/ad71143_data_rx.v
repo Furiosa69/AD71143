@@ -51,6 +51,7 @@ module ad71143_data_rx (
     output reg          dbg_header_latched, // 寄存: 首次捕获�?? header 后锁�??
     output wire         dbg_dout_a_raw,     // 调试: LVDS A原始输入
     output wire         dbg_dout_b_raw,      // 调试: LVDS B原始输入（单LVDS模式未使用，保留端口兼容性）,
+    output wire         dbg_capture_active,
     output wire [63:0]  dbg_lane_a_shift    // 调试: Lane A移位寄存器完整数�?
 );
 
@@ -92,12 +93,8 @@ module ad71143_data_rx (
     wire dclko_i;
     wire dout_a_i;
     // wire dout_b_i;  // 单LVDS模式未使�??
-    reg  dout_a_mid;   // 下降沿采�?? (DCLK 上升沿后 ~5ns, 数据已稳�??)
     // reg  dout_b_mid;   // 单LVDS模式未使�?
-    always @(negedge clk_sys) begin
-        dout_a_mid <= dout_a_i;
-        // dout_b_mid <= dout_b_i;
-    end
+    // DOUT 直接在实际生成的 DCLK 上升沿采样，避免与系统时钟边沿错位。
     wire dclk_pre;
 
     wire [15:0] a_word0 = lane_a_shift[63:48];
@@ -282,7 +279,8 @@ module ad71143_data_rx (
     // =========================================================================
     // DCLKO 域采�??
     // =========================================================================
-    always @(posedge dclko_i or negedge rst_n) begin
+    // DCLK 由 clk_sys 上升沿产生，DOUT 在传播延迟后稳定；在下降沿采样。
+    always @(negedge dclko_i or negedge rst_n) begin
         if (!rst_n) begin
             cap_start_tgl_d1  <= 1'b0;
             cap_start_tgl_d2  <= 1'b0;
@@ -308,7 +306,7 @@ module ad71143_data_rx (
                     pre_delay_cnt <= pre_delay_cnt - 1'b1;
                 end else begin
                     // 实际 64-bit 移位 (单LVDS模式只采样Lane A)
-                    lane_a_shift <= {lane_a_shift[62:0], dout_a_mid};
+                    lane_a_shift <= {lane_a_shift[62:0], dout_a_i};
                     // lane_b_shift <= {lane_b_shift[62:0], dout_b_i};  // 单LVDS模式未使�??
                 end
 
@@ -344,6 +342,7 @@ module ad71143_data_rx (
     assign dbg_header_valid = (lane_a_shift[63:56] == 8'h0A);
     assign dbg_dout_a_raw  = dout_a_i;  // 直接输出LVDS A输入
     assign dbg_dout_b_raw  = 1'b0;      // 单LVDS模式: Lane B未使用，输出固定0
+    assign dbg_capture_active = cap_active_dclko;
     assign dbg_lane_a_shift = lane_a_shift;  // 输出完整�?64位移位寄存器
 
     // =========================================================================
@@ -373,6 +372,8 @@ module ad71143_data_rx (
 
     // DCLKO 引脚不存在，�?? clk_sys 直接作内部采样时�??
     // clk_sys �?? dclk_pre (ODDR 输出) 同频同相, cap_active_dclko 门控实际采样
+    // ODDR 输出只能连接输出缓冲器，不能作为内部时钟负载。
+    // ODDR 在 clk_sys 上升沿产生 DCLK 上升沿，内部采样保持使用 clk_sys。
     assign dclko_i = clk_sys;
 
     IBUFDS #(

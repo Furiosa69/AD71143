@@ -1,25 +1,15 @@
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="36688" HostCore="24" HostMemory="033752997888">
+    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="29472" HostCore="24" HostMemory="033752997888">
     </Process>
 </ProcessHandle>
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="36488" HostCore="24" HostMemory="033752997888">
+    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="17800" HostCore="24" HostMemory="033752997888">
     </Process>
 </ProcessHandle>
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="36452" HostCore="24" HostMemory="033752997888">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="16248" HostCore="24" HostMemory="033752997888">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="5188" HostCore="24" HostMemory="033752997888">
+    <Process Command="vivado.bat" Owner="Lenovo" Host="LAPTOP-79V8GTMI" Pid="24312" HostCore="24" HostMemory="033752997888">
     </Process>
 </ProcessHandle>

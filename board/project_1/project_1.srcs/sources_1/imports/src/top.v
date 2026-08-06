@@ -329,10 +329,12 @@ module top #(
   wire        dbg_p1_dout_a_raw;
   wire        dbg_p1_dout_b_raw;
   wire [63:0] dbg_p1_lane_a_shift;
+  wire        dbg_p1_capture_active_int;
   // AFE 控制信号 (内部 �?????????????? �?????????????? Panel 扇出)
   wire roic_reset_int;
   wire sync_int;
   wire aclk_int;
+  // Panel1 capture state debug
   assign roic_reset_p0 = roic_reset_int;
   assign roic_reset_p1 = roic_reset_int;
   assign sync_p0       = spi_cfg_done ? sync_int : 1'b0;
@@ -836,6 +838,7 @@ module top #(
   	    .dbg_p1_merged_valid (dbg_p1_merged_valid),
   	    .dbg_p1_line_done    (dbg_p1_line_done),
   	    .dbg_p1_dout_a_raw   (dbg_p1_dout_a_raw),
+  	    .dbg_p1_capture_active (dbg_p1_capture_active_int),
   	    .dbg_p1_dout_b_raw   (dbg_p1_dout_b_raw),
   	    .dbg_p1_lane_a_shift (dbg_p1_lane_a_shift)
   	);
@@ -1097,7 +1100,7 @@ ila_1 u_ila_datapath (
     //                         DOUT_raw, burst_en, header_ok}.
     .probe0 ({spi_cfg_done, roic_reset_int, sync_int, aclk_int,
               aclk_done, dbg_p1_dout_a_raw, dbg_p1_burst_en,
-              dbg_p1_header_ok}),
+              dbg_p1_capture_active_int}),
 
     // AD71143 SPI configuration FSM state.
     .probe1 (cfg_state),

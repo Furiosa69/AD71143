@@ -24,7 +24,7 @@
       <Properties Property="CORE_REFRESH_RATE_MS" value="500"/>
     </Object>
     <Object name="u_ila_datapath" gui_info="">
-      <Properties Property="CONTROL.DATA_DEPTH" value="512"/>
+      <Properties Property="CONTROL.DATA_DEPTH" value="8192"/>
       <Properties Property="CONTROL.TRIGGER_CONDITION" value="AND"/>
       <Properties Property="CONTROL.TRIGGER_POSITION" value="63"/>
       <Properties Property="CORE_REFRESH_RATE_MS" value="500"/>
@@ -51,7 +51,9 @@
     <Object name="ctrl_line_done" gui_info=""/>
     <Object name="ctrl_line_start" gui_info=""/>
     <Object name="dbg_p1_burst_en" gui_info=""/>
+    <Object name="dbg_p1_dout_a_raw" gui_info=""/>
     <Object name="dbg_p1_header_ok" gui_info=""/>
+    <Object name="dbg_p1_lane_a_shift[63:0]" gui_info=""/>
     <Object name="dbg_p1_line_done" gui_info=""/>
     <Object name="dbg_p1_merged_valid" gui_info=""/>
     <Object name="dbg_p1_shift_hi[7:0]" gui_info=""/>
@@ -717,6 +719,27 @@
       </probeOptions>
       <nets>
         <net name="dbg_p1_burst_index"/>
+      </nets>
+    </probe>
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
+      <probeOptions Id="DebugProbeParams">
+        <Option Id="CAPTURE_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="COMPARE_VALUE.0" value="eq1&apos;bX"/>
+        <Option Id="DISPLAY_AS_ENUM" value="1"/>
+        <Option Id="DISPLAY_HINT" value=""/>
+        <Option Id="DISPLAY_RADIX" value="HEX"/>
+        <Option Id="DISPLAY_VISIBILITY" value=""/>
+        <Option Id="HW_ILA" value="hw_ila_1"/>
+        <Option Id="LINK_TO_WAVEFORM" value="1"/>
+        <Option Id="MAP" value="probe0[0]"/>
+        <Option Id="NAME.CUSTOM" value=""/>
+        <Option Id="NAME.SELECT" value="Long"/>
+        <Option Id="SOURCE" value="netlist"/>
+        <Option Id="TRIGGER_COMPARE_VALUE" value="eq1&apos;bX"/>
+        <Option Id="WAVEFORM_STYLE" value="Digital"/>
+      </probeOptions>
+      <nets>
+        <net name="dbg_p1_capture_active_int"/>
       </nets>
     </probe>
     <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
@@ -2419,7 +2442,7 @@
         <net name="spi_reg_addr_1[0]"/>
       </nets>
     </probe>
-    <probe type="ila" busType="bus" source="netlist" spec="ILA_V2_RT">
+    <probe type="ila" busType="net" source="netlist" spec="ILA_V2_RT">
       <probeOptions Id="DebugProbeParams">
         <Option Id="CAPTURE_COMPARE_VALUE" value="eq10&apos;hXXX"/>
         <Option Id="COMPARE_VALUE.0" value="eq10&apos;hXXX"/>

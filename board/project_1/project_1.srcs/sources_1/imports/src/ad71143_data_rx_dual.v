@@ -74,7 +74,8 @@ module ad71143_data_rx_dual #(
     output wire         dbg_p1_merged_valid, // Panel 1 合并数据有效
     output wire         dbg_p1_line_done,   // Panel 1 行完�?
     output wire         dbg_p1_dout_a_raw,  // Panel 1 LVDS A原始输入
-    output wire         dbg_p1_dout_b_raw,   // Panel 1 LVDS B原始输入
+    output wire         dbg_p1_dout_b_raw,
+    output wire         dbg_p1_capture_active,   // Panel 1 LVDS B原始输入
     output wire [63:0] dbg_p1_lane_a_shift  // Panel 1 Lane A移位寄存�?,
 );
 
@@ -99,6 +100,7 @@ module ad71143_data_rx_dual #(
     wire [7:0]   p1_shift_lo;
     wire         p1_dout_a_raw;
     wire         p1_dout_b_raw;
+    wire         p1_capture_active;
     wire [63:0]  p1_lane_a_shift;
 
     // =========================================================================
@@ -185,6 +187,7 @@ module ad71143_data_rx_dual #(
         .dbg_header_latched   (),
         .dbg_dout_a_raw       (p1_dout_a_raw),
         .dbg_dout_b_raw       (p1_dout_b_raw),
+        .dbg_capture_active   (p1_capture_active),
         .dbg_lane_a_shift     (p1_lane_a_shift)
     );
 
@@ -269,5 +272,6 @@ module ad71143_data_rx_dual #(
     assign dbg_p1_dout_a_raw  = p1_dout_a_raw;
     assign dbg_p1_lane_a_shift = p1_lane_a_shift;
     assign dbg_p1_dout_b_raw  = p1_dout_b_raw;
+    assign dbg_p1_capture_active = p1_capture_active;
 
 endmodule
