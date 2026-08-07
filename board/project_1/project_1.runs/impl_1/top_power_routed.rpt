@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date             : Thu Aug  6 09:43:12 2026
+| Date             : Thu Aug  6 17:56:52 2026
 | Host             : LAPTOP-79V8GTMI running 64-bit major release  (build 9200)
 | Command          : report_power -file top_power_routed.rpt -pb top_power_summary_routed.pb -rpx top_power_routed.rpx
 | Design           : top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.454        |
+| Total On-Chip Power (W)  | 0.458        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.301        |
+| Dynamic (W)              | 0.304        |
 | Device Static (W)        | 0.153        |
 | Effective TJA (C/W)      | 2.5          |
 | Max Ambient (C)          | 83.9         |
@@ -53,20 +53,20 @@ Table of Contents
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
 | Clocks                   |     0.022 |        9 |       --- |             --- |
-| Slice Logic              |     0.006 |     7977 |       --- |             --- |
-|   LUT as Logic           |     0.005 |     2424 |    133800 |            1.81 |
-|   Register               |    <0.001 |     3898 |    269200 |            1.45 |
+| Slice Logic              |     0.006 |     7987 |       --- |             --- |
+|   LUT as Logic           |     0.005 |     2435 |    133800 |            1.82 |
+|   Register               |    <0.001 |     3902 |    269200 |            1.45 |
 |   CARRY4                 |    <0.001 |      121 |     33450 |            0.36 |
 |   LUT as Shift Register  |    <0.001 |      196 |     46200 |            0.42 |
 |   F7/F8 Muxes            |    <0.001 |       59 |    133800 |            0.04 |
 |   LUT as Distributed RAM |    <0.001 |       24 |     46200 |            0.05 |
 |   Others                 |     0.000 |      446 |       --- |             --- |
-| Signals                  |     0.007 |     5991 |       --- |             --- |
+| Signals                  |     0.007 |     6000 |       --- |             --- |
 | Block RAM                |     0.013 |     29.5 |       365 |            8.08 |
 | MMCM                     |     0.106 |        1 |        10 |           10.00 |
-| I/O                      |     0.147 |       60 |       285 |           21.05 |
+| I/O                      |     0.149 |       60 |       285 |           21.05 |
 | Static Power             |     0.153 |          |           |                 |
-| Total                    |     0.454 |          |           |                 |
+| Total                    |     0.458 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -76,7 +76,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.081 |       0.049 |      0.032 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.082 |       0.050 |      0.032 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.092 |       0.062 |      0.031 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.020 |       0.015 |      0.005 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.042 |       0.037 |      0.005 |       NA    | Unspecified | NA         |
@@ -151,12 +151,12 @@ Table of Contents
 +---------------------------+-----------+
 | Name                      | Power (W) |
 +---------------------------+-----------+
-| top                       |     0.301 |
+| top                       |     0.304 |
 |   dbg_hub                 |     0.003 |
 |     inst                  |     0.003 |
 |       BSCANID.u_xsdbm_id  |     0.003 |
 |   u_data_rx_dual          |     0.096 |
-|     u_panel0              |     0.047 |
+|     u_panel0              |     0.048 |
 |     u_panel1              |     0.048 |
 |   u_ila_datapath          |     0.022 |
 |     inst                  |     0.022 |

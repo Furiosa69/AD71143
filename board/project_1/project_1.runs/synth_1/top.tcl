@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "D:/project/AD71143/board/project_1/project_1.runs/synth_1/top.tcl"
+  variable script "D:/project/stouch/AD71143/board/project_1/project_1.runs/synth_1/top.tcl"
   variable category "vivado_synth"
 }
 
@@ -80,41 +80,41 @@ set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
 set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
-set_property webtalk.parent_dir D:/project/AD71143/board/project_1/project_1.cache/wt [current_project]
-set_property parent.project_path D:/project/AD71143/board/project_1/project_1.xpr [current_project]
+set_property webtalk.parent_dir D:/project/stouch/AD71143/board/project_1/project_1.cache/wt [current_project]
+set_property parent.project_path D:/project/stouch/AD71143/board/project_1/project_1.xpr [current_project]
 set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo d:/project/AD71143/board/project_1/project_1.cache/ip [current_project]
+set_property ip_output_repo d:/project/stouch/AD71143/board/project_1/project_1.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_verilog -library xil_defaultlib {
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/RGMII_tx.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_ctrl.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/nt39565d_ctrl.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/rgmii_bridge.v
-  D:/project/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/RGMII_tx.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_ctrl.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_data_rx_dual.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/ad71143_spi.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/mdio_ctrl.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/nt39565d_ctrl.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/rgmii_bridge.v
+  D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/imports/src/top.v
 }
-read_ip -quiet D:/project/AD71143/board/project_1/project_1.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
+read_ip -quiet D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
 
-read_ip -quiet D:/project/AD71143/board/project_1/project_1.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_clocks.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_ooc.xdc]
+read_ip -quiet D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/ip/fifo_generator_0/fifo_generator_0.xci
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_clocks.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/fifo_generator_0/fifo_generator_0_ooc.xdc]
 
-read_ip -quiet D:/project/AD71143/board/project_1/project_1.srcs/sources_1/ip/ila_1/ila_1.xci
-set_property used_in_synthesis false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila_impl.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila_impl.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila.xdc]
-set_property used_in_implementation false [get_files -all d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_1_ooc.xdc]
+read_ip -quiet D:/project/stouch/AD71143/board/project_1/project_1.srcs/sources_1/ip/ila_1/ila_1.xci
+set_property used_in_synthesis false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila_impl.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila_impl.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_v6_2/constraints/ila.xdc]
+set_property used_in_implementation false [get_files -all d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/ila_1/ila_1_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -125,11 +125,11 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/pin.xdc
-set_property used_in_implementation false [get_files D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/pin.xdc]
+read_xdc D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/pin.xdc
+set_property used_in_implementation false [get_files D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/pin.xdc]
 
-read_xdc D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc
-set_property used_in_implementation false [get_files D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc]
+read_xdc D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc
+set_property used_in_implementation false [get_files D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]

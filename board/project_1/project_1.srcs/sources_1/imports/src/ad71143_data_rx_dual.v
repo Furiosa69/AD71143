@@ -73,6 +73,8 @@ module ad71143_data_rx_dual #(
     output wire         dbg_p1_header_ok,  // Panel 1 Header 校验 (连续组合比较)
     output wire         dbg_p1_merged_valid, // Panel 1 合并数据有效
     output wire         dbg_p1_line_done,   // Panel 1 行完�?
+    output wire         dbg_p1_header_valid,
+    output wire         dbg_p1_header_latched,
     output wire         dbg_p1_dout_a_raw,  // Panel 1 LVDS A原始输入
     output wire         dbg_p1_dout_b_raw,
     output wire         dbg_p1_capture_active,   // Panel 1 LVDS B原始输入
@@ -101,6 +103,8 @@ module ad71143_data_rx_dual #(
     wire         p1_dout_a_raw;
     wire         p1_dout_b_raw;
     wire         p1_capture_active;
+    wire         p1_header_valid;
+    wire         p1_header_latched;
     wire [63:0]  p1_lane_a_shift;
 
     // =========================================================================
@@ -183,8 +187,8 @@ module ad71143_data_rx_dual #(
         .burst_en_out         (p1_burst_en),
         .burst_en_comb        (),
         .roic_trigger         (),
-        .dbg_header_valid     (),
-        .dbg_header_latched   (),
+        .dbg_header_valid     (p1_header_valid),
+        .dbg_header_latched   (p1_header_latched),
         .dbg_dout_a_raw       (p1_dout_a_raw),
         .dbg_dout_b_raw       (p1_dout_b_raw),
         .dbg_capture_active   (p1_capture_active),
@@ -269,6 +273,8 @@ module ad71143_data_rx_dual #(
     assign dbg_p1_header_ok   = p1_header_ok;
     assign dbg_p1_merged_valid = p1_merged_valid;
     assign dbg_p1_line_done   = p1_line_done;
+    assign dbg_p1_header_valid = p1_header_valid;
+    assign dbg_p1_header_latched = p1_header_latched;
     assign dbg_p1_dout_a_raw  = p1_dout_a_raw;
     assign dbg_p1_lane_a_shift = p1_lane_a_shift;
     assign dbg_p1_dout_b_raw  = p1_dout_b_raw;

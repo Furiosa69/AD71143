@@ -3,12 +3,194 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Mon Aug  3 11:44:17 2026
-# Process ID: 21052
-# Current directory: D:/project/AD71143/board/project_1
-# Command line: vivado.exe -mode batch -source D:\project\AD71143\board\project_1\.tmp_add_ila_probe.tcl
-# Log file: D:/project/AD71143/board/project_1/vivado.log
-# Journal file: D:/project/AD71143/board/project_1\vivado.jou
+# Start of session at: Thu Aug  6 14:14:25 2026
+# Process ID: 25612
+# Current directory: D:/project/stouch/AD71143/board/project_1
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent19664 D:\project\stouch\AD71143\board\project_1\project_1.xpr
+# Log file: D:/project/stouch/AD71143/board/project_1/vivado.log
+# Journal file: D:/project/stouch/AD71143/board/project_1\vivado.jou
 # Running On: LAPTOP-79V8GTMI, OS: Windows, CPU Frequency: 3072 MHz, CPU Physical cores: 24, Host memory: 33752 MB
 #-----------------------------------------------------------
-source {D:\project\AD71143\board\project_1\.tmp_add_ila_probe.tcl}
+start_gui
+open_project D:/project/stouch/AD71143/board/project_1/project_1.xpr
+update_compile_order -fileset sources_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+current_hw_device [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1 -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+save_wave_config {D:/project/stouch/AD71143/board/project_1/project_1.hw/hw_1/wave/hw_ila_data_1/hw_ila_data_1.wcfg}
+close_hw_manager
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+current_hw_device [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1 -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes aclk_done -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE neq64'hXXXX_XXXX_XXXX_XXXX [get_hw_probes dbg_p1_lane_a_shift -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE neq64'h0000_0000_0000_0000 [get_hw_probes dbg_p1_lane_a_shift -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila -timeout 0 [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+set_property TRIGGER_COMPARE_VALUE eq64'hXXXX_XXXX_XXXX_XXXX [get_hw_probes dbg_p1_lane_a_shift -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+add_wave -into {hw_ila_data_1.wcfg} -radix hex { {dbg_p1_header_latched} {dbg_p1_header_valid} }
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila -timeout 0 [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila -timeout 0 [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila -timeout 0 [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'b1 [get_hw_probes aclk_int -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+close_hw_manager
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+current_hw_device [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+set_property PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property FULL_PROBES.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.ltx} [get_hw_devices xc7a200t_0]
+set_property PROGRAM.FILE {D:/project/stouch/AD71143/board/project_1/project_1.runs/impl_1/top.bit} [get_hw_devices xc7a200t_0]
+program_hw_devices [get_hw_devices xc7a200t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a200t_0] 0]
+display_hw_ila_data [ get_hw_ila_data hw_ila_data_1 -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes aclk_int -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'b1 [get_hw_probes dbg_p1_capture_active_int -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes dbg_p1_capture_active_int -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+set_property TRIGGER_COMPARE_VALUE eq1'b1 [get_hw_probes dbg_p1_header_latched -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila -timeout 0 [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+set_property TRIGGER_COMPARE_VALUE eq1'bX [get_hw_probes dbg_p1_header_latched -of_objects [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]
+run_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+wait_on_hw_ila [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]
+display_hw_ila_data [upload_hw_ila_data [get_hw_ilas -of_objects [get_hw_devices xc7a200t_0] -filter {CELL_NAME=~"u_ila_datapath"}]]

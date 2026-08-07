@@ -3,21 +3,21 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="D:/project/AD71143/board/project_1/project_1.hw/hw_1/wave/hw_ila_data_1/hw_ila_data_1.wdb" id="1">
+      <db_ref path="D:/project/stouch/AD71143/board/project_1/project_1.hw/hw_1/wave/hw_ila_data_1/hw_ila_data_1.wdb" id="1">
          <top_modules>
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0"></ZoomStartTime>
-      <ZoomEndTime time="513"></ZoomEndTime>
-      <Cursor1Time time="248"></Cursor1Time>
+      <ZoomEndTime time="8,193"></ZoomEndTime>
+      <Cursor1Time time="4,275"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="338"></NameColumnWidth>
+      <NameColumnWidth column_width="322"></NameColumnWidth>
       <ValueColumnWidth column_width="116"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="26" />
+   <WVObjectSize size="20" />
    <wave_markers>
    </wave_markers>
    <wvobject fp_name="aclk_done" type="logic">
@@ -27,24 +27,10 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="aclk_done_1" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">aclk_done_1</obj_property>
-      <obj_property name="ObjectShortName">aclk_done_1</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
    <wvobject fp_name="aclk_int" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
       <obj_property name="ElementShortName">aclk_int</obj_property>
       <obj_property name="ObjectShortName">aclk_int</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="aclk_int_1" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">aclk_int_1</obj_property>
-      <obj_property name="ObjectShortName">aclk_int_1</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
@@ -63,13 +49,6 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="dbg_p1_burst_en_1" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">dbg_p1_burst_en_1</obj_property>
-      <obj_property name="ObjectShortName">dbg_p1_burst_en_1</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
    <wvobject fp_name="dbg_p1_capture_active_int" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
       <obj_property name="ElementShortName">dbg_p1_capture_active_int</obj_property>
@@ -84,32 +63,11 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="dbg_p1_dout_a_raw_1" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">dbg_p1_dout_a_raw_1</obj_property>
-      <obj_property name="ObjectShortName">dbg_p1_dout_a_raw_1</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="dbg_p1_header_ok" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">dbg_p1_header_ok</obj_property>
-      <obj_property name="ObjectShortName">dbg_p1_header_ok</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
    <wvobject fp_name="dbg_p1_lane_a_shift" type="array">
       <obj_property name="DisplayName">FullPathName</obj_property>
       <obj_property name="ElementShortName">dbg_p1_lane_a_shift[63:0]</obj_property>
       <obj_property name="ObjectShortName">dbg_p1_lane_a_shift[63:0]</obj_property>
       <obj_property name="Radix">HEXRADIX</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="dbg_p1_merged_valid" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">dbg_p1_merged_valid</obj_property>
-      <obj_property name="ObjectShortName">dbg_p1_merged_valid</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
@@ -120,31 +78,10 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="roic_reset_int_1" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">roic_reset_int_1</obj_property>
-      <obj_property name="ObjectShortName">roic_reset_int_1</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
    <wvobject fp_name="rx_line_done" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
       <obj_property name="ElementShortName">rx_line_done</obj_property>
       <obj_property name="ObjectShortName">rx_line_done</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="spi_cfg_done" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_cfg_done</obj_property>
-      <obj_property name="ObjectShortName">spi_cfg_done</obj_property>
-      <obj_property name="LABELRADIX">true</obj_property>
-      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
-   </wvobject>
-   <wvobject fp_name="spi_cs_p1_OBUF" type="logic">
-      <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">spi_cs_p1_OBUF</obj_property>
-      <obj_property name="ObjectShortName">spi_cs_p1_OBUF</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
@@ -172,10 +109,24 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
+   <wvobject fp_name="spi_cfg_done" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">spi_cfg_done</obj_property>
+      <obj_property name="ObjectShortName">spi_cfg_done</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
    <wvobject fp_name="spi_sck_p1_OBUF" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
       <obj_property name="ElementShortName">spi_sck_p1_OBUF</obj_property>
       <obj_property name="ObjectShortName">spi_sck_p1_OBUF</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="spi_cs_p1_OBUF" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">spi_cs_p1_OBUF</obj_property>
+      <obj_property name="ObjectShortName">spi_cs_p1_OBUF</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
@@ -200,10 +151,17 @@
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>
-   <wvobject fp_name="sync_int_1" type="logic">
+   <wvobject fp_name="dbg_p1_header_latched" type="logic">
       <obj_property name="DisplayName">FullPathName</obj_property>
-      <obj_property name="ElementShortName">sync_int_1</obj_property>
-      <obj_property name="ObjectShortName">sync_int_1</obj_property>
+      <obj_property name="ElementShortName">dbg_p1_header_latched</obj_property>
+      <obj_property name="ObjectShortName">dbg_p1_header_latched</obj_property>
+      <obj_property name="LABELRADIX">true</obj_property>
+      <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
+   </wvobject>
+   <wvobject fp_name="dbg_p1_header_valid" type="logic">
+      <obj_property name="DisplayName">FullPathName</obj_property>
+      <obj_property name="ElementShortName">dbg_p1_header_valid</obj_property>
+      <obj_property name="ObjectShortName">dbg_p1_header_valid</obj_property>
       <obj_property name="LABELRADIX">true</obj_property>
       <obj_property name="WaveformStyle">STYLE_DIGITAL</obj_property>
    </wvobject>

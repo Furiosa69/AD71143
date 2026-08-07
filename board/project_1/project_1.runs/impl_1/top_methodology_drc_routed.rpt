@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date         : Thu Aug  6 09:43:11 2026
+| Date         : Thu Aug  6 17:56:52 2026
 | Host         : LAPTOP-79V8GTMI running 64-bit major release  (build 9200)
 | Command      : report_methodology -file top_methodology_drc_routed.rpt -pb top_methodology_drc_routed.pb -rpx top_methodology_drc_routed.rpx
 | Design       : top
@@ -123,15 +123,15 @@ Related violations: <none>
 XDCC-1#1 Warning
 Scoped Clock constraint overwritten with the same name  
 A new clock constraint create_clock overrides a previous scoped clock constraint with the same name. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
-New: create_clock -period 20.000 -name sys_clk [get_ports sys_clk] (Source: D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc (Line: 8))
-Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
+New: create_clock -period 20.000 -name sys_clk [get_ports sys_clk] (Source: D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc (Line: 8))
+Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
 Related violations: <none>
 
 XDCC-7#1 Warning
 Scoped Clock constraint overwritten on the same source  
 A new clock constraint create_clock overrides a previous scoped clock constraint defined on the same source. It is not recommended to override a scoped (typically an IP) clock constraint and could result in unexpected behaviors.
-New: create_clock -period 20.000 -name sys_clk [get_ports sys_clk] (Source: D:/project/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc (Line: 8))
-Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: d:/project/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
+New: create_clock -period 20.000 -name sys_clk [get_ports sys_clk] (Source: D:/project/stouch/AD71143/board/project_1/project_1.srcs/constrs_1/imports/XDC/timing.xdc (Line: 8))
+Previous: create_clock -period 20.000 [get_ports sys_clk] (Source: d:/project/stouch/AD71143/board/project_1/project_1.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc (Line: 53))
 Related violations: <none>
 
 

@@ -74,6 +74,7 @@ module ad71143_data_rx (
     reg  [9:0] mute_cnt;
     reg  [6:0] burst_cnt;
     reg        cap_start_tgl_sys;
+    reg        aclk_done_seen;
     reg        cap_done_tgl_sys_d1;
     reg        cap_done_tgl_sys_d2;
 
@@ -90,11 +91,20 @@ module ad71143_data_rx (
     reg         cap_done_tgl_dclko;
     reg  [6:0]  pre_delay_cnt;
 
-    wire dclko_i;
+    reg         dout_a_mid;
     wire dout_a_i;
     // wire dout_b_i;  // 单LVDS模式未使�??
     // reg  dout_b_mid;   // 单LVDS模式未使�?
     // DOUT 直接在实际生成的 DCLK 上升沿采样，避免与系统时钟边沿错位。
+    // Sample DOUT after the generated DCLK rising edge, then consume the
+    // settled value on the following rising edge.
+    always @(negedge clk_sys or negedge rst_n) begin
+        if (!rst_n)
+            dout_a_mid <= 1'b0;
+        else
+            dout_a_mid <= dout_a_i;
+    end
+
     wire dclk_pre;
 
     wire [15:0] a_word0 = lane_a_shift[63:48];
@@ -136,7 +146,7 @@ module ad71143_data_rx (
         state_next = state;
         case (state)
             S_IDLE: if (sync_fall)            state_next = S_WAIT;
-            S_WAIT: if (aclk_done)            state_next = S_ACT;
+            S_WAIT: if (sync_in && (aclk_done || aclk_done_seen)) state_next = S_ACT;
             S_ACT : if (capture_done_pulse_sys) begin
                         if (burst_cnt == TOTAL_BURSTS - 1)
                             state_next = S_DONE;
@@ -172,6 +182,7 @@ module ad71143_data_rx (
             mute_cnt              <= 10'd0;
             burst_cnt             <= 7'd0;
             cap_start_tgl_sys     <= 1'b0;
+            aclk_done_seen        <= 1'b0;
             dbg_header_latched    <= 1'b0;
             header_byte           <= 8'd0;
             header_readdown       <= 1'b0;
@@ -191,6 +202,7 @@ module ad71143_data_rx (
 
             case (state)
                 S_IDLE: begin
+                    aclk_done_seen   <= 1'b0;
                     mute_cnt          <= 10'd0;
                     burst_cnt         <= 7'd0;
                     dbg_header_latched<= 1'b0;
@@ -200,7 +212,11 @@ module ad71143_data_rx (
                 S_WAIT: begin
                     mute_cnt <= 10'd0;
                     if (aclk_done)
+                        aclk_done_seen <= 1'b1;
+                    if (state_next == S_ACT) begin
                         cap_start_tgl_sys <= ~cap_start_tgl_sys;
+                        aclk_done_seen    <= 1'b0;
+                    end
                 end
 
                 S_ACT: begin
@@ -280,7 +296,7 @@ module ad71143_data_rx (
     // DCLKO 域采�??
     // =========================================================================
     // DCLK 由 clk_sys 上升沿产生，DOUT 在传播延迟后稳定；在下降沿采样。
-    always @(negedge dclko_i or negedge rst_n) begin
+    always @(posedge clk_sys or negedge rst_n) begin
         if (!rst_n) begin
             cap_start_tgl_d1  <= 1'b0;
             cap_start_tgl_d2  <= 1'b0;
@@ -306,7 +322,7 @@ module ad71143_data_rx (
                     pre_delay_cnt <= pre_delay_cnt - 1'b1;
                 end else begin
                     // 实际 64-bit 移位 (单LVDS模式只采样Lane A)
-                    lane_a_shift <= {lane_a_shift[62:0], dout_a_i};
+                    lane_a_shift <= {lane_a_shift[62:0], dout_a_mid};
                     // lane_b_shift <= {lane_b_shift[62:0], dout_b_i};  // 单LVDS模式未使�??
                 end
 
@@ -374,7 +390,6 @@ module ad71143_data_rx (
     // clk_sys �?? dclk_pre (ODDR 输出) 同频同相, cap_active_dclko 门控实际采样
     // ODDR 输出只能连接输出缓冲器，不能作为内部时钟负载。
     // ODDR 在 clk_sys 上升沿产生 DCLK 上升沿，内部采样保持使用 clk_sys。
-    assign dclko_i = clk_sys;
 
     IBUFDS #(
         .DIFF_TERM("TRUE"),

@@ -320,6 +320,8 @@ module top #(
 
   // Panel 1 调试信号 (ILA 探针, clk_100m �?????????????)
   wire        dbg_p1_line_done;
+  wire        dbg_p1_header_valid;
+  wire        dbg_p1_header_latched;
   wire        dbg_p1_burst_en;
   wire        dbg_p1_header_ok;
   wire        dbg_p1_merged_valid;
@@ -837,6 +839,8 @@ module top #(
   	    .dbg_p1_header_ok    (dbg_p1_header_ok),
   	    .dbg_p1_merged_valid (dbg_p1_merged_valid),
   	    .dbg_p1_line_done    (dbg_p1_line_done),
+	    .dbg_p1_header_valid (dbg_p1_header_valid),
+	    .dbg_p1_header_latched (dbg_p1_header_latched),
   	    .dbg_p1_dout_a_raw   (dbg_p1_dout_a_raw),
   	    .dbg_p1_capture_active (dbg_p1_capture_active_int),
   	    .dbg_p1_dout_b_raw   (dbg_p1_dout_b_raw),
@@ -1116,8 +1120,8 @@ ila_1 u_ila_datapath (
     .probe7 (dbg_p1_lane_a_shift),
     // AD71143 runtime status.
     .probe8 ({roic_reset_int, sync_int, aclk_int, aclk_done,
-              dbg_p1_dout_a_raw, dbg_p1_burst_en, dbg_p1_header_ok,
-              dbg_p1_merged_valid})
+              dbg_p1_dout_a_raw, dbg_p1_burst_en, dbg_p1_header_valid,
+              dbg_p1_header_latched})
 );
 
 endmodule
